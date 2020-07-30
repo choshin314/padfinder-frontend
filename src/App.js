@@ -1,10 +1,13 @@
 import React from 'react';
+import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
+
+import MainNav from './components/Nav/MainNav'
 
 function App() {
   return (
-    <div>
-      <h1>Hello World</h1>
-    </div>
+    <Router>
+      <MainNav />
+    </Router>
   );
 }
 
