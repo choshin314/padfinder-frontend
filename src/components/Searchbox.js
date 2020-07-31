@@ -1,4 +1,5 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
+import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faSearch} from '@fortawesome/free-solid-svg-icons'
@@ -7,23 +8,31 @@ import {MapContext} from '../context/MapContext'
 
 const Searchbox = () => {
     const mapContext = useContext(MapContext);
+    let history = useHistory();
 
     const [inputText, setInputText] = useState('');
 
     const handleInput = e => {
-        const value = e.target.value;
+        let value = e.target.value;
         setInputText(value);
     }
 
     //on search form submit, send value to context - Maps component will need to consume this
-    const handleSubmit = e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        mapContext.setSearchQuery(inputText);
-        setInputText('');
+        let queryString = inputText.trim().replace(' ', '+');
+        try {
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${queryString}&key=${process.env.REACT_APP_MAPS_KEY}`);
+            const responseData = await response.json();
+            const coords = responseData.results[0].geometry.location;
+            const displayAddress = responseData.results[0].formatted_address;
+            mapContext.setCoordinates(coords);
+            mapContext.setDisplayAddress(displayAddress);
+            history.push(`/search/${queryString}`)
+        } catch(err) {
+            console.log(err);
+        }
     };
-
-    console.log(mapContext.searchQuery);
-
 
     return (
         <Div>
