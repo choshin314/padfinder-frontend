@@ -3,10 +3,10 @@ import styled from 'styled-components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faSearch} from '@fortawesome/free-solid-svg-icons'
 
-import {SearchContext} from '../context/SearchContext'
+import {MapContext} from '../context/MapContext'
 
 const Searchbox = () => {
-    const searchContext = useContext(SearchContext);
+    const mapContext = useContext(MapContext);
 
     const [inputText, setInputText] = useState('');
 
@@ -18,11 +18,11 @@ const Searchbox = () => {
     //on search form submit, send value to context - Maps component will need to consume this
     const handleSubmit = e => {
         e.preventDefault();
-        searchContext.setSearchQuery(inputText);
+        mapContext.setSearchQuery(inputText);
         setInputText('');
     };
 
-    console.log(searchContext.searchQuery);
+    console.log(mapContext.searchQuery);
 
 
     return (
