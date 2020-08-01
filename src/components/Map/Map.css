@@ -1,0 +1,14 @@
+div.infowindow {
+    display: flex;
+    flex-direction: column;
+    max-width: 150px;
+    align-items: center;
+}
+
+div.infowindow > h1 {
+    font-size: 1rem;
+}
+
+div.infowindow img {
+    width: 100px;
+}

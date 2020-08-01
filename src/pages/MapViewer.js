@@ -15,11 +15,16 @@ const MapViewer = props => (
 const GridContainer = styled.div`
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(6, 1fr)
+    grid-template-columns: repeat(6, 1fr);
+    position: absolute;
+    bottom: 0;
+    top: 4rem;
 `
 
 const GridItem = styled.div`
     grid-column: span ${props => props.columns};
+    position: relative;
+    height: 100%;
 `
 
 export default MapViewer

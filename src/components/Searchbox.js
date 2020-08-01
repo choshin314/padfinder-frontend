@@ -20,7 +20,7 @@ const Searchbox = () => {
     //on search form submit, send value to context - Maps component will need to consume this
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let queryString = inputText.trim().replace(' ', '+');
+        let queryString = inputText.trim().replace(/ /g, '+');
         try {
             const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${queryString}&key=${process.env.REACT_APP_MAPS_KEY}`);
             const responseData = await response.json();
