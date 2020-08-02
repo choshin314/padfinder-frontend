@@ -3,10 +3,10 @@ import styled from 'styled-components'
 
 import Map from '../components/Map/Map'
 
-const MapViewer = props => (
+const MapView = props => (
     <GridContainer>
         <GridItem columns={4}>
-            <Map />
+            <Map mainMap/>
         </GridItem>
         <GridItem columns={2} />
     </GridContainer>
@@ -27,4 +27,4 @@ const GridItem = styled.div`
     height: 100%;
 `
 
-export default MapViewer
+export default MapView
