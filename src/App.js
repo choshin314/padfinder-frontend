@@ -4,7 +4,8 @@ import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
 import {MapContextProvider} from './context/MapContext'
 import MainNav from './components/Nav/MainNav'
 import Home from './pages/Home'
-import MapViewer from './pages/MapViewer'
+import MapView from './pages/MapView'
+import PropertyView from './pages/PropertyView'
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <MainNav />
         <Switch>
           <Route exact path="/"><Home /></Route>
-          <Route exact path="/search/:searchquery"><MapViewer /></Route>
+          <Route exact path="/search/:searchquery"><MapView /></Route>
+          <Route exact path="/properties/:propertyid"><PropertyView /></Route>
         </Switch>
       </Router>
     </MapContextProvider>
