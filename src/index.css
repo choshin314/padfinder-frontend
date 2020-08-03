@@ -1,6 +1,9 @@
 * {
   box-sizing: border-box;
   --primary-color: #0b6839;
+  --tablet: 620px;
+  --desktop: 980px;
+  --wide: 1244px;
 }
 
 html, body {
