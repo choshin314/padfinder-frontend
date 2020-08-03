@@ -5,43 +5,11 @@ import {Link} from 'react-router-dom'
 import usePlacesAutocomplete, {getGeocode, getLatLng} from 'use-places-autocomplete'
 
 import {MapContext} from '../../context/MapContext'
-import SearchInput from '../SearchInput'
+import SearchInput from './SearchInput'
 import house from '../../assets/home-solid.svg'
 import aptBldg from '../../assets/building-solid.svg'
 
-const dummyProperties = [
-    {
-        address: '1557 Sanford Ave, St. Louis, MO',
-        coordinates: {
-            lat: 38.6224608,
-            lng: -90.298468
-        },
-        type: 'house',
-        id: 'p1',
-        image: 'https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg'
-    },
-    {
-        address: '7355 Manchester Rd, Maplewood, MO',
-        coordinates: {
-            lat: 38.6140832,
-            lng: -90.31923739999999
-        },
-        type: 'apartment',
-        id: 'p2',
-        image: 'https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg'
-    },
-    {
-        address: '6554 Manchester Rd, Maplewood, Mo',
-        coordinates: {
-            lat: 38.61923,
-            lng: -90.30013
-        },
-        type: 'apartment',
-        id: 'p3',
-        image: 'https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg'
-    }
-]
-
+import {dummyProperties} from '../dummyProperties'
 
 //map properties (styles, libraries, options, icons, etc)
 const containerStyle = {

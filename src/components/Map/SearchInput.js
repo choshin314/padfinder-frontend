@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faSearch} from '@fortawesome/free-solid-svg-icons'
 
-import {MapContext} from '../context/MapContext'
+import {MapContext} from '../../context/MapContext'
 
 const SearchInput = (props) => {
     const mapContext = useContext(MapContext);

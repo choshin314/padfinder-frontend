@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
 
 import {MapContextProvider} from './context/MapContext'
-import MainNav from './components/Nav/MainNav'
+import MainNav from './components/nav/MainNav'
 import Home from './pages/Home'
 import MapView from './pages/MapView'
 import PropertyView from './pages/PropertyView'
