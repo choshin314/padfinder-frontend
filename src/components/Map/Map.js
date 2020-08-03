@@ -95,7 +95,7 @@ const Map = props => {
                 >
                     <InfoCard>
                         <Link to={`/properties/${selected.id}`}>
-                            <h2>{selected.address}</h2>
+                            <h2>{selected.address.split(',')[0]}</h2>
                             <ul>
                                 <li>Rent: {selected.rent}</li>
                                 <li>{selected.bedrooms}BR / {selected.bathrooms}BA</li>
