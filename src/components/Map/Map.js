@@ -76,7 +76,7 @@ const Map = props => {
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={coordinates}
-            zoom={15}
+            zoom={13}
             options={options}
             onLoad={onMapLoad}
         >
@@ -129,7 +129,7 @@ const SearchDiv = styled.div`
     position: absolute;
     top: 2rem;
     left: 0;
-    z-index: 10;
+    z-index: 5;
     width: 350px;
 `
 
