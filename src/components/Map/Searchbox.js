@@ -27,6 +27,7 @@ const Div = styled.div`
         font-weight: bold;
         text-align: center;
         z-index: 100;
+        text-shadow: 2px 2px 2px #00ffff;
     }
 `
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, {css} from 'styled-components'
 
-const Section = (props) => {
+const HeroSection = (props) => {
     return (
         <StyledSection bg={props.bg} overlay={props.overlay}>  
             {props.children}
@@ -9,13 +9,14 @@ const Section = (props) => {
     )
 }
 
-export default Section
+export default HeroSection
 
 
 const StyledSection = styled.section`
     width: 100%;
     padding: 15% 0;
     min-height: 300px;
+    max-height: 450px;
     position: relative;
     background: ${props => props.bg ? props.bg : 'white'};
     background-size: cover;

@@ -1,15 +1,15 @@
 import React from 'react'
 
-import Section from '../components/Section'
+import HeroSection from '../components/HeroSection'
 import cityscape from '../assets/cityscape.svg'
 import Searchbox from '../components/map/Searchbox'
 
 const Home = () => {
     return (
         <>
-        <Section bg={`url(${cityscape})`} overlay>
+        <HeroSection bg={`url(${cityscape})`} overlay>
             <Searchbox />
-        </Section>
+        </HeroSection>
         </>
     )
 }
