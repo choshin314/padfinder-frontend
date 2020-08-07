@@ -9,7 +9,6 @@ import SearchInput from './SearchInput'
 import house from '../../assets/home-solid.svg'
 import aptBldg from '../../assets/building-solid.svg'
 
-import {dummyProperties} from '../dummyProperties'
 
 //map properties (styles, libraries, options, icons, etc)
 const containerStyle = {
@@ -40,7 +39,7 @@ let icon = (property) => {
 
 const Map = props => {
     const mapContext = useContext(MapContext);
-    const {coordinates, setCoordinates, nearbyProperties} = mapContext;
+    const {coordinates, setCoordinates, nearbyProperties, setNearbyProperties} = mapContext;
     const [selected, setSelected] = useState();
 
     const {isLoaded, loadError} = useLoadScript({
@@ -57,13 +56,16 @@ const Map = props => {
     //only reset local storage w/ context coordinates if we actually have new coordinates
     //if we don't have new coordinates, we need to use our value saved in local storage to set state again after a reload
     useEffect(()=> {
-        if (coordinates.lat) {
-            localStorage.setItem('coordinates', JSON.stringify({coordinates: coordinates}))
+        if (coordinates.lat && nearbyProperties) {
+            localStorage.setItem('coordinates', JSON.stringify({coordinates: coordinates}));
+            localStorage.setItem('nearbyProperties', JSON.stringify({nearbyProperties}));
         } else {
             let localCoordinates = JSON.parse(localStorage.getItem('coordinates'));
             setCoordinates(localCoordinates.coordinates);
+            let localNearbyProperties = JSON.parse(localStorage.getItem('nearbyProperties'));
+            setNearbyProperties(localNearbyProperties.nearbyProperties)
         }
-    }, [coordinates])
+    }, [coordinates, nearbyProperties])
 
     useEffect(() => {
         console.log(nearbyProperties);
@@ -132,7 +134,8 @@ const InfoCard = styled.div`
 const SearchDiv = styled.div`
     position: absolute;
     top: 2rem;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 5;
     width: 350px;
 `
