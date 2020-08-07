@@ -21,17 +21,31 @@ const SearchInput = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let queryString = inputText.trim().replace(/ /g, '+');
+        let coords;
+
+        //convert queried address to lat lng and store in mapcontext.  Map component will need coordinates as center.
         try {
             const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${queryString}&key=${process.env.REACT_APP_MAPS_KEY}`);
             const responseData = await response.json();
-            const coords = responseData.results[0].geometry.location;
+            coords = responseData.results[0].geometry.location;
             const displayAddress = responseData.results[0].formatted_address;
             mapContext.setCoordinates(coords);
             mapContext.setDisplayAddress(displayAddress);
-            history.push(`/search/${queryString}`)
         } catch(err) {
             console.log(err);
         }
+
+        //retrieve array of properties that are within 3(ish) miles from queried property. Store it in mapcontext.
+        //need to display these in map markers/infowindows and property cards for the sidebar
+        try {
+            const response = await fetch(`http://localhost:5000/api/properties/nearby/${coords.lat}-${coords.lng}`);
+            const nearbyProperties = await response.json();
+            mapContext.setNearbyProperties(nearbyProperties);
+        } catch(err) {
+            console.log(err, 'Failed to fetch nearby properties');
+        }
+
+        history.push(`/search/${queryString}`)
     };
 
     return (

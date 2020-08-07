@@ -40,7 +40,7 @@ let icon = (property) => {
 
 const Map = props => {
     const mapContext = useContext(MapContext);
-    const {coordinates, setCoordinates} = mapContext;
+    const {coordinates, setCoordinates, nearbyProperties} = mapContext;
     const [selected, setSelected] = useState();
 
     const {isLoaded, loadError} = useLoadScript({
@@ -65,6 +65,10 @@ const Map = props => {
         }
     }, [coordinates])
 
+    useEffect(() => {
+        console.log(nearbyProperties);
+    }, [nearbyProperties])
+
     if (loadError) return "Error loading maps";
     if (!isLoaded) return "Loading Maps";
 
@@ -80,7 +84,7 @@ const Map = props => {
             options={options}
             onLoad={onMapLoad}
         >
-            {props.mainMap && dummyProperties.map(property => (
+            {props.mainMap && nearbyProperties.map(property => (
                 <Marker 
                     key={property.id} 
                     position={property.coordinates}

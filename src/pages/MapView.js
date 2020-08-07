@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {Switch, Route} from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -7,8 +7,11 @@ import PropertyCard from '../components/properties/PropertyCard'
 import PropertyModal from '../components/properties/PropertyModal'
 
 import {dummyProperties} from '../components/dummyProperties'
+import {MapContext} from '../context/MapContext'
 
 const MapView = props => {
+    const mapContext = useContext(MapContext);
+    const {nearbyProperties} = mapContext;
     const [modalOpen, setModalOpen] = useState(false);
     const toggleModal = () => setModalOpen(!modalOpen);
 
@@ -19,7 +22,7 @@ const MapView = props => {
                 <Map mainMap/>
             </MapDiv>
             <SidePanel>
-                {dummyProperties.map(p => <PropertyCard property={p} toggleModal={toggleModal}/>)}
+                {nearbyProperties.map(p => <PropertyCard property={p} toggleModal={toggleModal}/>)}
             </SidePanel>
         </GridContainer>
         {modalOpen && <PropertyModal toggleModal={toggleModal}/>}
