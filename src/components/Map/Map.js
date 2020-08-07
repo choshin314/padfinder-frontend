@@ -2,7 +2,6 @@ import React, {useState, useContext, useEffect, useRef, useCallback} from 'react
 import {GoogleMap, useLoadScript, Marker, InfoWindow} from '@react-google-maps/api'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
-import usePlacesAutocomplete, {getGeocode, getLatLng} from 'use-places-autocomplete'
 
 import {MapContext} from '../../context/MapContext'
 import SearchInput from './SearchInput'
@@ -39,7 +38,7 @@ let icon = (property) => {
 
 const Map = props => {
     const mapContext = useContext(MapContext);
-    const {coordinates, setCoordinates, nearbyProperties, setNearbyProperties} = mapContext;
+    const { coordinates, nearbyProperties, dispatch } = mapContext;
     const [selected, setSelected] = useState();
 
     const {isLoaded, loadError} = useLoadScript({
@@ -52,20 +51,7 @@ const Map = props => {
         mapRef.current = map;
     }, []);
 
-    //need to save coordinates to local storage or it'll blank out on reload bc context will reset on reload
-    //only reset local storage w/ context coordinates if we actually have new coordinates
-    //if we don't have new coordinates, we need to use our value saved in local storage to set state again after a reload
-    // useEffect(()=> {
-    //     if (coordinates.lat && nearbyProperties) {
-    //         localStorage.setItem('coordinates', JSON.stringify({coordinates: coordinates}));
-    //         localStorage.setItem('nearbyProperties', JSON.stringify({nearbyProperties}));
-    //     } else {
-    //         let localCoordinates = JSON.parse(localStorage.getItem('coordinates'));
-    //         setCoordinates(localCoordinates.coordinates);
-    //         let localNearbyProperties = JSON.parse(localStorage.getItem('nearbyProperties'));
-    //         setNearbyProperties(localNearbyProperties.nearbyProperties)
-    //     }
-    // }, [coordinates, nearbyProperties])
+
 
     if (loadError) return "Error loading maps";
     if (!isLoaded) return "Loading Maps";

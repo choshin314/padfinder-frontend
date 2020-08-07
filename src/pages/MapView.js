@@ -27,6 +27,9 @@ const MapView = props => {
         </>
     )
 }
+
+
+
 const GridContainer = styled.div`
     width: 100%;
     height: 100%;

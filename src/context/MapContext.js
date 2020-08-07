@@ -1,12 +1,15 @@
-import React, {useState, useEffect} from 'react'
+import React, { useEffect, useReducer } from 'react'
 
 const MapContext = React.createContext();
 
-function reducer(state, action) {
+function reducerFunction(state, action) {
     switch(action.type) {
         case "UPDATE_COORDS": {
             return { ...state, coordinates: action.value }
         };
+        case "UPDATE_COORDS+ADDRESS": {
+            return { ...state, coordinates: action.value[0], displayAddress: action.value[1] }
+        }
         case "UPDATE_NEARBY": {
             return { ...state, nearbyProperties: action.value }
         }; 
@@ -14,28 +17,28 @@ function reducer(state, action) {
 }
 
 const MapContextProvider = props => {
-    const [coordinates, setCoordinates] = useState({});
-    const [displayAddress, setDisplayAddress] = useState('');
-    const [nearbyProperties, setNearbyProperties] = useState([]);
+    //if it's saved in localstorage, initialize it w/ that.  Otherwise, initialize state fresh.
+    const [ state, dispatch ] = useReducer(reducerFunction, {
+        coordinates: JSON.parse(localStorage.getItem('coordinates')).coordinates || {},
+        nearbyProperties: JSON.parse(localStorage.getItem('nearbyProperties')).nearbyProperties || [],
+        displayAddress: JSON.parse(localStorage.getItem('displayAddress')).displayAddress || ''
+    })
 
+    const { coordinates, nearbyProperties, displayAddress } = state;
 
-    //need to save coordinates + nearbyProperties to local storage or map & sidebar will blank out on reload bc context will reset on reload
+    //need to save coordinates, nearbyProperties & displayAddy to local storage or map & sidebar will blank out on reload bc context will reset on reload
     //only reset local storage w/ context values if we actually have new context values
     //if we don't have new coordinates, we need to use our value saved in local storage to set context state again after a reload
     useEffect(()=> {
-        if (coordinates.lat && nearbyProperties) {
+        if (coordinates.lat && nearbyProperties && displayAddress) {
             localStorage.setItem('coordinates', JSON.stringify({coordinates: coordinates}));
             localStorage.setItem('nearbyProperties', JSON.stringify({nearbyProperties}));
-        } else {
-            let localCoordinates = JSON.parse(localStorage.getItem('coordinates'));
-            setCoordinates(localCoordinates.coordinates);
-            let localNearbyProperties = JSON.parse(localStorage.getItem('nearbyProperties'));
-            setNearbyProperties(localNearbyProperties.nearbyProperties)
-        }
-    }, [coordinates, nearbyProperties])
+            localStorage.setItem('displayAddress', JSON.stringify({displayAddress}));
+        } 
+    }, [coordinates, nearbyProperties, displayAddress])
 
     return (
-        <MapContext.Provider value={{coordinates, setCoordinates, displayAddress, setDisplayAddress, nearbyProperties, setNearbyProperties}} >
+        <MapContext.Provider value={{coordinates, nearbyProperties, displayAddress, dispatch}} >
             {props.children}
         </MapContext.Provider>
     )
