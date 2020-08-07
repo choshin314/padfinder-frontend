@@ -15,7 +15,7 @@ function App() {
         <Switch>
           <Route exact path="/"><Home /></Route>
           <Route exact path="/search/:searchquery"><MapView /></Route>
-          <Route exact path="/properties/:propertyid"><PropertyView /></Route>
+          
         </Switch>
       </Router>
     </MapContextProvider>

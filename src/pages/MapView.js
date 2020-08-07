@@ -1,23 +1,31 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {Switch, Route} from 'react-router-dom'
 import styled from 'styled-components'
 
 import Map from '../components/map/Map'
 import PropertyCard from '../components/properties/PropertyCard'
+import PropertyModal from '../components/properties/PropertyModal'
 
 import {dummyProperties} from '../components/dummyProperties'
 
-const MapView = props => (
-    <GridContainer>
-        <MapDiv>
-            <Map mainMap/>
-        </MapDiv>
-        <RelatedListings>
+const MapView = props => {
+    const [modalOpen, setModalOpen] = useState(false);
+    const toggleModal = () => setModalOpen(!modalOpen);
 
-            {dummyProperties.map(p => <PropertyCard property={p}/>)}
-        </RelatedListings>
-    </GridContainer>
-)
-
+    return (
+        <>
+        <GridContainer>
+            <MapDiv>
+                <Map mainMap/>
+            </MapDiv>
+            <SidePanel>
+                {dummyProperties.map(p => <PropertyCard property={p} toggleModal={toggleModal}/>)}
+            </SidePanel>
+        </GridContainer>
+        {modalOpen && <PropertyModal toggleModal={toggleModal}/>}
+        </>
+    )
+}
 const GridContainer = styled.div`
     width: 100%;
     height: 100%;
@@ -39,7 +47,7 @@ const MapDiv = styled.div`
     min-height: 50vh;
 `
 
-const RelatedListings = styled.div`
+const SidePanel = styled.div`
     grid-column: span 2;
     position: relative;
     height: 100%;

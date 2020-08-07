@@ -1,14 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
+import {Link, Route} from 'react-router-dom'
+
+import PropertyModal from './PropertyModal'
+import Modal from '../Modal'
 
 const PropertyCard = props => {
     const {id, image, rent, beds, baths, sqft, address, name, type} = props.property;
 
     return (
         <Container>
-            <ImageDiv>
-                <Link to={`/properties/${id}`}><img src={image} alt={address} /></Link>
+            <ImageDiv onClick={() => props.toggleModal()}>
+                <img src={image} alt={address} />
             </ImageDiv>
             <InfoList>
                 <Flex>
@@ -17,7 +20,6 @@ const PropertyCard = props => {
                 </Flex>
                 <Detail>{address.split(',')[0]}</Detail>
                 <Detail>{name || `${type} for Rent`}</Detail>
-                <Detail><Link to={`/properties/${id}`}>See details</Link></Detail>
             </InfoList>
         </Container>
     )
