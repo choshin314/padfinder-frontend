@@ -1,12 +1,10 @@
 import React, {useState, useContext} from 'react'
-import {Switch, Route} from 'react-router-dom'
 import styled from 'styled-components'
 
 import Map from '../components/map/Map'
 import PropertyCard from '../components/properties/PropertyCard'
 import PropertyModal from '../components/properties/PropertyModal'
 
-import {dummyProperties} from '../components/dummyProperties'
 import {MapContext} from '../context/MapContext'
 
 const MapView = props => {
