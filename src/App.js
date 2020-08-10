@@ -8,6 +8,7 @@ import MapView from './pages/MapView'
 import PropertyView from './pages/PropertyView'
 
 function App() {
+  
   return (
     <MapContextProvider>
       <Router>
