@@ -9,10 +9,13 @@ function reducerFunction(state, action) {
         };
         case "UPDATE_COORDS+ADDRESS": {
             return { ...state, coordinates: action.value[0], displayAddress: action.value[1] }
-        }
+        };
         case "UPDATE_NEARBY": {
             return { ...state, nearbyProperties: action.value }
         }; 
+        case "EXPAND_PROPERTY": {
+            return { ...state, expandedProperty: action.value }
+        };
     }
 }
 
@@ -21,10 +24,11 @@ const MapContextProvider = props => {
     const [ state, dispatch ] = useReducer(reducerFunction, {
         coordinates: JSON.parse(localStorage.getItem('coordinates')).coordinates || {},
         nearbyProperties: JSON.parse(localStorage.getItem('nearbyProperties')).nearbyProperties || [],
-        displayAddress: JSON.parse(localStorage.getItem('displayAddress')).displayAddress || ''
+        displayAddress: JSON.parse(localStorage.getItem('displayAddress')).displayAddress || '',
+        expandedProperty: null
     })
 
-    const { coordinates, nearbyProperties, displayAddress } = state;
+    const { coordinates, nearbyProperties, displayAddress, expandedProperty } = state;
 
     //need to save coordinates, nearbyProperties & displayAddy to local storage or map & sidebar will blank out on reload bc context will reset on reload
     //only reset local storage w/ context values if we actually have new context values
@@ -38,7 +42,7 @@ const MapContextProvider = props => {
     }, [coordinates, nearbyProperties, displayAddress])
 
     return (
-        <MapContext.Provider value={{coordinates, nearbyProperties, displayAddress, dispatch}} >
+        <MapContext.Provider value={{coordinates, nearbyProperties, displayAddress, expandedProperty, dispatch}} >
             {props.children}
         </MapContext.Provider>
     )
