@@ -1,16 +1,18 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import styled from 'styled-components'
-import {Link, Route} from 'react-router-dom'
 
-import PropertyModal from './PropertyModal'
-import Modal from '../Modal'
+import {MapContext} from '../../context/MapContext'
 
 const PropertyCard = props => {
     const {id, images, details, address, type} = props.property;
     const {rent, beds, baths, size} = details;
+    const {dispatch} = useContext(MapContext); //on click, save the property in context. To be consumed by PropertyModal.
 
     return (
-        <Container onClick={() => props.toggleModal()}>
+        <Container onClick={() => {
+            props.toggleModal();
+            dispatch({type: "EXPAND_PROPERTY", value: props.property});
+        }}>
             <ImageDiv>
                 <img src={images[0].href} alt={address.street} />
             </ImageDiv>
