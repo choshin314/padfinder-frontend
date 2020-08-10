@@ -6,20 +6,30 @@ import PropertyModal from './PropertyModal'
 import Modal from '../Modal'
 
 const PropertyCard = props => {
-    const {id, image, rent, beds, baths, sqft, address, name, type} = props.property;
+    const {id, images, details, address, type} = props.property;
+    const {rent, beds, baths, size} = details;
 
     return (
-        <Container>
-            <ImageDiv onClick={() => props.toggleModal()}>
-                <img src={image} alt={address} />
+        <Container onClick={() => props.toggleModal()}>
+            <ImageDiv>
+                <img src={images[0].href} alt={address.street} />
             </ImageDiv>
             <InfoList>
-                <Flex>
-                    <Rent>${rent}/mo</Rent>
-                    <Detail>{beds} bd | {baths} ba | {sqft} sqft</Detail>
-                </Flex>
-                <Detail>{address.split(',')[0]}</Detail>
-                <Detail>{name || `${type} for Rent`}</Detail>
+                
+                    {
+                        !rent[1] ? 
+                        <Rent>${rent[0]}/mo</Rent> :
+                        <Rent>${rent[0]}-${rent[1]}/mo</Rent>
+                    }
+                    {
+                        !beds[1] ? 
+                        <Detail>{beds[0]} bd | {baths[0]} ba | {size[0]} sqft</Detail> :
+                        <Detail>{beds[0]}-{beds[1]} bd | {baths[0]}-{baths[1]} ba | {size[0]}-{size[1]} sqft</Detail>
+                    }
+                    
+                
+                <Detail>{address.street}, {address.city}, {address.state} {address.zip}</Detail>
+                <Detail>{details.neighborhood || `${type} for Rent`}</Detail>
             </InfoList>
         </Container>
     )
@@ -58,7 +68,7 @@ const Flex = styled.li`
     align-items: baseline;
 `
 const Rent = styled.h1`
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 `
 
 const Detail = styled.li`
