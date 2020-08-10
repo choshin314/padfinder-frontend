@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Map from '../components/map/Map'
 import PropertyCard from '../components/properties/PropertyCard'
 import PropertyModal from '../components/properties/PropertyModal'
+import {devices} from '../components/styledLib'
 
 import {MapContext} from '../context/MapContext'
 
@@ -35,11 +36,11 @@ const GridContainer = styled.div`
     height: 100%;
     display: grid;
     grid-template-columns: 1fr;
+    padding-top: 4rem;
     position: absolute;
     bottom: 0;
-    top: 4rem;
     grid-row-gap: 5px;
-    @media (min-width: 980px) {
+    @media (min-width: ${devices.tablet}) {
         grid-template-columns: repeat(6, 1fr);
     }
 `
@@ -61,13 +62,14 @@ const SidePanel = styled.div`
     grid-gap: 5px;
     grid-template-columns: 1fr;
 
-    @media(min-width: 620px) {
+    @media(min-width: ${devices.lgPhone}) {
         grid-template-columns: 1fr 1fr;
     }
-    @media(min-width: 980px) {
+    @media(min-width: ${devices.tablet}) {
         grid-template-columns: 1fr;
+        overflow-y: auto;
     }
-    @media(min-width: 1244px) {
+    @media(min-width: ${devices.laptop}) {
         grid-template-columns: 1fr 1fr;
     }
 `

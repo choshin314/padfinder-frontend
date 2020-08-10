@@ -27,6 +27,8 @@ const Nav = styled.nav`
     position: relative;
     overflow: hidden;
     padding: 0 2rem;
+    position: fixed;
+    z-index: 100;
 
     & > a {
         font-size: 2rem;
