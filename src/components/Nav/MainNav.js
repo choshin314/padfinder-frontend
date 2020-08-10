@@ -24,7 +24,6 @@ const Nav = styled.nav`
     justify-content: space-between;
     background-color: var(--primary-color);
     color: white;
-    position: relative;
     overflow: hidden;
     padding: 0 2rem;
     position: fixed;
