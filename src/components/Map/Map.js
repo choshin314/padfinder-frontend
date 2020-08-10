@@ -52,6 +52,20 @@ const Map = props => {
     }, []);
 
 
+    //set up handler to update map center coordinates and update nearby properties array whenever user drags the map.
+    const saveNewCoords = async () => {
+        let newCoords = mapRef.current.getCenter();
+        newCoords = { lat: newCoords.lat(), lng: newCoords.lng()}
+        dispatch({type: "UPDATE_COORDS", value: newCoords});
+        try {
+            const response = await fetch(`http://localhost:5000/api/properties/nearby/${newCoords.lat}-${newCoords.lng}`);
+            const nearbyProperties = await response.json();
+            // mapContext.setNearbyProperties(nearbyProperties);
+            dispatch({ type: "UPDATE_NEARBY", value: nearbyProperties })
+        } catch(err) {
+            console.log(err, 'Failed to fetch nearby properties');
+        }
+    }
 
     if (loadError) return "Error loading maps";
     if (!isLoaded) return "Loading Maps";
@@ -67,26 +81,36 @@ const Map = props => {
             zoom={13}
             options={options}
             onLoad={onMapLoad}
+            onDragEnd={saveNewCoords}
         >
             {props.mainMap && nearbyProperties.map(property => (
                 <Marker 
                     key={property.id} 
-                    position={property.coordinates}
+                    position={property.address.coordinates}
                     icon={icon(property)}
                     onClick={() => setSelected(property)}
                 />
             ))}
             {selected && (
                 <InfoWindow 
-                    position={selected.coordinates}
+                    position={selected.address.coordinates}
                     onCloseClick={() => setSelected(null)}
                 >
                     <InfoCard>
                         <Link to={`/properties/${selected.id}`}>
-                            <h2>{selected.address.split(',')[0]}</h2>
+                            <h2>{selected.address.street}</h2>
                             <ul>
-                                <li>Rent: {selected.rent}</li>
-                                <li>{selected.bedrooms}BR / {selected.bathrooms}BA</li>
+                                { 
+                                    !selected.details.rent[1] ? 
+                                    <>
+                                    <li>${selected.details.rent}/MO</li>
+                                    <li>{selected.details.beds}BR / {selected.details.baths}BA</li>
+                                    </> :
+                                    <>
+                                    <li>${selected.details.rent[0]}-${selected.details.rent[1]}/MO</li>
+                                    <li>{selected.details.beds[0]}-{selected.details.beds[1]}BR / {selected.details.baths[0]}-{selected.details.baths[1]}BA</li>
+                                    </> 
+                                }
                             </ul>
                         </Link>
                     </InfoCard>
