@@ -6,11 +6,11 @@ import {MapContext} from '../../context/MapContext'
 const PropertyCard = props => {
     const {id, images, details, address, type} = props.property;
     const {rent, beds, baths, size} = details;
-    const {dispatch} = useContext(MapContext); //on click, save the property in context. To be consumed by PropertyModal.
+    const {toggleModal, dispatch} = useContext(MapContext); //on click, save the property in context. To be consumed by PropertyModal.
 
     return (
         <Container onClick={() => {
-            props.toggleModal();
+            toggleModal();
             dispatch({type: "EXPAND_PROPERTY", value: props.property});
         }}>
             <ImageDiv>

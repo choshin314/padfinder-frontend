@@ -7,9 +7,9 @@ import {MapContext} from '../../context/MapContext'
 import {devices, Wrapper} from '../styledLib'
 
 const PropertyModal = (props) => {
-    const {expandedProperty} = useContext(MapContext);
+    const {expandedProperty, toggleModal} = useContext(MapContext);
     return (
-        <Modal toggleModal={props.toggleModal}>
+        <Modal toggleModal={toggleModal}>
             <Container>
                 <PhotoGrid>
                     <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>

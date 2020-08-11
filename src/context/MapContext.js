@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 
 const MapContext = React.createContext();
 
@@ -27,8 +27,11 @@ const MapContextProvider = props => {
         displayAddress: JSON.parse(localStorage.getItem('displayAddress')).displayAddress || '',
         expandedProperty: null
     })
-
     const { coordinates, nearbyProperties, displayAddress, expandedProperty } = state;
+
+    //PropertyModal toggle 
+    const [modalOpen, setModalOpen] = useState(false);
+    const toggleModal = () => setModalOpen(!modalOpen);
 
     //need to save coordinates, nearbyProperties & displayAddy to local storage or map & sidebar will blank out on reload bc context will reset on reload
     //only reset local storage w/ context values if we actually have new context values
@@ -42,7 +45,15 @@ const MapContextProvider = props => {
     }, [coordinates, nearbyProperties, displayAddress])
 
     return (
-        <MapContext.Provider value={{coordinates, nearbyProperties, displayAddress, expandedProperty, dispatch}} >
+        <MapContext.Provider value={{
+            coordinates, 
+            nearbyProperties, 
+            displayAddress, 
+            expandedProperty, 
+            modalOpen,
+            toggleModal,
+            dispatch
+        }} >
             {props.children}
         </MapContext.Provider>
     )

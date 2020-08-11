@@ -96,23 +96,21 @@ const Map = props => {
                     position={selected.address.coordinates}
                     onCloseClick={() => setSelected(null)}
                 >
-                    <InfoCard>
-                        <Link to={`/properties/${selected.id}`}>
-                            <h2>{selected.address.street}</h2>
-                            <ul>
-                                { 
-                                    !selected.details.rent[1] ? 
-                                    <>
-                                    <li>${selected.details.rent}/MO</li>
-                                    <li>{selected.details.beds}BR / {selected.details.baths}BA</li>
-                                    </> :
-                                    <>
-                                    <li>${selected.details.rent[0]}-${selected.details.rent[1]}/MO</li>
-                                    <li>{selected.details.beds[0]}-{selected.details.beds[1]}BR / {selected.details.baths[0]}-{selected.details.baths[1]}BA</li>
-                                    </> 
-                                }
-                            </ul>
-                        </Link>
+                    <InfoCard onClick={()=> dispatch({type: "EXPAND_PROPERTY", value: selected })}>
+                        <h2>{selected.address.street}</h2>
+                        <ul>
+                            { 
+                                !selected.details.rent[1] ? 
+                                <>
+                                <li>${selected.details.rent}/MO</li>
+                                <li>{selected.details.beds}BR / {selected.details.baths}BA</li>
+                                </> :
+                                <>
+                                <li>${selected.details.rent[0]}-${selected.details.rent[1]}/MO</li>
+                                <li>{selected.details.beds[0]}-{selected.details.beds[1]}BR / {selected.details.baths[0]}-{selected.details.baths[1]}BA</li>
+                                </> 
+                            }
+                        </ul>
                     </InfoCard>
                 </InfoWindow>
             )}
@@ -123,9 +121,6 @@ const Map = props => {
 
 const InfoCard = styled.div`
     max-width: 100px;
-    & a {
-        text-decoration: none;
-    }
     & h2 {
         font-size: .7rem;
         font-weight: bold;

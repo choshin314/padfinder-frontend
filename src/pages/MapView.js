@@ -10,9 +10,7 @@ import {MapContext} from '../context/MapContext'
 
 const MapView = props => {
     const mapContext = useContext(MapContext);
-    const {nearbyProperties} = mapContext;
-    const [modalOpen, setModalOpen] = useState(false);
-    const toggleModal = () => setModalOpen(!modalOpen);
+    const {nearbyProperties, modalOpen, toggleModal} = mapContext;
 
     return (
         <>
