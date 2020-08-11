@@ -1,11 +1,13 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import styled from 'styled-components'
 
 import Modal from '../Modal'
 import PropertyDetails from './PropertyDetails'
+import {MapContext} from '../../context/MapContext'
 import {devices, Wrapper} from '../styledLib'
 
 const PropertyModal = (props) => {
+    const {expandedProperty} = useContext(MapContext);
     return (
         <Modal toggleModal={props.toggleModal}>
             <Container>
@@ -22,7 +24,7 @@ const PropertyModal = (props) => {
                     <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
                     <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
                 </PhotoGrid>
-                <PropertyDetails />
+                <PropertyDetails property={expandedProperty}/>
             </Container>
         </Modal>
     )
