@@ -32,6 +32,7 @@ const PropertyCard = props => {
                 
                 <Detail>{address.street}, {address.city}, {address.state} {address.zip}</Detail>
                 <Detail>{details.neighborhood || `${type} for Rent`}</Detail>
+                
             </InfoList>
         </Container>
     )
@@ -47,6 +48,7 @@ const Container = styled.div`
     position: relative;
     padding: 0;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
 `
 
 const ImageDiv = styled.div`
@@ -54,13 +56,14 @@ const ImageDiv = styled.div`
     overflow: hidden;
     & img {
         width: 100%;
+        height: 200px;
         object-fit: cover;
         object-position: 50% 50%;
     }
 ` 
 const InfoList = styled.ul`
     list-style: none;
-    padding: 0 0.5rem;
+    padding: 0.5rem;
     margin: 0;
 `
 
@@ -75,6 +78,6 @@ const Rent = styled.h1`
 
 const Detail = styled.li`
     font-size: .8rem;
-    line-height: 1.3;
+    line-height: 1.5;
     text-transform: capitalize;
 `

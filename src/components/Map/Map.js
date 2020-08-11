@@ -38,7 +38,7 @@ let icon = (property) => {
 
 const Map = props => {
     const mapContext = useContext(MapContext);
-    const { coordinates, nearbyProperties, dispatch } = mapContext;
+    const { coordinates, nearbyProperties, toggleModal, dispatch } = mapContext;
     const [selected, setSelected] = useState();
 
     const {isLoaded, loadError} = useLoadScript({
@@ -96,7 +96,7 @@ const Map = props => {
                     position={selected.address.coordinates}
                     onCloseClick={() => setSelected(null)}
                 >
-                    <InfoCard onClick={()=> dispatch({type: "EXPAND_PROPERTY", value: selected })}>
+                    <InfoCard>
                         <h2>{selected.address.street}</h2>
                         <ul>
                             { 
@@ -110,6 +110,12 @@ const Map = props => {
                                 <li>{selected.details.beds[0]}-{selected.details.beds[1]}BR / {selected.details.baths[0]}-{selected.details.baths[1]}BA</li>
                                 </> 
                             }
+                            <SeeMore onClick={()=> {
+                                toggleModal();
+                                dispatch({type: "EXPAND_PROPERTY", value: selected });
+                            }}>
+                                See details
+                            </SeeMore>
                         </ul>
                     </InfoCard>
                 </InfoWindow>
@@ -130,6 +136,11 @@ const InfoCard = styled.div`
         list-style: none;
         padding-left: 0;
     }
+`
+const SeeMore = styled.li`
+    cursor: pointer;
+    color: blue;
+    font-weight: bold;
 `
 
 const SearchDiv = styled.div`
