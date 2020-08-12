@@ -1,7 +1,7 @@
 import React, {useReducer} from 'react'
 import styled from 'styled-components'
 
-import FormInput from './FormInput'
+import FormInput from '../formElements/FormInput'
 
 function reducer(state, action) {
     switch(action.type) {
