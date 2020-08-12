@@ -11,7 +11,7 @@ const PropertyDetails = props => {
     const {type, address, details, creator} = props.property; 
 
     return (
-        <Wrapper>
+        <WrapperDiv>
             <FlexHeader>
                 <h1>Property Details</h1>
                 <h1>Save <span><FontAwesomeIcon icon={farHeart} size={'1x'}/></span></h1>
@@ -88,9 +88,13 @@ const PropertyDetails = props => {
             <InfoContainer>
                 <ContactForm />
             </InfoContainer>
-        </Wrapper>
+        </WrapperDiv>
     )
 }
+
+const WrapperDiv = styled(Wrapper)`
+    overflow-y: auto;
+`
 
 const FlexHeader = styled.div`
     width: 100%;

@@ -34,23 +34,25 @@ export default PropertyModal
 
 const Container = styled.div`
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     position: relative;
-    overflow: hidden;
     display: grid;
     grid-template-columns: 1fr;
+    row-gap: 1rem;
+    
     @media(min-width: ${devices.tablet}) {
         grid-template-columns: 1fr 1fr;
+        height: 100%;
     }
 `
 
 const PhotoGrid = styled.div`
+    height: 100%;
     display: grid;
-    max-height: 90vh;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(5, 1fr);
     grid-gap: 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
     & div {
         grid-area: span 1 / span 1;
 
@@ -61,5 +63,6 @@ const PhotoGrid = styled.div`
     }
     @media(max-width: ${devices.lgPhone}){
         margin-top: 2rem;
+        border-bottom: 2px solid rgba(0,0,0,0.3);
     }
 `//in the future, make grid-template-rows: ${photoarray.length / 2}

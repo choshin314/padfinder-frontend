@@ -18,6 +18,7 @@ const Modal = props => {
 }
 
 const ModalWrapper = styled.div`
+    height: 100%;
     position: fixed;
     top: 0;
     bottom: 0;
@@ -31,6 +32,7 @@ const ModalDiv = styled.div`
     width: 100%;
     max-width: 1244px;
     max-height: 95vh;
+    height: 100%;
     padding: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -39,7 +41,12 @@ const ModalDiv = styled.div`
     background: white;
     box-shadow: 0 0 0 rgba(0,0,0,.5);
     position: relative;
-    overflow-y: auto;
+    overflow-y: hidden;
+
+    @media(max-width: 600px) {
+        overflow-y: auto;
+        max-height: 90vh;
+    }
 `
 
 const ModalExitBtn = styled.button`
@@ -51,6 +58,7 @@ const ModalExitBtn = styled.button`
     right: 0;
     top: 0;
     cursor: pointer;
+    z-index: 10;
     &:hover {
         background: black;
         color: white;
