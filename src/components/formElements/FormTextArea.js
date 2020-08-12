@@ -1,16 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const FormInput = (props) => {
-    const {labelText, id, name, placeholder, type, value, pattern, onChange} = props;
+const FormTextArea = (props) => {
+    const {labelText, id, name, placeholder, value, pattern, onChange} = props;
     return (
         <InputWrapper>
             <Label htmlFor={id}>{labelText}</Label>
-            <Input
+            <TextArea
                 id={id}
                 name={name}
                 placeholder={placeholder}
-                type={type}
                 value={value}
                 pattern={pattern}
                 onChange={onChange} 
@@ -20,22 +19,23 @@ const FormInput = (props) => {
     )
 }
 
-export default FormInput;
+export default FormTextArea;
 
 const Label = styled.label`
     display: none;
 `
 
-const Input = styled.input`
-    line-height: 2;
+const TextArea = styled.textarea`
+    resize: none;
     width: 100%;
+    min-height: 100px;
     font-family: 'Roboto';
     font-size: 1.1rem;
-    padding-left: .5rem;
+    line-height: 1.3;
+    padding: .5rem;
     border-radius: 3px;
 `
 
 const InputWrapper = styled.div`
     width: 100%;
 `
-
