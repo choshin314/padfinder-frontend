@@ -47,11 +47,13 @@ const Container = styled.div`
 `
 
 const PhotoGrid = styled.div`
-    height: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(5, 1fr);
     grid-gap: 5px;
+    margin-top: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(0,0,0,0.3);
     overflow-y: auto;
     & div {
         grid-area: span 1 / span 1;
@@ -61,8 +63,8 @@ const PhotoGrid = styled.div`
             max-width: 100%;
         }
     }
-    @media(max-width: ${devices.lgPhone}){
-        margin-top: 2rem;
-        border-bottom: 2px solid rgba(0,0,0,0.3);
+    @media(min-width: ${devices.tablet}){
+        margin: none;
+        border: none;
     }
 `//in the future, make grid-template-rows: ${photoarray.length / 2}

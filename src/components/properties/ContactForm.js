@@ -67,7 +67,7 @@ const ContactForm = props => {
                             name="moveInDate"
                             selected={moveInDate} 
                             onChange={date => dispatch({ type: "CHANGE_INPUT", inputName: "moveInDate", value: date })} 
-                            minDate={new Date}
+                            minDate={new Date()}
                             placeholderText="Move-In Date"
                             className="datepicker"
                         />    

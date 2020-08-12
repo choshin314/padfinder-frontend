@@ -14,7 +14,7 @@ const PropertyDetails = props => {
         <WrapperDiv>
             <FlexHeader>
                 <h1>Property Details</h1>
-                <h1>Save <span><FontAwesomeIcon icon={farHeart} size={'1x'}/></span></h1>
+                <span>Save <span><FontAwesomeIcon icon={farHeart} size={'1x'}/></span></span>
             </FlexHeader>
             <InfoContainer>
                 <InfoList>
@@ -101,6 +101,16 @@ const FlexHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-weight: bold;
+
+    & > h1 {
+        font-size: 1.5rem;
+    }
+
+    & > span {
+        font-size: 1.1rem;
+        cursor: pointer;
+    }
 `
 
 const InfoContainer = styled.div`

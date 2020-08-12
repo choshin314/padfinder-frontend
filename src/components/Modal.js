@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faWindowClose} from '@fortawesome/free-regular-svg-icons'
 
+import {devices} from './styledLib'
+
 const Modal = props => {
     return (
         <ModalWrapper onClick={() => props.toggleModal()}>
@@ -31,7 +33,7 @@ const ModalWrapper = styled.div`
 const ModalDiv = styled.div`
     width: 100%;
     max-width: 1244px;
-    max-height: 95vh;
+    max-height: 90vh;
     height: 100%;
     padding: 1rem;
     margin-top: 1rem;
@@ -41,11 +43,11 @@ const ModalDiv = styled.div`
     background: white;
     box-shadow: 0 0 0 rgba(0,0,0,.5);
     position: relative;
-    overflow-y: hidden;
+    overflow-y: auto;
 
-    @media(max-width: 600px) {
-        overflow-y: auto;
-        max-height: 90vh;
+    @media(min-width: ${devices.tablet}) {
+        overflow-y: hidden;
+        max-height: 95vh;
     }
 `
 
