@@ -3,23 +3,13 @@ import styled from 'styled-components'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
+import {useForm} from '../../hooks/useForm'
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import FormTextArea from '../formElements/FormTextArea'
 import Card from '../Card'
 import {MapContext} from '../../context/MapContext'
 import './ContactForm.css'
-
-function reducer(state, action) {
-    switch(action.type) {
-        case "INPUT_CHANGE": {
-            return {...state, [action.inputName]: action.value}
-        };
-        case "DATE_CHANGE": {
-            return {...state, moveInDate: action.value }
-        };
-    }
-}
 
 const initialState = {
     name: null,
@@ -30,15 +20,10 @@ const initialState = {
 }
 
 const ContactForm = props => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch, handleInputChange] = useForm(initialState);
     const { name, email, moveInDate, phone, message } = state;
     const {expandedProperty} = useContext(MapContext); 
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
-
-    function handleChange(e) {
-        let {value, name} = e.target;
-        dispatch({type: "INPUT_CHANGE", inputName: name, value});
-    }
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -46,6 +31,8 @@ const ContactForm = props => {
             console.log('Some async op here') //send to backend email sending route
         }
     }
+
+    console.log(state)
 
     return (
         <Card>
@@ -60,7 +47,7 @@ const ContactForm = props => {
                     labelText="Name"
                     placeholder="Your Name"
                     value={name}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     required
                 />
                 <FormInput
@@ -70,7 +57,7 @@ const ContactForm = props => {
                     labelText="Email"
                     placeholder="Email Address"
                     value={email}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     required
                 />
                 <SplitDiv>
@@ -79,7 +66,7 @@ const ContactForm = props => {
                             id="moveInDate"
                             name="moveInDate"
                             selected={moveInDate} 
-                            onChange={date => dispatch({ type: "DATE_CHANGE", value: date })} 
+                            onChange={date => dispatch({ type: "CHANGE_INPUT", inputName: "moveInDate", value: date })} 
                             minDate={new Date}
                             placeholderText="Move-In Date"
                             className="datepicker"
@@ -91,7 +78,7 @@ const ContactForm = props => {
                         name="phone"
                         labelText="Phone Number"
                         placeholder="Phone Number"
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                         value={phone}
                     />
                 </SplitDiv>
@@ -100,7 +87,7 @@ const ContactForm = props => {
                     name="message"
                     labelText="Message"
                     placeholder={`I'd like to schedule a viewing for ${expandedProperty.address.street}, please contact me!`}
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     value={message}
                 />
                 <FormButton>Send Message</FormButton>

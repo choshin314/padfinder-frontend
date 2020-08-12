@@ -3,19 +3,7 @@ import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
-
-function reducer(state, action) {
-    switch(action.type) {
-        case "INPUT_EMAIL": return {...state, email: action.value};
-        case "INPUT_PASSWORD": return {...state, password: action.value};
-        case "INPUT_FIRSTNAME": return {...state, firstName: action.value};
-        case "INPUT_LASTNAME": return {...state, lastName: action.value};
-        case "INPUT_PHONE": return {...state, phone: action.value};
-        case "INPUT_COMPANY": return {...state, company: action.value};
-        case "TOGGLE_LISTER": return {...state, isLister: action.value};
-        case "RESET": return { ...initialState };
-    }
-}
+import {useForm} from '../../hooks/useForm'
 
 const initialState = {
     email: null,
@@ -29,15 +17,8 @@ const initialState = {
 
 const LoginForm = ({mode}) => {
 
-    const [state, dispatch] = useReducer(reducer, initialState);
-
+    const [state, dispatch, handleInputChange] = useForm(initialState);
     const {email, password, isLister, firstName, lastName, phone, company} = state;
-
-    const handleChange = (e) => {
-        const inputName = e.target.name;
-        const value = e.target.value;
-        dispatch({ type: `INPUT_${inputName.toUpperCase()}`, value: value })
-    }
 
     const handleAuthSubmit = async () => {
         if (mode === "login") {
@@ -100,7 +81,7 @@ const LoginForm = ({mode}) => {
                     type="email"
                     placeholder="Enter email address"
                     value={email || ''}
-                    onChange={handleChange} 
+                    onChange={handleInputChange} 
                     required
                 />
                 <FormInput 
@@ -110,7 +91,7 @@ const LoginForm = ({mode}) => {
                     type="password" 
                     placeholder="Enter password"
                     value={password || ''}
-                    onChange={handleChange} 
+                    onChange={handleInputChange} 
                     required
                 />
                 {mode === "register" && (
@@ -118,8 +99,9 @@ const LoginForm = ({mode}) => {
                     <Checkbox>
                         <input 
                             id="isLister" 
+                            name="isLister"
                             type="checkbox" 
-                            onChange={(e) => dispatch({type: "TOGGLE_LISTER", value: e.target.checked})}
+                            onChange={handleInputChange}
                             checked={isLister}
                         />
                         <label htmlFor="isLister">I will be listing properties for lease</label>
@@ -135,7 +117,7 @@ const LoginForm = ({mode}) => {
                             type="text"
                             placeholder="First Name"
                             value={firstName || ''}
-                            onChange={handleChange}
+                            onChange={handleInputChange}
                             required
                         />
                         <FormInput
@@ -145,7 +127,7 @@ const LoginForm = ({mode}) => {
                             type="text"
                             placeholder="Last Name"
                             value={lastName || ''}
-                            onChange={handleChange}
+                            onChange={handleInputChange}
                             required
                         />
                         <FormInput
@@ -155,7 +137,7 @@ const LoginForm = ({mode}) => {
                             type="text"
                             placeholder='Company Name'
                             value={company || ''}
-                            onChange={handleChange}
+                            onChange={handleInputChange}
                             required
                         />
                         <FormInput
@@ -166,7 +148,7 @@ const LoginForm = ({mode}) => {
                             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                             placeholder="Phone Number"
                             value={phone || ''}
-                            onChange={handleChange}
+                            onChange={handleInputChange}
                             required
                         />
 
