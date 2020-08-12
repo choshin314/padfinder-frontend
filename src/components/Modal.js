@@ -1,15 +1,18 @@
 import React, {useState} from 'react'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faWindowClose} from '@fortawesome/free-regular-svg-icons'
 
 const Modal = props => {
     return (
         <ModalWrapper onClick={() => props.toggleModal()}>
             <ModalDiv onClick={(e) => e.stopPropagation()}>
+                <ModalExitBtn onClick={() => props.toggleModal()}>
+                    <FontAwesomeIcon icon={faWindowClose} size="2x" />
+                </ModalExitBtn>    
                 {props.children}
-                <ModalExitBtn onClick={() => props.toggleModal()}>X</ModalExitBtn>
             </ModalDiv>
-            
         </ModalWrapper>
     )
 }
@@ -35,18 +38,23 @@ const ModalDiv = styled.div`
     margin-right: auto;
     background: white;
     box-shadow: 0 0 0 rgba(0,0,0,.5);
-    overflow-y: auto;
     position: relative;
+    overflow-y: auto;
 `
 
 const ModalExitBtn = styled.button`
     width: 3rem;
     height: 3rem;
     border: 2px solid white;
+    background: transparent;
     position: absolute;
     right: 0;
     top: 0;
     cursor: pointer;
+    &:hover {
+        background: black;
+        color: white;
+    }
 `
 
 export default withRouter(Modal);

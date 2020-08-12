@@ -2,6 +2,7 @@ import React, {useReducer} from 'react'
 import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
+import FormButton from '../formElements/FormButton'
 
 function reducer(state, action) {
     switch(action.type) {
@@ -33,9 +34,9 @@ const LoginForm = ({mode}) => {
     const {email, password, isLister, firstName, lastName, phone, company} = state;
 
     const handleChange = (e) => {
-        const inputId = e.target.id;
+        const inputName = e.target.name;
         const value = e.target.value;
-        dispatch({ type: `INPUT_${inputId.toUpperCase()}`, value: value })
+        dispatch({ type: `INPUT_${inputName.toUpperCase()}`, value: value })
     }
 
     const handleAuthSubmit = async () => {
@@ -94,6 +95,7 @@ const LoginForm = ({mode}) => {
             <Form onSubmit={handleSubmit}>
                 <FormInput
                     id="email"
+                    name="email"
                     labelText="Email Address"
                     type="email"
                     placeholder="Enter email address"
@@ -103,6 +105,7 @@ const LoginForm = ({mode}) => {
                 />
                 <FormInput 
                     id="password" 
+                    name="password"
                     labelText="Password"
                     type="password" 
                     placeholder="Enter password"
@@ -127,6 +130,7 @@ const LoginForm = ({mode}) => {
                     <ListerContainer>
                         <FormInput
                             id="firstName"
+                            name="firstName"
                             labelText="First Name"
                             type="text"
                             placeholder="First Name"
@@ -136,6 +140,7 @@ const LoginForm = ({mode}) => {
                         />
                         <FormInput
                             id="lastName"
+                            name="lastName"
                             labelText="Last Name"
                             type="text"
                             placeholder="Last Name"
@@ -145,15 +150,17 @@ const LoginForm = ({mode}) => {
                         />
                         <FormInput
                             id="company"
+                            name="company"
                             labelText="Company Name"
                             type="text"
-                            placeholder='Company Name (or "Self")'
+                            placeholder='Company Name'
                             value={company || ''}
                             onChange={handleChange}
                             required
                         />
                         <FormInput
                             id="phone"
+                            name="phone"
                             labelText="Phone Number"
                             type="tel"
                             pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
@@ -201,16 +208,4 @@ const Checkbox = styled.div`
         cursor: pointer;
         margin-right: 1rem;
     }
-`
-
-const FormButton = styled.button`
-    width: 100%;
-    background-color: ${props => props.bg || 'var(--primary-color)'};
-    color: ${props => props.color || 'white'};
-    font-family: 'Roboto';
-    font-size: 1.1rem;
-    line-height: 2;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
 `

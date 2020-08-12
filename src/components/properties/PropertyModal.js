@@ -34,6 +34,9 @@ export default PropertyModal
 
 const Container = styled.div`
     width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
     display: grid;
     grid-template-columns: 1fr;
     @media(min-width: ${devices.tablet}) {
@@ -43,10 +46,11 @@ const Container = styled.div`
 
 const PhotoGrid = styled.div`
     display: grid;
+    max-height: 90vh;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(5, 1fr);
     grid-gap: 5px;
-
+    overflow-y: scroll;
     & div {
         grid-area: span 1 / span 1;
 
@@ -54,5 +58,8 @@ const PhotoGrid = styled.div`
             object-fit: contain;
             max-width: 100%;
         }
+    }
+    @media(max-width: ${devices.lgPhone}){
+        margin-top: 2rem;
     }
 `//in the future, make grid-template-rows: ${photoarray.length / 2}
