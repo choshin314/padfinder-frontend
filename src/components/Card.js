@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Card = props => <Card>{props.children}</Card>
+const Card = props => <CardContainer>{props.children}</CardContainer>
 
 const CardContainer = styled.div`
     width: 100%;
