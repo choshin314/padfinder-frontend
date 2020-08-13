@@ -6,7 +6,7 @@ const NavLinks = ({border}) => (
     <>
     <NavItem border={border}><Link to="/favorites">My Favorites</Link></NavItem>
     <NavItem border={border}><Link to="/listings">Manage Listings</Link></NavItem>
-    <NavItem border={border}><Link to="/list">Add Listing</Link></NavItem>
+    <NavItem border={border}><Link to="/listings/new">Add Listing</Link></NavItem>
     <NavItem border={border}><Link to="/authenticate">Sign In / Register</Link></NavItem>
     </>
 )

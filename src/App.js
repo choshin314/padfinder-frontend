@@ -6,7 +6,7 @@ import {MapContextProvider} from './context/MapContext'
 import MainNav from './components/nav/MainNav'
 import Home from './pages/Home'
 import MapView from './pages/MapView'
-import PropertyView from './pages/PropertyView'
+import NewListing from './pages/NewListing'
 import Authentication from './pages/Authentication'
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
             <Route exact path="/"><Home /></Route>
             <Route exact path="/authenticate"><Authentication /></Route>
             <Route exact path="/search/:searchquery"><MapView /></Route>  
+            <Route exact path="/listings/new"><NewListing /></Route>
           </Switch>
         </Main>
       </Router>  
