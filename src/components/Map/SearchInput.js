@@ -10,17 +10,18 @@ const SearchInput = (props) => {
     const { coordinates, nearbyProperties, displayAddress, dispatch } = useContext(MapContext);
     let history = useHistory();
 
-    const [inputText, setInputText] = useState(displayAddress);
+    const startingText = () => { return (displayAddress.length > 1 ? displayAddress : null )}
+    const [inputText, setInputText] = useState(startingText);
 
     const handleInput = e => {
         let value = e.target.value;
         setInputText(value);
     }
 
-    //on search form submit, send value to context - Maps component will need to consume this
+    //on search submit, send value to context - Maps component will need to consume this
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let queryString = inputText.trim().replace(/ /g, '+');
+        let queryString = inputText.trim().replace(/ /g, '+').replace(/,/g, '');
         let newCoords;
 
         //convert queried address to lat lng and store in mapcontext.  Map component will need coordinates as center.
