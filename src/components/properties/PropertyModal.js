@@ -12,17 +12,9 @@ const PropertyModal = (props) => {
         <Modal toggleModal={toggleModal}>
             <Container>
                 <PhotoGrid>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
-                    <div><img src="https://specials-images.forbesimg.com/imageserve/1026205392/960x0.jpg" /></div>
+                    {expandedProperty && expandedProperty.images.map(propertyImage => (
+                        <div><img src={propertyImage.href} /></div>
+                    ))}
                 </PhotoGrid>
                 <PropertyDetails property={expandedProperty}/>
             </Container>
