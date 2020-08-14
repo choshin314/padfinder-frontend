@@ -19,12 +19,19 @@ function reducerFunction(state, action) {
     }
 }
 
+function checkLocalStorage(key, orValue) {
+    let localItem = localStorage.getItem(key);
+    return ( localItem ? JSON.parse(localItem) : orValue );
+}
+
 const MapContextProvider = props => {
     //if it's saved in localstorage, initialize it w/ that.  Otherwise, initialize state fresh.
+
+
     const [ state, dispatch ] = useReducer(reducerFunction, {
-        coordinates: JSON.parse(localStorage.getItem('coordinates')).coordinates || {},
-        nearbyProperties: JSON.parse(localStorage.getItem('nearbyProperties')).nearbyProperties || [],
-        displayAddress: JSON.parse(localStorage.getItem('displayAddress')).displayAddress || '',
+        coordinates: checkLocalStorage('coordinates', {}),
+        nearbyProperties: checkLocalStorage('nearbyProperties', []),
+        displayAddress: checkLocalStorage('displayAddress', ''),
         expandedProperty: null
     })
     const { coordinates, nearbyProperties, displayAddress, expandedProperty } = state;
@@ -38,9 +45,9 @@ const MapContextProvider = props => {
     //if we don't have new coordinates, we need to use our value saved in local storage to set context state again after a reload
     useEffect(()=> {
         if (coordinates.lat && nearbyProperties && displayAddress) {
-            localStorage.setItem('coordinates', JSON.stringify({coordinates: coordinates}));
-            localStorage.setItem('nearbyProperties', JSON.stringify({nearbyProperties}));
-            localStorage.setItem('displayAddress', JSON.stringify({displayAddress}));
+            localStorage.setItem('coordinates', JSON.stringify(coordinates));
+            localStorage.setItem('nearbyProperties', JSON.stringify(nearbyProperties));
+            localStorage.setItem('displayAddress', JSON.stringify(displayAddress));
         } 
     }, [coordinates, nearbyProperties, displayAddress])
 
