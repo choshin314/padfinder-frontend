@@ -1,5 +1,7 @@
 import React, {useState, useReducer} from 'react'
 import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
 function reducer(state, action) {
     switch(action.type) {
@@ -27,24 +29,24 @@ const ImgSlider = ({images, startingSlide}) => {
     }
 
     function handleSwipeStart(e) {
-        const initialX = e.touches[0].clientX;
-        dispatch({ type: "START_SWIPE", value: initialX});
+        const initialX = e.clientX;
+        dispatch({ type: "START_SWIPE", value: initialX})
     }
 
     function handleSwiping(e) {
         if (!isTracking) return;
-        const currentX = e.touches[0].clientX;
+        const currentX = e.clientX;
         let diffX = Math.abs(currentX - startingX);
-        if (diffX < 50) return; //weed out tiny accidental touches
+        if (diffX < 50) return;
         currentX > startingX ? prevSlide() : nextSlide();
-        dispatch({ type: "RESET" });
-        e.preventDefault();
+        dispatch({ type: "RESET"});
+        e.preventDefault()
     }
 
     return (
         <SliderFrame
-            onTouchStart={handleSwipeStart}
-            onTouchMove={handleSwiping}
+            onPointerDown={handleSwipeStart}
+            onPointerMove={handleSwiping}
         >
             <SliderTrack currentSlide={currentSlide}>
                 {images.map((image, index) =>  { 
@@ -98,4 +100,8 @@ const SliderItemNum = styled.div`
     color: white;
     text-align: center;
     line-height: 1.5;
+`
+
+const SliderBtn = styled.button`
+
 `
