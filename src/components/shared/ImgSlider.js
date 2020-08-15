@@ -1,5 +1,5 @@
 import React, {useState, useReducer} from 'react'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
@@ -56,6 +56,18 @@ const ImgSlider = ({images, startingSlide}) => {
                             <SliderItemNum>
                                 <span>{`${currentSlide + 1} of ${images.length}`}</span>
                             </SliderItemNum>
+                            <SliderBtn prev onClick={() => {
+                                prevSlide();
+                                dispatch({type: "RESET"});
+                            }}>
+                                <FontAwesomeIcon icon={faChevronLeft} size="2x" />
+                            </SliderBtn>
+                            <SliderBtn onClick={() => {
+                                nextSlide();
+                                dispatch({type: "RESET"});
+                            }}>
+                                <FontAwesomeIcon icon={faChevronRight} size="2x" />
+                            </SliderBtn>
                         </SliderItem>    
                     )                   
                 })}
@@ -103,5 +115,13 @@ const SliderItemNum = styled.div`
 `
 
 const SliderBtn = styled.button`
-
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    ${props => props.prev ? `left: 0;` : 'right: 0;'}
+    background-color: rgba(0,0,0,.3);
+    color: white;
+    padding: 1rem .5rem;
+    outline: none;
+    border: none;
 `
