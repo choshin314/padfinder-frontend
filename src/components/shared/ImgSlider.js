@@ -5,28 +5,29 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 
 function reducer(state, action) {
     switch(action.type) {
-        case "START_SWIPE": return { isTracking: true, startingX: action.value };
+        case "START_SWIPE": return { ...state, isTracking: true, startingX: action.value };
+        case "NEXT_SLIDE": {
+            let nextSlide = state.currentSlide < action.finalSlide ? state.currentSlide + 1 : 0;
+            return { isTracking: false, startingX: null, currentSlide: nextSlide }
+        };
+        case "PREV_SLIDE": {
+            let prevSlide = state.currentSlide > 0 ? state.currentSlide - 1 : action.finalSlide;
+            return { isTracking: false, startingX: null, currentSlide: prevSlide }
+        }
         case "RESET": return { isTracking: false, startingX: null };
     }
 }
 
 const ImgSlider = ({images, startingSlide}) => {
     let initSlide = startingSlide ? startingSlide : 0;
-    const [currentSlide, setCurrentSlide] = useState(initSlide);
-    const [{ isTracking, startingX }, dispatch] = useReducer(reducer, { isTracking: false, startingX: null })
+    let finalSlide = images.length - 1;
+    const [{ isTracking, startingX, currentSlide }, dispatch] = useReducer(reducer, { 
+        isTracking: false, 
+        startingX: null,
+        currentSlide: initSlide  
+    })
 
     //need to apply these to both button click and swipes
-    function nextSlide() {
-        currentSlide < images.length - 1 ? 
-        setCurrentSlide(currentSlide + 1) :
-        setCurrentSlide(0)
-    }
-
-    function prevSlide() {
-        currentSlide > 0 ? 
-        setCurrentSlide(currentSlide - 1) :
-        setCurrentSlide(images.length - 1)
-    }
 
     function handleSwipeStart(e) {
         const initialX = e.clientX;
@@ -38,8 +39,7 @@ const ImgSlider = ({images, startingSlide}) => {
         const currentX = e.clientX;
         let diffX = Math.abs(currentX - startingX);
         if (diffX < 50) return;
-        currentX > startingX ? prevSlide() : nextSlide();
-        dispatch({ type: "RESET"});
+        currentX > startingX ? dispatch({ type: "PREV_SLIDE", finalSlide }) : dispatch({ type: "NEXT_SLIDE", finalSlide });
         e.preventDefault()
     }
 
@@ -57,14 +57,12 @@ const ImgSlider = ({images, startingSlide}) => {
                                 <span>{`${currentSlide + 1} of ${images.length}`}</span>
                             </SliderItemNum>
                             <SliderBtn prev onClick={() => {
-                                prevSlide();
-                                dispatch({type: "RESET"});
+                                dispatch({type: "PREV_SLIDE", finalSlide});
                             }}>
                                 <FontAwesomeIcon icon={faChevronLeft} size="2x" />
                             </SliderBtn>
                             <SliderBtn onClick={() => {
-                                nextSlide();
-                                dispatch({type: "RESET"});
+                                dispatch({type: "NEXT_SLIDE", finalSlide});
                             }}>
                                 <FontAwesomeIcon icon={faChevronRight} size="2x" />
                             </SliderBtn>
