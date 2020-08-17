@@ -6,7 +6,7 @@ import {Wrapper} from '../components/styledLib'
 
 
 const Authentication = () => {
-    const [selected, setSelected] = useState("login");
+    const [mode, setMode] = useState("login");
 
     return (
         <Wrapper maxWidth="480px">
@@ -14,19 +14,19 @@ const Authentication = () => {
                 <h1>Welcome to Padfinder</h1>
                 <div>
                     <Button 
-                        selected={ selected === "login" ? true : false }
-                        onClick={() => setSelected("login")}
+                        selected={ mode === "login" ? true : false }
+                        onClick={() => setMode("login")}
                     >
                         Log In
                     </Button>
                     <Button 
-                        selected={ selected === "register" ? true : false }
-                        onClick={() => setSelected('register')}
+                        selected={ mode === "register" ? true : false }
+                        onClick={() => setMode('register')}
                     >
                         Register
                     </Button>
                 </div>
-                <LoginForm mode={selected}/>
+                <LoginForm mode={mode}/>
             </Container>
         </Wrapper>
     )
