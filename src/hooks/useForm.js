@@ -5,6 +5,13 @@ export const useForm = (initialState) => {
     function reducer(state, action) {
         switch(action.type) {
             case "CHANGE_INPUT": return { ...state, [action.inputName]: action.value };
+            case "CHANGE_NESTED_INPUT": return { 
+                ...state, 
+                [action.inputName]: {
+                    ...state[action.inputName],
+                    ...action.update
+                }
+            }
             case "RESET": return { ...initialState };
         }
     };
@@ -21,4 +28,4 @@ export const useForm = (initialState) => {
 }
 
 //basically handleInputChange should work for all text-ish inputs (text, email, phone, textarea) and checkboxes
-//handleInputChange will NOT work for the datepicker since it doesn't give direct access to event. Will need to dispatch custom action
+//handleInputChange will NOT work for the datepicker since datepicker doesn't give direct access to event. Will need to dispatch custom action
