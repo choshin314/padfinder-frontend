@@ -56,13 +56,15 @@ const ImgSlider = ({images, startingSlide}) => {
                             <SliderItemNum>
                                 <span>{`${currentSlide + 1} of ${images.length}`}</span>
                             </SliderItemNum>
-                            <SliderBtn prev onClick={() => {
+                            <SliderBtn prev onClick={(e) => {
                                 dispatch({type: "PREV_SLIDE", finalSlide});
+                                e.preventDefault();
                             }}>
                                 <FontAwesomeIcon icon={faChevronLeft} size="2x" />
                             </SliderBtn>
-                            <SliderBtn onClick={() => {
+                            <SliderBtn onClick={(e) => {
                                 dispatch({type: "NEXT_SLIDE", finalSlide});
+                                e.preventDefault();
                             }}>
                                 <FontAwesomeIcon icon={faChevronRight} size="2x" />
                             </SliderBtn>
