@@ -1,15 +1,13 @@
 import React, {useContext, useReducer, useState} from 'react'
 import styled from 'styled-components'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
 
 import {useForm} from '../../hooks/useForm'
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import FormTextArea from '../formElements/FormTextArea'
+import FormDatePicker from '../formElements/FormDatePicker'
 import Card from '../Card'
 import {MapContext} from '../../context/MapContext'
-import './ContactForm.css'
 
 const initialState = {
     name: null,
@@ -61,17 +59,16 @@ const ContactForm = props => {
                     required
                 />
                 <SplitDiv>
-                    <label htmlFor="moveInDate">
-                        <DatePicker 
-                            id="moveInDate"
-                            name="moveInDate"
-                            selected={moveInDate} 
-                            onChange={date => dispatch({ type: "CHANGE_INPUT", inputName: "moveInDate", value: date })} 
-                            minDate={new Date()}
-                            placeholderText="Move-In Date"
-                            className="datepicker"
-                        />    
-                    </label>
+
+                    <FormDatePicker
+                        id="moveInDate"
+                        name="moveInDate"
+                        stateValue={moveInDate}
+                        dispatch={dispatch}
+                        minDate={new Date()}
+                        placeholderText="Move-In Date"
+                        labelText="Move-In Date"
+                    />
                     <FormInput 
                         type="tel"
                         id="contactPhone"
