@@ -19,12 +19,12 @@ const PropertyCard = props => {
             <InfoList>
                 
                     {
-                        !rent[1] ? 
+                        rent[1] === rent[0] ? 
                         <Rent>${rent[0]}/mo</Rent> :
                         <Rent>${rent[0]}-${rent[1]}/mo</Rent>
                     }
                     {
-                        !beds[1] ? 
+                        beds[1] === beds[0] ? 
                         <Detail>{beds[0]} bd | {baths[0]} ba | {size[0]} sqft</Detail> :
                         <Detail>{beds[0]}-{beds[1]} bd | {baths[0]}-{baths[1]} ba | {size[0]}-{size[1]} sqft</Detail>
                     }

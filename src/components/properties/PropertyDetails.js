@@ -18,10 +18,10 @@ const PropertyDetails = props => {
             </FlexHeader>
             <InfoContainer>
                 <InfoList>
-                    {!details.rent[1] ? 
+                    {details.rent[0] === details.rent[1] ? 
                         <Flex>
-                            <Subheading>${details.rent}/mo</Subheading>
-                            <Detail>{details.beds} bd | {details.baths} ba | {details.size} sqft</Detail>
+                            <Subheading>${details.rent[0]}/mo</Subheading>
+                            <Detail>{details.beds[0]} bd | {details.baths[0]} ba | {details.size[0]} sqft</Detail>
                         </Flex>
                         : 
                         <Flex>
@@ -124,6 +124,7 @@ const InfoList = styled.ul`
     list-style: none;
     padding: 0;
     margin: 0;
+    line-height: 1.5;
 `
 const Subheading = styled.h2`
     font-size: 1.3rem;
