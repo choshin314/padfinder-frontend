@@ -13,7 +13,7 @@ const FormDatePicker = ({id, name, labelText, showLabel, stateValue, placeholder
                 id={id}
                 name={name}
                 selected={stateValue} 
-                onChange={date => dispatch({ type: "CHANGE_INPUT", inputName: name, value: date })} 
+                onChange={date => dispatch({ type: "CHANGE_INPUT", key: name, value: date })} 
                 minDate={new Date()}
                 placeholderText={placeholderText}
                 className="datepicker"

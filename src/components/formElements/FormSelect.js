@@ -1,10 +1,11 @@
 import React from 'react'
 import styled, {css} from 'styled-components'
 
-const FormSelect = ({labelText, showLabel, id, name, onChange, children}) => (
+const FormSelect = ({labelText, showLabel, id, name, placeholder, onChange, children}) => (
     <InputWrapper>
         <Label htmlFor={id} showLabel={showLabel} >{labelText}</Label>
         <select id={id} name={name} onChange={onChange}>
+            <option value="" disabled selected>{placeholder}</option>
             {children}
         </select>
     </InputWrapper>
@@ -22,6 +23,10 @@ const InputWrapper = styled.div`
         font-size: 1.1rem;
         padding: 0 .5rem;
         border-radius: 3px;
+
+        & option[disabled] {
+            color: grey;
+        }
     }
 `
 const Label = styled.label`

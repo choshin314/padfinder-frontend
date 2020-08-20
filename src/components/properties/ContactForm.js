@@ -45,7 +45,7 @@ const ContactForm = props => {
                     labelText="Name"
                     placeholder="Your Name"
                     value={name}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e)}
                     required
                 />
                 <FormInput
@@ -55,7 +55,7 @@ const ContactForm = props => {
                     labelText="Email"
                     placeholder="Email Address"
                     value={email}
-                    onChange={handleInputChange}
+                    onChange={(e) => handleInputChange(e)}
                     required
                 />
                 <SplitDiv>
@@ -75,7 +75,7 @@ const ContactForm = props => {
                         name="phone"
                         labelText="Phone Number"
                         placeholder="Phone Number"
-                        onChange={handleInputChange}
+                        onChange={e => handleInputChange(e)}
                         value={phone}
                     />
                 </SplitDiv>
@@ -84,7 +84,7 @@ const ContactForm = props => {
                     name="message"
                     labelText="Message"
                     placeholder={`I'd like to schedule a viewing for ${expandedProperty.address.street}, please contact me!`}
-                    onChange={handleInputChange}
+                    onChange={e => handleInputChange(e)}
                     value={message}
                 />
                 <FormButton>Send Message</FormButton>

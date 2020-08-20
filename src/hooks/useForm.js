@@ -4,12 +4,30 @@ export const useForm = (initialState) => {
 
     function reducer(state, action) {
         switch(action.type) {
-            case "CHANGE_INPUT": return { ...state, [action.inputName]: action.value };
+            case "CHANGE_INPUT": return { ...state, [action.key]: action.value };
+            case "CHANGE_MINMAX_INPUT": {
+                return ( action.min ? 
+                    { 
+                        ...state, 
+                        [action.key]: {
+                            ...state[action.key],
+                            [action.subKey]:  [ action.value, state[action.key][action.subKey][1] ]
+                        }
+                    } :
+                    { 
+                        ...state, 
+                        [action.key]: {
+                            ...state[action.key],
+                            [action.subKey]: [ state[action.key][action.subKey][0], action.value ]
+                        }
+                    }
+                )
+            };
             case "CHANGE_NESTED_INPUT": return { 
                 ...state, 
-                [action.inputName]: {
-                    ...state[action.inputName],
-                    ...action.update
+                [action.key]: {
+                    ...state[action.key],
+                    ...action.updateSubKey
                 }
             }
             case "RESET": return { ...initialState };
@@ -18,17 +36,25 @@ export const useForm = (initialState) => {
     
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    function handleInputChange(e) {
+    function handleInputChange(e, array) {
         let { name, value, checked, type } = e.target;
         if (type === "checkbox") { value = checked };
-        dispatch({ type: "CHANGE_INPUT", inputName: name, value: value });
+        array ?
+            dispatch({ type: "CHANGE_INPUT", key: name, value: [value, value] }) :
+            dispatch({ type: "CHANGE_INPUT", key: name, value: value })
     }
 
-    function handleInputChangeNested(topState, nestedState, e) {
-        dispatch({type: "CHANGE_NESTED_INPUT", inputName: topState, update: { [nestedState]: e.target.value }})
+    function handleInputChangeNested(e, topState, nestedState, array=false) {
+        array ? 
+            dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [nestedState]: [ e.target.value, e.target.value ] }}) :
+            dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [nestedState]: e.target.value }})
     }
 
-    return [state, dispatch, handleInputChange, handleInputChangeNested];
+    function handleMinMaxChange(e, topState, nestedState, min) {
+        dispatch({ type: "CHANGE_MINMAX_INPUT", key: topState, subKey: nestedState, min: min, value: parseInt(e.target.value) })
+    }
+
+    return [state, dispatch, handleInputChange, handleInputChangeNested, handleMinMaxChange];
 }
 
 //basically handleInputChange should work for all text-ish inputs (text, email, phone, textarea) and checkboxes
