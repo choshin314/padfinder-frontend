@@ -7,3 +7,7 @@
     padding-left: .5rem;
     border-radius: 3px;
 }
+
+.react-datepicker-wrapper {
+    width: 100%;
+}
