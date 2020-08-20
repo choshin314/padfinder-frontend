@@ -1,11 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 const FormInput = (props) => {
-    const {labelText, id, name, placeholder, type, value, pattern, onChange} = props;
+    const {labelText, showLabel, id, name, placeholder, type, value, pattern, onChange} = props;
     return (
         <InputWrapper>
-            <Label htmlFor={id}>{labelText}</Label>
+            <Label htmlFor={id} showLabel={showLabel}>{labelText}</Label>
             <Input
                 id={id}
                 name={name}
@@ -23,11 +23,15 @@ const FormInput = (props) => {
 export default FormInput;
 
 const Label = styled.label`
+    font-size: 1.1rem;
     display: none;
+    margin-bottom: 1rem;
+    ${props => props.showLabel && css` display: block;` }
 `
 
 const Input = styled.input`
     line-height: 2;
+    height: 2.5rem;
     width: 100%;
     font-family: 'Roboto';
     font-size: 1.1rem;
