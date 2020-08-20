@@ -24,7 +24,11 @@ export const useForm = (initialState) => {
         dispatch({ type: "CHANGE_INPUT", inputName: name, value: value });
     }
 
-    return [state, dispatch, handleInputChange];
+    function handleInputChangeNested(topState, nestedState, e) {
+        dispatch({type: "CHANGE_NESTED_INPUT", inputName: topState, update: { [nestedState]: e.target.value }})
+    }
+
+    return [state, dispatch, handleInputChange, handleInputChangeNested];
 }
 
 //basically handleInputChange should work for all text-ish inputs (text, email, phone, textarea) and checkboxes
