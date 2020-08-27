@@ -61,10 +61,7 @@ const PropertyForm = ({multi}) => {
         }
     }
 
-    async function uploadImages(e) {
-        e.preventDefault();
-        
-        
+    async function uploadImages() {
         let photoArr = await Promise.all(selectedFiles.map(async imageFile => {
             const uploadTask = storage.ref(`images/${uuidv4() + imageFile.name}`).put(imageFile);
             uploadTask.on('state_changed', snapshot => {}, error => console.log(error.code));
@@ -74,15 +71,18 @@ const PropertyForm = ({multi}) => {
         }))
 
         await dispatch({type: "CHANGE_INPUT", key: "photos", value: [...photoArr] }); 
+        return photoArr;
     }
 
-    function handleFormSubmit() {
+    async function handleFormSubmit(e) {
+        e.preventDefault();
+        const photoArr = await uploadImages();
         fetch('http://localhost:5000/api/properties/new', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ ...state, photos })
+            body: JSON.stringify({ ...state, photos: photoArr })
         })
             .then(resp => resp.json())
             .then(newProperty => console.log(newProperty))
@@ -97,17 +97,9 @@ const PropertyForm = ({multi}) => {
         });
     }
 
-    //have to stick handleFormSubmit in useEffect, otherwise it's going to send stale value for state.photos (i.e. an empty array) to the backend
-    //messy AF, need to figure out a better way to do this if i can
-    useEffect(() => {
-        if (state.photos.length >= 1) {
-            handleFormSubmit();
-        }
-    }, [state.photos])
-
     return (
         <Container>
-            <Form onSubmit={uploadImages}>
+            <Form onSubmit={handleFormSubmit}>
                 <FormSection>
                     <h3>Property Address</h3>
                     <FormInput 
