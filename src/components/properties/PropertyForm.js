@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import styled, {css} from 'styled-components'
+import { v4 as uuidv4 } from 'uuid'
 
+import { storage } from '../../firebase'
 import ImgSlider from '../shared/ImgSlider'
 import {useForm} from '../../hooks/useForm'
 import FormButton from '../formElements/FormButton'
@@ -31,7 +33,7 @@ const initialState = {
         laundry: undefined,
         utilities: undefined
     },
-    photos: null,
+    photos: [],
     creator: 'Shin'
 }
 
@@ -44,15 +46,58 @@ const PropertyForm = ({multi}) => {
     const { type, multiple_units, available_date, address, details, photos, creator } = state;
 
     const [selectedFiles, setSelectedFiles] = useState(null);
+    const [inputError, setInputError] = useState({ });
 
     console.log(state);
+    console.log(selectedFiles);
 
     function handleSelectFiles(e) {
-        let files = e.target.files;
-        files = [...files];
-        setSelectedFiles(files);
+        let files = e.target.files; //this is a FileList
+        files = [...files]; //convert FileList to Array
+        if (files.every(file => (file.type === "image/png" || file.type == "image/jpeg"))) {
+            setSelectedFiles(files);
+            setInputError({ ...inputError, imageFormat: false })
+        } else {
+            setInputError({ ...inputError, imageFormat: true })
+        }
     }
 
+    function handleUploadFiles(e) {
+        e.preventDefault();
+        selectedFiles.forEach(imageFile => {
+            const uploadTask = storage.ref(`images/${uuidv4() + imageFile.name}`).put(imageFile);
+            uploadTask.on(
+                'state_changed',
+                snapshot => {}, //will finish this later if i wanna add progress bar
+                error => {
+                    switch(error.code) {
+                        case 'storage/object-not-found': {
+                            console.log('File does not exist')
+                        }
+                        break;
+
+                        case 'storage/unauthorized': {
+                            console.log('User not authorized to access file')
+                        }
+                        break;
+
+                        case 'storage/unknown': {
+                            console.log('unknown error occurred with upload')
+                        }
+                        break;
+                    }
+                },
+                async () => {
+                    //upon successful upload, get the newly-stored file's download URL
+                    let downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                    let fileName = uploadTask.snapshot.metadata.name;
+                    dispatch({type: "ADD_TO_ARRAY", key: "photos", value: { name: fileName, href: downloadURL } });                
+                }
+            ) 
+        })
+    }
+
+    //convert FileList to array, to pass down to ImgSlider
     function getImgArr() {
         return selectedFiles.map(file => {
             let image = { src: URL.createObjectURL(file) };
@@ -62,7 +107,7 @@ const PropertyForm = ({multi}) => {
 
     return (
         <Container>
-            <Form>
+            <Form onSubmit={handleUploadFiles}>
                 <FormSection>
                     <h3>Property Address</h3>
                     <FormInput 
@@ -319,6 +364,7 @@ const PropertyForm = ({multi}) => {
                 <FormSection border>
                     <PreviewDiv>
                         <h3>Upload Photos and Review</h3>
+                        {inputError.imageFormat && <p>Images must be .png, .jpg, or .jpeg format</p>}
                         {!selectedFiles ? <PreviewDivFiller /> : <ImgSlider images={getImgArr()}/>}
                     </PreviewDiv>
                     <ImageUploadLabel htmlFor="propertyImgUpload" bg="black">SELECT PHOTOS</ImageUploadLabel>
