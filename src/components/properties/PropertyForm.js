@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import styled, {css} from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -43,13 +43,12 @@ const stateAbbrevs = [
 
 const PropertyForm = ({multi}) => {
     const [state, dispatch, handleInputChange, handleInputChangeNested, handleMinMaxChange] = useForm(initialState);
-    const { type, multiple_units, available_date, address, details, photos, creator } = state;
+    const { type, multiple_units, available_date, address, photos, details, creator } = state;
 
     const [selectedFiles, setSelectedFiles] = useState(null);
     const [inputError, setInputError] = useState({ });
 
     console.log(state);
-    console.log(selectedFiles);
 
     function handleSelectFiles(e) {
         let files = e.target.files; //this is a FileList
@@ -62,39 +61,32 @@ const PropertyForm = ({multi}) => {
         }
     }
 
-    function handleUploadFiles(e) {
+    async function uploadImages(e) {
         e.preventDefault();
-        selectedFiles.forEach(imageFile => {
+        
+        
+        let photoArr = await Promise.all(selectedFiles.map(async imageFile => {
             const uploadTask = storage.ref(`images/${uuidv4() + imageFile.name}`).put(imageFile);
-            uploadTask.on(
-                'state_changed',
-                snapshot => {}, //will finish this later if i wanna add progress bar
-                error => {
-                    switch(error.code) {
-                        case 'storage/object-not-found': {
-                            console.log('File does not exist')
-                        }
-                        break;
+            uploadTask.on('state_changed', snapshot => {}, error => console.log(error.code));
+            const downloadURL = await uploadTask.then(snapshot => snapshot.ref.getDownloadURL())
+            const fileName = uploadTask.snapshot.metadata.name;
+            return { name: fileName, href: downloadURL }
+        }))
 
-                        case 'storage/unauthorized': {
-                            console.log('User not authorized to access file')
-                        }
-                        break;
+        await dispatch({type: "CHANGE_INPUT", key: "photos", value: [...photoArr] }); 
+    }
 
-                        case 'storage/unknown': {
-                            console.log('unknown error occurred with upload')
-                        }
-                        break;
-                    }
-                },
-                async () => {
-                    //upon successful upload, get the newly-stored file's download URL
-                    let downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                    let fileName = uploadTask.snapshot.metadata.name;
-                    dispatch({type: "ADD_TO_ARRAY", key: "photos", value: { name: fileName, href: downloadURL } });                
-                }
-            ) 
+    function handleFormSubmit() {
+        fetch('http://localhost:5000/api/properties/new', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ...state, photos })
         })
+            .then(resp => resp.json())
+            .then(newProperty => console.log(newProperty))
+            .catch(err => console.log(err))
     }
 
     //convert FileList to array, to pass down to ImgSlider
@@ -105,9 +97,17 @@ const PropertyForm = ({multi}) => {
         });
     }
 
+    //have to stick handleFormSubmit in useEffect, otherwise it's going to send stale value for state.photos (i.e. an empty array) to the backend
+    //messy AF, need to figure out a better way to do this if i can
+    useEffect(() => {
+        if (state.photos.length >= 1) {
+            handleFormSubmit();
+        }
+    }, [state.photos])
+
     return (
         <Container>
-            <Form onSubmit={handleUploadFiles}>
+            <Form onSubmit={uploadImages}>
                 <FormSection>
                     <h3>Property Address</h3>
                     <FormInput 
@@ -360,7 +360,7 @@ const PropertyForm = ({multi}) => {
                             <option value="both">Electric and Gas</option>
                         </FormSelect>
                     </SplitContainer>
-                </FormSection>
+                </FormSection> 
                 <FormSection border>
                     <PreviewDiv>
                         <h3>Upload Photos and Review</h3>
@@ -395,7 +395,6 @@ const SplitContainer = styled.div`
 `
 const Form = styled.form`
     width: 100%;
-
 `
 
 const FormSection = styled.div`
