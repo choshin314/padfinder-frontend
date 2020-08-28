@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import styled, {css} from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import { storage } from '../../firebase'
 import ImgSlider from '../shared/ImgSlider'
 import {useForm} from '../../hooks/useForm'
 import FormButton from '../formElements/FormButton'
@@ -61,32 +60,29 @@ const PropertyForm = ({multi}) => {
         }
     }
 
-    async function uploadImages() {
-        let photoArr = await Promise.all(selectedFiles.map(async imageFile => {
-            const uploadTask = storage.ref(`images/${uuidv4() + imageFile.name}`).put(imageFile);
-            uploadTask.on('state_changed', snapshot => {}, error => console.log(error.code));
-            const downloadURL = await uploadTask.then(snapshot => snapshot.ref.getDownloadURL())
-            const fileName = uploadTask.snapshot.metadata.name;
-            return { name: fileName, href: downloadURL }
-        }))
-
-        await dispatch({type: "CHANGE_INPUT", key: "photos", value: [...photoArr] }); 
-        return photoArr;
-    }
-
-    async function handleFormSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        const photoArr = await uploadImages();
-        fetch('http://localhost:5000/api/properties/new', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ...state, photos: photoArr })
-        })
-            .then(resp => resp.json())
-            .then(newProperty => console.log(newProperty))
-            .catch(err => console.log(err))
+        try {
+            let formData = new FormData();
+            formData.append('type', JSON.stringify(type));
+            formData.append('available_date', JSON.stringify(available_date));
+            formData.append('address', JSON.stringify(address));
+            formData.append('details', JSON.stringify({...details, pet_policy: { dogs: details.dogs, cats: details.cats }}));
+            selectedFiles.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`))
+            formData.append('creator', JSON.stringify(creator));
+
+            const response = await fetch(
+                'http://localhost:5000/api/properties/new',
+                {
+                    method: 'POST',
+                    body: formData
+                }
+            );
+            const createdProperty = await response.json();
+            console.log(createdProperty);
+        } catch(err) {
+            console.log(err);
+        }
     }
 
     //convert FileList to array, to pass down to ImgSlider
@@ -99,7 +95,7 @@ const PropertyForm = ({multi}) => {
 
     return (
         <Container>
-            <Form onSubmit={handleFormSubmit}>
+            <Form onSubmit={handleSubmit}>
                 <FormSection>
                     <h3>Property Address</h3>
                     <FormInput 
