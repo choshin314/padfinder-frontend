@@ -2,7 +2,7 @@ import React from 'react'
 import styled, {css} from 'styled-components'
 
 const FormInput = (props) => {
-    const {labelText, showLabel, id, name, placeholder, type, value, pattern, onChange, required, minmax} = props;
+    const {labelText, showLabel, id, name, placeholder, type, value, isValid=true, errorMsg, onChange, required, minmax} = props;
     if (minmax) return (
         <InputWrapper>
             <Label showLabel={showLabel}>{labelText}</Label>
@@ -12,7 +12,6 @@ const FormInput = (props) => {
                     placeholder={`Min. ${placeholder}`}
                     type={type}
                     value={value.min}
-                    pattern={pattern}
                     onChange={onChange[0]} 
                     required={required}
                 />
@@ -21,7 +20,6 @@ const FormInput = (props) => {
                     placeholder={`Max. ${placeholder}`}
                     type={type}
                     value={value.max}
-                    pattern={pattern}
                     onChange={onChange[1]} 
                     required={required}
                 />
@@ -37,10 +35,10 @@ const FormInput = (props) => {
                 placeholder={placeholder}
                 type={type}
                 value={value}
-                pattern={pattern}
                 onChange={onChange} 
                 required={required}
             />
+            {!isValid && (<Error>{errorMsg}</Error>)}
         </InputWrapper>  
     )
 }
@@ -77,6 +75,12 @@ const Input = styled.input`
 const InputWrapper = styled.div`
     width: 100%;
 `
+
+const Error = styled.p`
+    color: red;
+    font-size: .8rem;
+`
+
 const SplitContainer = styled.div`
     width: 100%;
     height: 2.5rem;
