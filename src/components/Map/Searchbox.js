@@ -15,12 +15,15 @@ const Searchbox = () => {
 
 const Div = styled.div`
     width: 90%;
-    min-width: 480px;
+    min-width: 300px;
     margin: 0 auto;
     color: var(--primary-color);
     z-index: 1;
     position: relative;
     transform: translateY(-50%);
+    @media(max-width: 768px) {
+        margin-top: 3rem;       
+    }
 
     & h1 {
         font-size: 3rem;

@@ -55,7 +55,7 @@ const SearchInput = (props) => {
                 type="text"
                 value={inputText}
                 name="query"
-                placeholder="Enter an address, city, or ZIP code"
+                placeholder="Address, city, or ZIP code"
                 onChange={handleInput}
             />
             <button type="submit">
@@ -71,12 +71,12 @@ const SearchForm = styled.form`
     width: 80%;
     max-width: 600px;
     margin: 0 auto;
-    display: flex;
+    position: relative;
     background-color: white;
     border: var(--primary-color) solid 2px;
     & input {
         height: 100%;
-        flex: 1 1 auto;
+        width: 100%;
         padding-left: 1rem;
         border: none;
         font-size: ${props => props.mini ? '1rem' : '1.2rem'};
@@ -85,6 +85,13 @@ const SearchForm = styled.form`
         background-color: transparent;
         border: none;
         cursor: pointer;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        & > svg {
+            color: rgba(0,0,0,0.5);
+        }
     }
 `
 
