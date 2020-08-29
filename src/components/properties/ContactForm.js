@@ -1,7 +1,6 @@
 import React, {useContext, useReducer, useState} from 'react'
 import styled from 'styled-components'
 
-import {useForm} from '../../hooks/useForm'
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import FormTextArea from '../formElements/FormTextArea'
@@ -10,21 +9,56 @@ import Card from '../Card'
 import {MapContext} from '../../context/MapContext'
 
 const initialState = {
-    name: null,
-    email: null,
-    moveInDate: null,
-    phone: null,
-    message: null
+    name: { value: '', isValid: true, errorMsg: null },
+    email: { value: '', isValid: true, errorMsg: 'Valid email address is required' },
+    moveInDate: { value: null, isValid: true, errorMsg: null },
+    phone: { value: '', isValid: true, errorMsg: 'Valid phone number required (numbers only)' },
+    message: { value: '', isValid: true, errorMsg: null },
+    isFormValid: false
 }
 
 const ContactForm = props => {
-    const [state, dispatch, handleInputChange] = useForm(initialState);
+    const [ state, setState ] = useState(initialState);
     const { name, email, moveInDate, phone, message } = state;
     const {expandedProperty} = useContext(MapContext); 
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
 
+    function validate(formfield, value) {
+        switch (formfield) {
+            case 'email': {
+                setState({...state, isFormValid: false})
+                return /^\S+@\S+\.\S+$/.test(value)
+            }
+            case 'phone': {
+                setState({...state, isFormValid: false})
+                return /^\d{10}$/.test(value)
+            }
+            default: {
+                return true
+            }
+        }
+    }
+
+    function handleChange(e) {
+        const { name, value } = e.target;
+        setState({
+            ...state, 
+            [name]: { ...state[name], value, isValid: validate(name, value) }
+        })
+    }
+
+    function handleDateChange(date) {
+        setState({
+            ...state,
+            moveInDate: { ...state.moveInDate, value: date }
+        })
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
+        if (!state.email.isValid || !state.phone.isValid) {
+            console.log('Invalid inputs')
+        }
         const asyncSubmit = async () => {
             console.log('Some async op here') //send to backend email sending route
         }
@@ -44,8 +78,8 @@ const ContactForm = props => {
                     name="name"
                     labelText="Name"
                     placeholder="Your Name"
-                    value={name}
-                    onChange={(e) => handleInputChange(e)}
+                    value={name.value}
+                    onChange={handleChange}
                     required
                 />
                 <FormInput
@@ -54,8 +88,10 @@ const ContactForm = props => {
                     name="email"
                     labelText="Email"
                     placeholder="Email Address"
-                    value={email}
-                    onChange={(e) => handleInputChange(e)}
+                    value={email.value}
+                    isValid={email.isValid}
+                    errorMsg={email.errorMsg}
+                    onChange={handleChange}
                     required
                 />
                 <SplitDiv>
@@ -63,8 +99,8 @@ const ContactForm = props => {
                     <FormDatePicker
                         id="moveInDate"
                         name="moveInDate"
-                        stateValue={moveInDate}
-                        dispatch={dispatch}
+                        stateValue={moveInDate.value}
+                        handleChange={handleDateChange}
                         minDate={new Date()}
                         placeholderText="Move-In Date"
                         labelText="Move-In Date"
@@ -74,9 +110,11 @@ const ContactForm = props => {
                         id="contactPhone"
                         name="phone"
                         labelText="Phone Number"
-                        placeholder="Phone Number"
-                        onChange={e => handleInputChange(e)}
-                        value={phone}
+                        placeholder="Phone"
+                        onChange={handleChange}
+                        value={phone.value}
+                        isValid={phone.isValid}
+                        errorMsg={phone.errorMsg}
                     />
                 </SplitDiv>
                 <FormTextArea 
@@ -84,8 +122,8 @@ const ContactForm = props => {
                     name="message"
                     labelText="Message"
                     placeholder={`I'd like to schedule a viewing for ${expandedProperty.address.street}, please contact me!`}
-                    onChange={e => handleInputChange(e)}
-                    value={message}
+                    onChange={handleChange}
+                    value={message.value}
                 />
                 <FormButton>Send Message</FormButton>
             </Form>
