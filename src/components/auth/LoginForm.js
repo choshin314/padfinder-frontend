@@ -1,24 +1,24 @@
-import React, {useReducer} from 'react'
+import React, {useState, useReducer} from 'react'
 import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
-import {useForm} from '../../hooks/useForm'
+import {useFormSimple} from '../../hooks/useFormSimple'
 
 const initialState = {
-    email: null,
-    password: null,
-    isLister: false,
-    firstName: null,
-    lastName: null,
-    phone: null,
-    company: null
+    email: { value: '', isValid: true, errorMsg: 'Valid email address is required' },
+    password: { value: '', isValid: true, errorMsg: 'Password requires 8 or more characters' },
+    isLister: { value: false, isValid: true, errorMsg: null },
+    firstName: { value: '', isValid: true, errorMsg: null },
+    lastName: { value: '', isValid: true, errorMsg: null },
+    phone: { value: '', isValid: true, errorMsg: '10 digit number required (digits only)' },
+    company: { value: '', isValid: true, errorMsg: null }
 }
 
 const LoginForm = ({mode}) => {
 
-    const [state, dispatch, handleInputChange] = useForm(initialState);
-    const {email, password, isLister, firstName, lastName, phone, company} = state;
+    const [ formState, setFormState, handleChange, checkFormValidity, resetForm ] = useFormSimple(initialState);
+    const { email, password, isLister, firstName, lastName, phone, company, formValid } = formState;
 
     const handleAuthSubmit = async () => {
         if (mode === "login") {
@@ -38,7 +38,7 @@ const LoginForm = ({mode}) => {
             try {
                 let response = await fetch(`${process.env.SERVER_URL}/api/users/register`, {
                     method: 'POST',
-                    body: JSON.stringify({ ...state }),
+                    body: JSON.stringify({ ...formState }),
                     headers: { 'Content-Type': 'application/json' }
                 })
                 let data = await response.json();
@@ -65,11 +65,12 @@ const LoginForm = ({mode}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!checkFormValidity()) return;
         handleAuthSubmit();
-        dispatch({type: "RESET"});
+        resetForm();
     }
 
-    console.log(state)
+    console.log(formState)
 
     return (
         <Container>
@@ -80,8 +81,10 @@ const LoginForm = ({mode}) => {
                     labelText="Email Address"
                     type="email"
                     placeholder="Enter email address"
-                    value={email || ''}
-                    onChange={handleInputChange} 
+                    value={email.value}
+                    inputState={email}
+                    formValid={formValid}
+                    onChange={handleChange} 
                     required
                 />
                 <FormInput 
@@ -90,8 +93,10 @@ const LoginForm = ({mode}) => {
                     labelText="Password"
                     type="password" 
                     placeholder="Enter password"
-                    value={password || ''}
-                    onChange={handleInputChange} 
+                    value={password.value}
+                    inputState={password}
+                    formValid={formValid}
+                    onChange={handleChange} 
                     required
                 />
                 {mode === "register" && (
@@ -101,14 +106,14 @@ const LoginForm = ({mode}) => {
                             id="isLister" 
                             name="isLister"
                             type="checkbox" 
-                            onChange={handleInputChange}
-                            checked={isLister}
+                            onChange={handleChange}
+                            checked={isLister.value}
                         />
                         <label htmlFor="isLister">I will be listing properties for lease</label>
                     </Checkbox>
                     </>
                 )}
-                {isLister && mode === "register" && (
+                {isLister.value && mode === "register" && (
                     <ListerContainer>
                         <FormInput
                             id="firstName"
@@ -116,8 +121,8 @@ const LoginForm = ({mode}) => {
                             labelText="First Name"
                             type="text"
                             placeholder="First Name"
-                            value={firstName || ''}
-                            onChange={handleInputChange}
+                            value={firstName.value}
+                            onChange={handleChange}
                             required
                         />
                         <FormInput
@@ -126,8 +131,8 @@ const LoginForm = ({mode}) => {
                             labelText="Last Name"
                             type="text"
                             placeholder="Last Name"
-                            value={lastName || ''}
-                            onChange={handleInputChange}
+                            value={lastName.value}
+                            onChange={handleChange}
                             required
                         />
                         <FormInput
@@ -136,8 +141,8 @@ const LoginForm = ({mode}) => {
                             labelText="Company Name"
                             type="text"
                             placeholder='Company Name'
-                            value={company || ''}
-                            onChange={handleInputChange}
+                            value={company.value}
+                            onChange={handleChange}
                             required
                         />
                         <FormInput
@@ -145,10 +150,11 @@ const LoginForm = ({mode}) => {
                             name="phone"
                             labelText="Phone Number"
                             type="tel"
-                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                             placeholder="Phone Number"
-                            value={phone || ''}
-                            onChange={handleInputChange}
+                            value={phone.value}
+                            inputState={phone}
+                            formValid={formValid}
+                            onChange={handleChange}
                             required
                         />
 

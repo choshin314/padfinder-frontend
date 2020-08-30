@@ -1,6 +1,7 @@
 import React, {useContext, useReducer, useState} from 'react'
 import styled from 'styled-components'
 
+import {useFormSimple} from '../../hooks/useFormSimple'
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import FormTextArea from '../formElements/FormTextArea'
@@ -13,62 +14,30 @@ const initialState = {
     email: { value: '', isValid: true, errorMsg: 'Valid email address is required' },
     moveInDate: { value: null, isValid: true, errorMsg: null },
     phone: { value: '', isValid: true, errorMsg: 'Valid phone number required (numbers only)' },
-    message: { value: '', isValid: true, errorMsg: null },
-    formValid: true
+    message: { value: '', isValid: true, errorMsg: null }
 }
 
 const ContactForm = props => {
-    const [ state, setState ] = useState(initialState);
-    const { name, email, moveInDate, phone, message, formValid } = state;
+    const [ formState, setFormState, handleChange, checkFormValidity, resetForm ] = useFormSimple(initialState);
+    const { name, email, moveInDate, phone, message, formValid } = formState;
     const {expandedProperty} = useContext(MapContext); 
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
 
-    function validateInput(fieldName, value) {
-        switch (fieldName) {
-            case 'email': {
-                return /^\S+@\S+\.\S+$/.test(value)
-            }
-            case 'phone': {
-                return /^\d{10}$/.test(value)
-            }
-            default: {
-                return true
-            }
-        }
-    }
-
-    function validateForm(formState) {
-        const formValuesArr = Object.values(formState).filter(el => typeof el !== 'boolean');
-        return formValuesArr.every(val => val.isValid)  //true if all inputs are valid, false if not
-    }
-
-    function handleChange(e) {
-        const { name, value } = e.target;
-        setState({
-            ...state, 
-            [name]: { ...state[name], value, isValid: validateInput(name, value) }
-        })
-    }
-
     function handleDateChange(date) {
-        setState({
-            ...state,
-            moveInDate: { ...state.moveInDate, value: date }
+        setFormState({
+            ...formState,
+            moveInDate: { ...formState.moveInDate, value: date }
         })
     }
 
     function handleSubmit(e) {
         e.preventDefault();
-        setState( { ...state, formValid: true })
-        if (!validateForm(state)) {
-            setState( { ...state, formValid: false })
-            console.log('Invalid inputs');
-            return;
-        } 
+        if (!checkFormValidity()) return;
         console.log('Sending to backend for email')
+        resetForm();
     }
 
-    console.log(state)
+    console.log(formState)
 
     return (
         <Card>
