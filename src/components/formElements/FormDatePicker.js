@@ -5,19 +5,31 @@ import DatePicker from 'react-datepicker'
 import './FormDatePicker.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
-const FormDatePicker = ({id, name, labelText, showLabel, stateValue, placeholderText, dispatch}) => {
+const FormDatePicker = ({id, name, labelText, showLabel, stateValue, placeholderText, dispatch, handleChange}) => {
     return (
         <InputWrapper>
             <Label htmlFor={id} showLabel={showLabel}>{labelText}</Label>
-            <DatePicker 
-                id={id}
-                name={name}
-                selected={stateValue} 
-                onChange={date => dispatch({ type: "CHANGE_INPUT", key: name, value: date })} 
-                minDate={new Date()}
-                placeholderText={placeholderText}
-                className="datepicker"
-            />    
+            {dispatch ? 
+                (<DatePicker 
+                    id={id}
+                    name={name}
+                    selected={stateValue} 
+                    onChange={date => dispatch({ type: "CHANGE_INPUT", key: name, value: date })} 
+                    minDate={new Date()}
+                    placeholderText={placeholderText}
+                    className="datepicker"
+                />)
+                :
+                (<DatePicker 
+                    id={id}
+                    name={name}
+                    selected={stateValue} 
+                    onChange={date => handleChange(date)} 
+                    minDate={new Date()}
+                    placeholderText={placeholderText}
+                    className="datepicker"
+                />) 
+            }     
         </InputWrapper>
     )
 }
