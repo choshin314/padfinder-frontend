@@ -5,7 +5,7 @@ import DatePicker from 'react-datepicker'
 import './FormDatePicker.css'
 import 'react-datepicker/dist/react-datepicker.css'
 
-const FormDatePicker = ({id, name, labelText, showLabel, stateValue, placeholderText, dispatch, handleChange}) => {
+const FormDatePicker = ({id, name, labelText, showLabel, stateValue, placeholderText, required, dispatch, handleChange}) => {
     return (
         <InputWrapper>
             <Label htmlFor={id} showLabel={showLabel}>{labelText}</Label>
@@ -18,6 +18,7 @@ const FormDatePicker = ({id, name, labelText, showLabel, stateValue, placeholder
                     minDate={new Date()}
                     placeholderText={placeholderText}
                     className="datepicker"
+                    required={required}
                 />)
                 :
                 (<DatePicker 
@@ -28,6 +29,7 @@ const FormDatePicker = ({id, name, labelText, showLabel, stateValue, placeholder
                     minDate={new Date()}
                     placeholderText={placeholderText}
                     className="datepicker"
+                    required={required}
                 />) 
             }     
         </InputWrapper>

@@ -14,23 +14,21 @@ const initialState = {
     moveInDate: { value: null, isValid: true, errorMsg: null },
     phone: { value: '', isValid: true, errorMsg: 'Valid phone number required (numbers only)' },
     message: { value: '', isValid: true, errorMsg: null },
-    isFormValid: false
+    formValid: true
 }
 
 const ContactForm = props => {
     const [ state, setState ] = useState(initialState);
-    const { name, email, moveInDate, phone, message } = state;
+    const { name, email, moveInDate, phone, message, formValid } = state;
     const {expandedProperty} = useContext(MapContext); 
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
 
-    function validate(formfield, value) {
-        switch (formfield) {
+    function validateInput(fieldName, value) {
+        switch (fieldName) {
             case 'email': {
-                setState({...state, isFormValid: false})
                 return /^\S+@\S+\.\S+$/.test(value)
             }
             case 'phone': {
-                setState({...state, isFormValid: false})
                 return /^\d{10}$/.test(value)
             }
             default: {
@@ -39,11 +37,16 @@ const ContactForm = props => {
         }
     }
 
+    function validateForm(formState) {
+        const formValuesArr = Object.values(formState).filter(el => typeof el !== 'boolean');
+        return formValuesArr.every(val => val.isValid)  //true if all inputs are valid, false if not
+    }
+
     function handleChange(e) {
         const { name, value } = e.target;
         setState({
             ...state, 
-            [name]: { ...state[name], value, isValid: validate(name, value) }
+            [name]: { ...state[name], value, isValid: validateInput(name, value) }
         })
     }
 
@@ -56,12 +59,13 @@ const ContactForm = props => {
 
     function handleSubmit(e) {
         e.preventDefault();
-        if (!state.email.isValid || !state.phone.isValid) {
-            console.log('Invalid inputs')
-        }
-        const asyncSubmit = async () => {
-            console.log('Some async op here') //send to backend email sending route
-        }
+        setState( { ...state, formValid: true })
+        if (!validateForm(state)) {
+            setState( { ...state, formValid: false })
+            console.log('Invalid inputs');
+            return;
+        } 
+        console.log('Sending to backend for email')
     }
 
     console.log(state)
@@ -78,9 +82,11 @@ const ContactForm = props => {
                     name="name"
                     labelText="Name"
                     placeholder="Your Name"
+                    inputState={name}
                     value={name.value}
                     onChange={handleChange}
                     required
+                    formValid={formValid}
                 />
                 <FormInput
                     type="email"
@@ -88,11 +94,13 @@ const ContactForm = props => {
                     name="email"
                     labelText="Email"
                     placeholder="Email Address"
+                    inputState={email}
                     value={email.value}
                     isValid={email.isValid}
                     errorMsg={email.errorMsg}
                     onChange={handleChange}
                     required
+                    formValid={formValid}
                 />
                 <SplitDiv>
 
@@ -112,18 +120,21 @@ const ContactForm = props => {
                         labelText="Phone Number"
                         placeholder="Phone"
                         onChange={handleChange}
+                        inputState={phone}
                         value={phone.value}
                         isValid={phone.isValid}
                         errorMsg={phone.errorMsg}
+                        formValid={formValid}
                     />
                 </SplitDiv>
                 <FormTextArea 
                     id="contactMessage"
                     name="message"
                     labelText="Message"
-                    placeholder={`I'd like to schedule a viewing for ${expandedProperty.address.street}, please contact me!`}
+                    placeholder="Include a brief message with your request"
                     onChange={handleChange}
                     value={message.value}
+                    formValid={formValid}
                 />
                 <FormButton>Send Message</FormButton>
             </Form>

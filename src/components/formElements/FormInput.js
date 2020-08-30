@@ -38,7 +38,7 @@ const FormInput = (props) => {
                 onChange={onChange} 
                 required={required}
             />
-            {!formValid && !inputState.isValid && (<Error>{inputState.errorMsg}</Error>)}
+            {inputState && !formValid && !inputState.isValid && (<Error>{inputState.errorMsg}</Error>)}
         </InputWrapper>  
     )
 }

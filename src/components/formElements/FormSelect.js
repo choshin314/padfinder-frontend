@@ -1,10 +1,10 @@
 import React from 'react'
 import styled, {css} from 'styled-components'
 
-const FormSelect = ({labelText, showLabel, id, name, placeholder, onChange, children}) => (
+const FormSelect = ({labelText, showLabel, id, name, placeholder, required, onChange, children}) => (
     <InputWrapper>
         <Label htmlFor={id} showLabel={showLabel} >{labelText}</Label>
-        <select id={id} name={name} onChange={onChange}>
+        <select id={id} name={name} onChange={onChange} required={required}>
             <option value="" disabled selected>{placeholder}</option>
             {children}
         </select>
