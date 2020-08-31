@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
 import styled from 'styled-components'
 
+import {AuthContextProvider} from './context/AuthContext'
 import {MapContextProvider} from './context/MapContext'
 import MainNav from './components/nav/MainNav'
 import Home from './pages/Home'
@@ -12,19 +13,21 @@ import Authentication from './pages/Authentication'
 function App() {
   
   return (
-    <MapContextProvider>
-      <Router>
-        <MainNav />
-        <Main>
-          <Switch>
-            <Route exact path="/"><Home /></Route>
-            <Route exact path="/authenticate"><Authentication /></Route>
-            <Route exact path="/search/:searchquery"><MapView /></Route>  
-            <Route exact path="/listings/new"><NewListing /></Route>
-          </Switch>
-        </Main>
-      </Router>  
-    </MapContextProvider>
+    <AuthContextProvider>
+      <MapContextProvider>
+        <Router>
+          <MainNav />
+          <Main>
+            <Switch>
+              <Route exact path="/"><Home /></Route>
+              <Route exact path="/authenticate"><Authentication /></Route>
+              <Route exact path="/search/:searchquery"><MapView /></Route>  
+              <Route exact path="/listings/new"><NewListing /></Route>
+            </Switch>
+          </Main>
+        </Router>  
+      </MapContextProvider>
+    </AuthContextProvider>
   );
 }
 

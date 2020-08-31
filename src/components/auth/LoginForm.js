@@ -1,9 +1,10 @@
-import React, {useState, useReducer} from 'react'
+import React, {useState, useReducer, useContext} from 'react'
 import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import {useFormSimple} from '../../hooks/useFormSimple'
+import {AuthContext} from '../../context/AuthContext'
 
 const initialState = {
     email: { value: '', isValid: true, errorMsg: 'Valid email address is required' },
@@ -19,58 +20,56 @@ const LoginForm = ({mode}) => {
 
     const [ formState, setFormState, handleChange, checkFormValidity, resetForm ] = useFormSimple(initialState);
     const { email, password, isLister, firstName, lastName, phone, company, formValid } = formState;
+    const { authState, setAuthState } = useContext(AuthContext);
 
     const handleAuthSubmit = async () => {
         if (mode === "login") {
             try {
                 let response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/users/login`, {
                     method: 'POST',
-                    body: JSON.stringify({ email, password }),
+                    body: JSON.stringify({ email: email.value, password: password.value }),
                     headers: { 'Content-Type': 'application/json' }
                 });
-                let data = await response.json();
-                console.log(data);
+                let user = await response.json();
+                setAuthState({ ...authState, user: user });
+                console.log(user);
             } catch(err) {
                 console.log(err);
                 return;
             }
-        } else if (mode === "register" && isLister) {
+        } else if (mode === "register") {
             try {
-                let response = await fetch(`${process.env.SERVER_URL}/api/users/register`, {
+                let response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/users/register`, {
                     method: 'POST',
-                    body: JSON.stringify({ ...formState }),
+                    body: JSON.stringify({ 
+                        email: email.value,
+                        password: password.value,
+                        isLister: isLister.value,
+                        firstName: firstName.value,
+                        lastName: lastName.value,
+                        phone: phone.value,
+                        company: company.value
+                     }),
                     headers: { 'Content-Type': 'application/json' }
                 })
-                let data = await response.json();
-                console.log(data);
+                let user = await response.json();
+                setAuthState({ ...authState, user: user });
+                console.log(user);
             } catch(err) {
                 console.log(err);
                 return;
             }
-        } else if (mode === "register" && !isLister) {
-            try {
-                let response = await fetch(`${process.env.SERVER_URL}/api/users/register`, {
-                    method: 'POST',
-                    body: JSON.stringify({ email, password, isLister }),
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                let data = await response.json();
-                console.log(data);
-            } catch(err) {
-                console.log(err);
-                return;
-            }
-        }
+        } 
     }
 
-    const handleSubmit = (e) => {
+    console.log(authState)
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!checkFormValidity()) return;
-        handleAuthSubmit();
+        // if (!checkFormValidity()) return;
+        await handleAuthSubmit();
         resetForm();
     }
-
-    console.log(formState)
 
     return (
         <Container>
