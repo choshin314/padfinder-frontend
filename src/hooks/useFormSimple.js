@@ -1,8 +1,29 @@
 import {useState} from 'react'
-import { validateInput, validateForm } from '../util/validation'
+
+function validateInput(name, value) {
+    switch (name) {
+        case 'email': {
+            return /^\S+@\S+\.\S+$/.test(value)
+        }
+        case 'phone': {
+            return /^\d{10}$/.test(value)
+        }
+        case 'password': {
+            return value.length >= 8
+        } 
+        default: {
+            return true
+        }
+    }
+}
+
+function validateForm(formState) {
+    const formValuesArr = Object.values(formState).filter(el => typeof el !== 'boolean');
+    return formValuesArr.every(val => val.isValid); //true if all inputs are valid, false if not
+}
 
 export const useFormSimple = (initialState) => {
-    const [formState, setFormState] = useState({ ...initialState, formValid: true }); 
+    const [formState, setFormState] = useState({ ...initialState, formValid: true, formError: null }); 
 
     function handleChange(e) {
         let { name, value, checked, type } = e.target;
@@ -20,11 +41,13 @@ export const useFormSimple = (initialState) => {
 
     function checkFormValidity() {
         setFormState( { ...formState, formValid: true })
+        let isValid = true;
         if (!validateForm(formState)) {
             setFormState( { ...formState, formValid: false })
             console.log('Invalid inputs');
-            return false;
+            isValid = false;
         } 
+        return isValid;
     }
     
     function resetForm() {
