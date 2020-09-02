@@ -18,12 +18,13 @@ function validateInput(name, value) {
 }
 
 function validateForm(formState) {
-    const formValuesArr = Object.values(formState).filter(el => typeof el !== 'boolean');
+    const formValuesArr = Object.values(formState).filter(el => typeof el !== 'boolean' && typeof el !== 'string');
     return formValuesArr.every(val => val.isValid); //true if all inputs are valid, false if not
 }
 
 export const useFormSimple = (initialState) => {
-    const [formState, setFormState] = useState({ ...initialState, formValid: true, formError: null }); 
+    const [formState, setFormState] = useState({ ...initialState, formValid: true }); 
+    const [ formErrorMsg, setFormErrorMsg ] = useState(null)
 
     function handleChange(e) {
         let { name, value, checked, type } = e.target;
@@ -54,5 +55,5 @@ export const useFormSimple = (initialState) => {
         setFormState({ ...initialState, formValid: true})
     }
 
-    return [ formState, setFormState, handleChange, checkFormValidity, resetForm ]
+    return [ formState, setFormState, formErrorMsg, setFormErrorMsg, handleChange, checkFormValidity, resetForm ]
 }

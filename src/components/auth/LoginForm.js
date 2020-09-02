@@ -10,17 +10,17 @@ const initialState = {
     email: { value: '', isValid: true, errorMsg: 'Valid email address is required' },
     password: { value: '', isValid: true, errorMsg: 'Password requires 8 or more characters' },
     isLister: { value: false, isValid: true, errorMsg: null },
-    firstName: { value: '', isValid: true, errorMsg: null },
-    lastName: { value: '', isValid: true, errorMsg: null },
+    first_name: { value: '', isValid: true, errorMsg: null },
+    last_name: { value: '', isValid: true, errorMsg: null },
     phone: { value: '', isValid: true, errorMsg: '10 digit number required (digits only)' },
     company: { value: '', isValid: true, errorMsg: null }
 }
 
 const LoginForm = ({mode}) => {
 
-    const [ formState, setFormState, handleChange, checkFormValidity, resetForm ] = useFormSimple(initialState);
-    const { email, password, isLister, firstName, lastName, phone, company, formValid } = formState;
-    const { authState, setAuthState } = useContext(AuthContext);
+    const [ formState, setFormState, formErrorMsg, setFormErrorMsg, handleChange, checkFormValidity, resetForm ] = useFormSimple(initialState);
+    const { email, password, isLister, first_name, last_name, phone, company, formValid } = formState;
+    const { authState, login } = useContext(AuthContext);
 
     const handleAuthSubmit = async () => {
         if (mode === "login") {
@@ -31,9 +31,11 @@ const LoginForm = ({mode}) => {
                     headers: { 'Content-Type': 'application/json' }
                 });
                 let user = await response.json();
-                setAuthState({ ...authState, user: user });
-                console.log(user);
+                if (response.status !== 200) throw new Error(user.message); 
+                login(user);
+                resetForm();
             } catch(err) {
+                setFormErrorMsg(err.message);
                 console.log(err);
                 return;
             }
@@ -45,17 +47,19 @@ const LoginForm = ({mode}) => {
                         email: email.value,
                         password: password.value,
                         isLister: isLister.value,
-                        firstName: firstName.value,
-                        lastName: lastName.value,
+                        first_name: first_name.value,
+                        last_name: last_name.value,
                         phone: phone.value,
                         company: company.value
                      }),
                     headers: { 'Content-Type': 'application/json' }
                 })
                 let user = await response.json();
-                setAuthState({ ...authState, user: user });
-                console.log(user);
+                if (response.status !== 201) throw new Error(user.message);
+                login(user);
+                resetForm();
             } catch(err) {
+                setFormErrorMsg(err.message);
                 console.log(err);
                 return;
             }
@@ -63,16 +67,19 @@ const LoginForm = ({mode}) => {
     }
 
     console.log(authState)
+    console.log(formState)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // if (!checkFormValidity()) return;
+        setFormErrorMsg(null);
+        if (mode === 'register' && !checkFormValidity()) return;  //calls checkFormValidity ONLY if registering, and stops before submitting to backend.  Also shows validation errors.
+        //don't care or don't want to validate or show validation errors for logging in (i.e. don't want to give correct password format to a potential bad actor)
         await handleAuthSubmit();
-        resetForm();
     }
 
     return (
         <Container>
+            {formErrorMsg && <FormError>{formErrorMsg}</FormError>}
             <Form onSubmit={handleSubmit}>
                 <FormInput
                     id="email"
@@ -115,22 +122,22 @@ const LoginForm = ({mode}) => {
                 {isLister.value && mode === "register" && (
                     <ListerContainer>
                         <FormInput
-                            id="firstName"
-                            name="firstName"
+                            id="first_name"
+                            name="first_name"
                             labelText="First Name"
                             type="text"
                             placeholder="First Name"
-                            value={firstName.value}
+                            value={first_name.value}
                             onChange={handleChange}
                             required
                         />
                         <FormInput
-                            id="lastName"
-                            name="lastName"
+                            id="last_name"
+                            name="last_name"
                             labelText="Last Name"
                             type="text"
                             placeholder="Last Name"
-                            value={lastName.value}
+                            value={last_name.value}
                             onChange={handleChange}
                             required
                         />
@@ -167,12 +174,20 @@ const LoginForm = ({mode}) => {
 
 export default LoginForm
 
-
+const FormError = styled.p`
+    padding: .5rem;
+    color: red;
+    font-weight: bold;
+    font-size: 1rem;
+    width: 100%;
+`
 
 const Container = styled.div`
     width: 100%;
     padding: 1rem;
     border-top: 2px solid rgba(0,0,0,.2);
+    display: flex;
+    flex-direction: column;
 `
 const Form = styled.form`
     width: 100%;
