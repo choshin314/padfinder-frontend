@@ -20,7 +20,7 @@ const LoginForm = ({mode}) => {
 
     const [ formState, setFormState, formErrorMsg, setFormErrorMsg, handleChange, checkFormValidity, resetForm ] = useFormSimple(initialState);
     const { email, password, isLister, first_name, last_name, phone, company, formValid } = formState;
-    const { authState, login } = useContext(AuthContext);
+    const authContext = useContext(AuthContext);
 
     const handleAuthSubmit = async () => {
         if (mode === "login") {
@@ -32,7 +32,7 @@ const LoginForm = ({mode}) => {
                 });
                 let user = await response.json();
                 if (response.status !== 200) throw new Error(user.message); 
-                login(user);
+                authContext.login(user);
                 resetForm();
             } catch(err) {
                 setFormErrorMsg(err.message);
@@ -56,7 +56,7 @@ const LoginForm = ({mode}) => {
                 })
                 let user = await response.json();
                 if (response.status !== 201) throw new Error(user.message);
-                login(user);
+                authContext.login(user);
                 resetForm();
             } catch(err) {
                 setFormErrorMsg(err.message);
@@ -65,9 +65,6 @@ const LoginForm = ({mode}) => {
             }
         } 
     }
-
-    console.log(authState)
-    console.log(formState)
 
     const handleSubmit = async (e) => {
         e.preventDefault();
