@@ -69,6 +69,10 @@ const MenuWrapper = styled.div`
         flex-direction: column;
         list-style: none;
         font-size: 2.5rem;
+        & button {
+            font-size: 2.5rem;
+            padding: 0;
+        }
     }
 `
 
