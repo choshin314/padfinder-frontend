@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 const AuthContext = React.createContext();
 
@@ -10,7 +10,7 @@ function checkLocalStorage(key, orValue) {
 const AuthContextProvider = props => {
     //if it's saved in localstorage, initialize it w/ that.  Otherwise, initialize state fresh.
     const [ authState, setAuthState ] = useState({
-        user: checkLocalStorage('user', null)
+        user: checkLocalStorage('pfUser', null)
     })
     const { user } = authState;
 
@@ -19,7 +19,7 @@ const AuthContextProvider = props => {
     //if we don't have new user, we need to use our value saved in local storage to set context state again after a reload
     useEffect(()=> {
         if (user) {
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('pfUser', JSON.stringify(user));
         } 
     }, [user])
 
