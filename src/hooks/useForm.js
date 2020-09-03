@@ -38,7 +38,7 @@ export const useForm = (initialState) => {
 
     function handleInputChange(e, array) {
         let { name, value, checked, type } = e.target;
-        if (typeof value === "string") { value = value.trim()}
+        if (typeof value === "string") { value = value.trim()};
         if (type === "checkbox") { value = checked };
         array ?
             dispatch({ type: "CHANGE_INPUT", key: name, value: [value, value] }) :
@@ -47,7 +47,9 @@ export const useForm = (initialState) => {
     // param 'array' is for properties that can potentially have minmax ranges (rent, beds, baths, size) - if they DO have ranges, they'll be handled by handleMinMaxChange, but if they DON'T have ranges, I still wanna keep the value as an array just to keep things simpler.  The array values in this case would just be [same, same]
 
     function handleInputChangeNested(e, topState, array=false) {
-        let { value, name } = e.target;
+        let { value, name, type } = e.target;
+        if (type === "number") { value = parseFloat(value) }; 
+        if (value === "true" || value === "false") { value = JSON.parse(value) }; //option input converts everything to strings.  Need to convert back to bool.
         if (typeof value === "string") {value = value.trim()};
         array ? 
             dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [ name ]: [ value, value ] }}) :

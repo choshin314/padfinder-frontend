@@ -80,7 +80,7 @@ const PropertyForm = ({multi}) => {
             formData.append('address', JSON.stringify(address));
             formData.append('details', JSON.stringify({...details, pet_policy: { dogs: details.dogs, cats: details.cats }}));
             selectedFiles.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`))
-            formData.append('creator', JSON.stringify(creator));
+            formData.append('creator', JSON.stringify(authContext.user.userId));
 
             const response = await fetch(
                 'http://localhost:5000/api/properties/new',
@@ -105,6 +105,8 @@ const PropertyForm = ({multi}) => {
             return image;
         });
     }
+
+    console.log(state);
 
     return (
         <Container>
