@@ -38,7 +38,6 @@ export const useForm = (initialState) => {
 
     function handleInputChange(e, array) {
         let { name, value, checked, type } = e.target;
-        if (typeof value === "string") { value = value.trim()};
         if (type === "checkbox") { value = checked };
         array ?
             dispatch({ type: "CHANGE_INPUT", key: name, value: [value, value] }) :
@@ -50,7 +49,6 @@ export const useForm = (initialState) => {
         let { value, name, type } = e.target;
         if (type === "number") { value = parseFloat(value) }; 
         if (value === "true" || value === "false") { value = JSON.parse(value) }; //option input converts everything to strings.  Need to convert back to bool.
-        if (typeof value === "string") {value = value.trim()};
         array ? 
             dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [ name ]: [ value, value ] }}) :
             dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [ name ]: value }})
