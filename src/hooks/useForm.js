@@ -46,16 +46,17 @@ export const useForm = (initialState) => {
     }       
     // param 'array' is for properties that can potentially have minmax ranges (rent, beds, baths, size) - if they DO have ranges, they'll be handled by handleMinMaxChange, but if they DON'T have ranges, I still wanna keep the value as an array just to keep things simpler.  The array values in this case would just be [same, same]
 
-    function handleInputChangeNested(e, topState, nestedState, array=false) {
-        let { value } = e.target;
+    function handleInputChangeNested(e, topState, array=false) {
+        let { value, name } = e.target;
         if (typeof value === "string") {value = value.trim()};
         array ? 
-            dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [nestedState]: [ value, value ] }}) :
-            dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [nestedState]: value }})
+            dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [ name ]: [ value, value ] }}) :
+            dispatch({type: "CHANGE_NESTED_INPUT", key: topState, updateSubKey: { [ name ]: value }})
     }
 
-    function handleMinMaxChange(e, topState, nestedState, min) {
-        dispatch({ type: "CHANGE_MINMAX_INPUT", key: topState, subKey: nestedState, min: min, value: parseFloat(e.target.value) })
+    function handleMinMaxChange(e, topState, min) {
+        const { value, name } = e.target;
+        dispatch({ type: "CHANGE_MINMAX_INPUT", key: topState, subKey: name, min: min, value: parseFloat(value) })
     }
 
     return [state, dispatch, handleInputChange, handleInputChangeNested, handleMinMaxChange];
