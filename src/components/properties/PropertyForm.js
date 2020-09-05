@@ -77,10 +77,24 @@ const PropertyForm = ({multi}) => {
             let formData = new FormData();
             formData.append('type', JSON.stringify(type));
             formData.append('available_date', JSON.stringify(available_date));
-            formData.append('address', JSON.stringify(address));
-            formData.append('details', JSON.stringify({...details, pet_policy: { dogs: details.dogs, cats: details.cats }}));
-            selectedFiles.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`))
+            formData.append('address', JSON.stringify({ 
+                ...address,
+                street: address.street.trim(),
+                city: address.city.trim(),
+            }));
+            formData.append('details', JSON.stringify({
+                rent: details.rent,
+                beds: details.beds,
+                baths: details.baths,
+                size: details.size,
+                pet_policy: { dogs: details.dogs, cats: details.cats },
+                neighborhood: details.neighborhood,
+                laundry: details.laundry,
+                utilities: details.utilities,
+                parking: details.parking
+            }));
             formData.append('creator', JSON.stringify(authContext.user.userId));
+            selectedFiles.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
 
             const response = await fetch(
                 'http://localhost:5000/api/properties/new',
@@ -150,7 +164,7 @@ const PropertyForm = ({multi}) => {
                             id="address-zip" 
                             name="zip" 
                             placeholder="ZIP Code" 
-                            type="number" 
+                            type="text" 
                             value={address.zip}
                             onChange={(e) => handleInputChangeNested(e, 'address')}
                             required
