@@ -1,4 +1,5 @@
 import React, {useState, useReducer, useContext} from 'react'
+import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
@@ -21,6 +22,7 @@ const LoginForm = ({mode}) => {
     const [ formState, setFormState, formErrorMsg, setFormErrorMsg, handleChange, checkFormValidity, resetForm ] = useFormSimple(initialState);
     const { email, password, isLister, first_name, last_name, phone, company, formValid } = formState;
     const authContext = useContext(AuthContext);
+    let history = useHistory()
 
     const handleAuthSubmit = async () => {
         if (mode === "login") {
@@ -34,6 +36,7 @@ const LoginForm = ({mode}) => {
                 if (response.status !== 200) throw new Error(user.message); 
                 authContext.login(user);
                 resetForm();
+                history.push('/');
             } catch(err) {
                 setFormErrorMsg(err.message);
                 console.log(err);
@@ -58,6 +61,7 @@ const LoginForm = ({mode}) => {
                 if (response.status !== 201) throw new Error(user.message);
                 authContext.login(user);
                 resetForm();
+                history.push('/');
             } catch(err) {
                 setFormErrorMsg(err.message);
                 console.log(err);
