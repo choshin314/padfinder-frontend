@@ -71,7 +71,7 @@ const PropertyForm = ({multi}) => {
         e.preventDefault();
         setFormErrorMsg(null);
         if (!authContext.user || !authContext.user.isLister) return setFormErrorMsg('You must be logged in as a Listing Agent/Property Manager to create a listing.')
-        if (!selectedFiles) return setFormErrorMsg('Photos are required for every listing.  Otherwise what\'s the point?')
+        if (!selectedFiles || selectedFiles.length < 4) return setFormErrorMsg('At least 4 photos are required for every listing.  Otherwise what\'s the point?')
 
         try {
             let formData = new FormData();
