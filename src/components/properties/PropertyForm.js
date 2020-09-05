@@ -93,14 +93,16 @@ const PropertyForm = ({multi}) => {
                 utilities: details.utilities,
                 parking: details.parking
             }));
-            formData.append('creator', JSON.stringify(authContext.user.userId));
             selectedFiles.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
-
+            console.log(authContext.user.token);
             const response = await fetch(
                 'http://localhost:5000/api/properties/new',
                 {
                     method: 'POST',
-                    body: formData
+                    body: formData,
+                    headers: {
+                        Authorization: `Bearer ${authContext.user.token}`
+                    }
                 }
             );
             const data = await response.json();
