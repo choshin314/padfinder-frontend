@@ -7,21 +7,6 @@ import ImgSlider from '../components/shared/ImgSlider'
 
 const NewListing = () => {
     const [multi, setMulti] = useState(false);
-    const [selectedFiles, setSelectedFiles] = useState(null);
-
-    function handleSelectFiles(e) {
-        let files = e.target.files;
-        files = [...files];
-        setSelectedFiles(files);
-    }
-
-    const getImgArr = () => {
-        let x = selectedFiles.map(file => {
-            let image = { src: URL.createObjectURL(file) };
-            return image;
-        });
-        return x;
-    }
 
     return (
         <Wrapper maxWidth="620px">
