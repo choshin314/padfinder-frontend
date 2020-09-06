@@ -3,6 +3,7 @@ import {GoogleMap, useLoadScript, Marker, InfoWindow} from '@react-google-maps/a
 import styled from 'styled-components'
 
 import {MapContext} from '../../context/MapContext'
+import {PropertyModalContext} from '../../context/PropertyModalContext'
 import SearchInput from './SearchInput'
 import house from '../../assets/home-solid.svg'
 import aptBldg from '../../assets/building-solid.svg'
@@ -37,7 +38,8 @@ let icon = (property) => {
 
 const Map = props => {
     const mapContext = useContext(MapContext);
-    const { coordinates, nearbyProperties, toggleModal, dispatch } = mapContext;
+    const { coordinates, nearbyProperties, dispatch } = mapContext;
+    const { toggleModal, setExpandedProperty } = useContext(PropertyModalContext);
     const [selected, setSelected] = useState();
 
     const {isLoaded, loadError} = useLoadScript({
@@ -111,7 +113,7 @@ const Map = props => {
                             }
                             <SeeMore onClick={()=> {
                                 toggleModal();
-                                dispatch({type: "EXPAND_PROPERTY", value: selected });
+                                setExpandedProperty(selected);
                             }}>
                                 See details
                             </SeeMore>
