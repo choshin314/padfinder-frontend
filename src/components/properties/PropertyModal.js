@@ -3,17 +3,17 @@ import styled from 'styled-components'
 
 import Modal from '../Modal'
 import PropertyDetails from './PropertyDetails'
-import {MapContext} from '../../context/MapContext'
-import {devices, Wrapper} from '../styledLib'
+import {PropertyModalContext} from '../../context/PropertyModalContext'
+import {devices} from '../styledLib'
 
-const PropertyModal = (props) => {
-    const {expandedProperty, toggleModal} = useContext(MapContext);
+const PropertyModal = () => {
+    const {expandedProperty, toggleModal} = useContext(PropertyModalContext);
     return (
         <Modal toggleModal={toggleModal}>
             <Container>
                 <PhotoGrid>
-                    {expandedProperty && expandedProperty.images.map(propertyImage => (
-                        <div><img src={propertyImage.href} /></div>
+                    {expandedProperty && expandedProperty.photos.map(propertyImage => (
+                        <div key={expandedProperty._id}><img src={propertyImage.href} /></div>
                     ))}
                 </PhotoGrid>
                 <PropertyDetails property={expandedProperty}/>

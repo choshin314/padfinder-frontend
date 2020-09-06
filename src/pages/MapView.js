@@ -5,12 +5,12 @@ import Map from '../components/map/Map'
 import PropertyCard from '../components/properties/PropertyCard'
 import PropertyModal from '../components/properties/PropertyModal'
 import {devices} from '../components/styledLib'
-
 import {MapContext} from '../context/MapContext'
+import {PropertyModalContext} from '../context/PropertyModalContext'
 
 const MapView = props => {
-    const mapContext = useContext(MapContext);
-    const {nearbyProperties, modalOpen, toggleModal} = mapContext;
+    const {nearbyProperties} = useContext(MapContext);
+    const {modalOpen, toggleModal} = useContext(PropertyModalContext);
 
     return (
         <>
