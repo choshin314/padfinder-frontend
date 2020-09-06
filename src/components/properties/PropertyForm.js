@@ -96,7 +96,7 @@ const PropertyForm = ({multi}) => {
             selectedFiles.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
             console.log(authContext.user.token);
             const response = await fetch(
-                'http://localhost:5000/api/properties/new',
+                `${process.env.REACT_APP_SERVER_URL}/api/properties/new`,
                 {
                     method: 'POST',
                     body: formData,
