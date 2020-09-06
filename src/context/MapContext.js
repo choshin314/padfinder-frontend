@@ -13,9 +13,7 @@ function reducerFunction(state, action) {
         case "UPDATE_NEARBY": {
             return { ...state, nearbyProperties: action.value }
         }; 
-        case "EXPAND_PROPERTY": {
-            return { ...state, expandedProperty: action.value }
-        };
+        default: return state;
     }
 }
 
@@ -27,18 +25,12 @@ function checkLocalStorage(key, orValue) {
 const MapContextProvider = props => {
     //if it's saved in localstorage, initialize it w/ that.  Otherwise, initialize state fresh.
 
-
     const [ state, dispatch ] = useReducer(reducerFunction, {
         coordinates: checkLocalStorage('coordinates', {}),
         nearbyProperties: checkLocalStorage('nearbyProperties', []),
-        displayAddress: checkLocalStorage('displayAddress', ''),
-        expandedProperty: null
+        displayAddress: checkLocalStorage('displayAddress', '')
     })
-    const { coordinates, nearbyProperties, displayAddress, expandedProperty } = state;
-
-    //PropertyModal toggle 
-    const [modalOpen, setModalOpen] = useState(false);
-    const toggleModal = () => setModalOpen(!modalOpen);
+    const { coordinates, nearbyProperties, displayAddress } = state;
 
     //need to save coordinates, nearbyProperties & displayAddy to local storage or map & sidebar will blank out on reload bc context will reset on reload
     //only reset local storage w/ context values if we actually have new context values
@@ -56,9 +48,6 @@ const MapContextProvider = props => {
             coordinates, 
             nearbyProperties, 
             displayAddress, 
-            expandedProperty, 
-            modalOpen,
-            toggleModal,
             dispatch
         }} >
             {props.children}

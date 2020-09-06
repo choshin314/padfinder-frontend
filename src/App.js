@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import {AuthContextProvider} from './context/AuthContext'
 import {MapContextProvider} from './context/MapContext'
+import {PropertyModalContextProvider} from './context/PropertyModalContext'
 import MainNav from './components/nav/MainNav'
 import Home from './pages/Home'
 import MapView from './pages/MapView'
@@ -15,20 +16,22 @@ function App() {
   
   return (
     <AuthContextProvider>
-      <MapContextProvider>
-        <Router>
-          <MainNav />
-          <Main>
-            <Switch>
-              <Route exact path="/"><Home /></Route>
-              <Route exact path="/authenticate"><Authentication /></Route>
-              <Route exact path="/search/:searchquery"><MapView /></Route>  
-              <Route exact path="/listings/new"><NewListing /></Route>
-              <Route exact path="/listings"><ManageListings /></Route>
-            </Switch>
-          </Main>
-        </Router>  
-      </MapContextProvider>
+    <MapContextProvider>
+    <PropertyModalContextProvider>
+      <Router>
+        <MainNav />
+        <Main>
+          <Switch>
+            <Route exact path="/"><Home /></Route>
+            <Route exact path="/authenticate"><Authentication /></Route>
+            <Route exact path="/search/:searchquery"><MapView /></Route>  
+            <Route exact path="/listings/new"><NewListing /></Route>
+            <Route exact path="/listings"><ManageListings /></Route>
+          </Switch>
+        </Main>
+      </Router>  
+    </PropertyModalContextProvider>
+    </MapContextProvider>
     </AuthContextProvider>
   );
 }
