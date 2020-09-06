@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faHeart as fasHeart, faDog, faCat, faParking, faPlug, faCalendarCheck, faCalendarPlus, faHome, faTshirt } from '@fortawesome/free-solid-svg-icons'
+import {faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons'
 import {faHeart as farHeart} from '@fortawesome/free-regular-svg-icons'
 
 import ContactForm from './ContactForm'
 import {Wrapper} from '../styledLib'
 
 const PropertyDetails = props => {
-    const {type, address, details, creator} = props.property; 
+    const {type, address, details} = props.property; 
 
     return (
         <WrapperDiv>

@@ -1,5 +1,5 @@
 import React, {useState, useContext } from 'react'
-import styled, {css} from 'styled-components'
+import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
 import ImgSlider from '../shared/ImgSlider'
@@ -40,7 +40,7 @@ const stateAbbrevs = [
 
 const PropertyForm = ({multi}) => {
     const [state, dispatch, handleInputChange, handleInputChangeNested, handleMinMaxChange] = useForm(initialState);
-    const { type, available_date, address, details, creator } = state;
+    const { type, available_date, address, details } = state;
     const [selectedFiles, setSelectedFiles] = useState(null);
     const [ formErrorMsg, setFormErrorMsg ] = useState(null);
     const authContext = useContext(AuthContext);
@@ -49,7 +49,7 @@ const PropertyForm = ({multi}) => {
         let files = e.target.files; //this is a FileList
         files = [...files]; //convert FileList to Array
         //only set selectedFiles if they are in jpeg OR png AND 300kb or less, otherwise display error message
-        if (files.some(file => (!(file.type === 'image/jpeg' || file.type == 'image/png')))) {
+        if (files.some(file => (!(file.type === 'image/jpeg' || file.type === 'image/png')))) {
             setFormErrorMsg('Photos must be .jpeg, .jpg, or .png format')
             return
         } else if (files.some(file => file.size > 300000)) {
@@ -117,7 +117,7 @@ const PropertyForm = ({multi}) => {
     //convert FileList to array, to pass down to ImgSlider
     function getImgArr() {
         return selectedFiles.map(file => {
-            let image = { src: URL.createObjectURL(file) };
+            let image = { src: URL.createObjectURL(file), name: file.name };
             return image;
         });
     }
@@ -430,10 +430,6 @@ const FormSection = styled.div`
         margin: .5rem 0;
         text-align: center;
     }
-`
-
-const Fieldset = styled.fieldset`
-    height: 100%;
 `
 
 const ImageUploadLabel = styled.label`

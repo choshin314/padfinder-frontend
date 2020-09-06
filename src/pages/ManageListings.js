@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react'
-import styled from 'styled-components'
 
 import {AuthContext} from '../context/AuthContext'
 import PropertyList from '../components/properties/PropertyList'
@@ -19,7 +18,7 @@ const ManageListings = () => {
                         Authorization: `Bearer ${authContext.user.token}`
                     }
                 });
-                if (response.status != 200) throw new Error('Could not retrieve listings.  Try again later.');
+                if (response.status !== 200) throw new Error('Could not retrieve listings.  Try again later.');
                 const properties = await response.json();
                 if (properties.length < 1) throw new Error('No listings found.  Create a property listing.');
                 setListings(properties);

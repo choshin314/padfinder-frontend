@@ -1,7 +1,6 @@
-import React, {useState, useContext, useEffect, useRef, useCallback} from 'react'
+import React, {useState, useContext, useRef, useCallback} from 'react'
 import {GoogleMap, useLoadScript, Marker, InfoWindow} from '@react-google-maps/api'
 import styled from 'styled-components'
-import {Link} from 'react-router-dom'
 
 import {MapContext} from '../../context/MapContext'
 import SearchInput from './SearchInput'

@@ -1,5 +1,5 @@
-import React, {useState, useReducer} from 'react'
-import styled, {css} from 'styled-components'
+import React, {useReducer} from 'react'
+import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
@@ -51,8 +51,8 @@ const ImgSlider = ({images, startingSlide}) => {
             <SliderTrack currentSlide={currentSlide}>
                 {images.map((image, index) =>  { 
                     return (
-                        <SliderItem key={`image${index}`}>
-                            <img src={image.src} />
+                        <SliderItem key={image.name}>
+                            <img src={image.src} alt=''/>
                             <SliderItemNum>
                                 <span>{`${currentSlide + 1} of ${images.length}`}</span>
                             </SliderItemNum>
