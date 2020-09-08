@@ -7,55 +7,63 @@ import FormButton from '../formElements/FormButton'
 import FormTextArea from '../formElements/FormTextArea'
 import FormDatePicker from '../formElements/FormDatePicker'
 import Card from '../Card'
-import {MapContext} from '../../context/MapContext'
+import {PropertyModalContext} from '../../context/PropertyModalContext'
 
 const initialState = {
-    name: { value: '', isValid: true, errorMsg: null },
-    email: { value: '', isValid: true, errorMsg: 'Valid email address is required' },
-    moveInDate: { value: null, isValid: true, errorMsg: null },
-    phone: { value: '', isValid: true, errorMsg: 'Valid phone number required (numbers only)' },
-    message: { value: '', isValid: true, errorMsg: null }
+    name: '',
+    email: '',
+    moveInDate: null,
+    phone: '',
+    message: ''
+}
+
+const validateForm = values => {
+    let errors = {}
+    if (!/^\S+@\S+\.\S+$/.test(values.email)) {
+        errors.email = "Valid email address required"
+    }
+    if (!/^\d{10}$/.test(values.phone)) {
+        errors.phone = "10-digit phone number required (numbers only)"
+    }
+    return errors;
 }
 
 const ContactForm = props => {
-    const [ formState, setFormState, handleChange, checkFormValidity, resetForm ] = useFormSimple(initialState);
-    const { name, email, moveInDate, phone, message, formValid } = formState;
-    const {expandedProperty} = useContext(MapContext); 
+    const { formValues, setFormValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm } = useFormSimple(initialState, submitCallback, validateForm);
+    const { name, email, moveInDate, phone, message } = formValues;
+    const {expandedProperty} = useContext(PropertyModalContext); 
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
 
     function handleDateChange(date) {
-        setFormState({
-            ...formState,
-            moveInDate: { ...formState.moveInDate, value: date }
+        setFormValues({
+            ...formValues,
+            moveInDate: date
         })
     }
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        if (!checkFormValidity()) return;
+    function submitCallback() {
         console.log('Sending to backend for email')
         resetForm();
     }
 
-    console.log(formState)
+    console.log(formValues)
 
     return (
         <Card>
             <FormHeader>
                 <h2>Contact Property Manager</h2>
             </FormHeader>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={validateAndSubmit}>
                 <FormInput
                     type="text"
                     id="contactName"
                     name="name"
                     labelText="Name"
                     placeholder="Your Name"
-                    inputState={name}
-                    value={name.value}
+                    value={name}
+                    errorMsg={formErrors.name}
                     onChange={handleChange}
                     required
-                    formValid={formValid}
                 />
                 <FormInput
                     type="email"
@@ -63,20 +71,17 @@ const ContactForm = props => {
                     name="email"
                     labelText="Email"
                     placeholder="Email Address"
-                    inputState={email}
-                    value={email.value}
-                    isValid={email.isValid}
-                    errorMsg={email.errorMsg}
+                    value={email}
+                    errorMsg={formErrors.email}
                     onChange={handleChange}
                     required
-                    formValid={formValid}
                 />
                 <SplitDiv>
 
                     <FormDatePicker
                         id="moveInDate"
                         name="moveInDate"
-                        stateValue={moveInDate.value}
+                        stateValue={moveInDate}
                         handleChange={handleDateChange}
                         minDate={new Date()}
                         placeholderText="Move-In Date"
@@ -89,11 +94,8 @@ const ContactForm = props => {
                         labelText="Phone Number"
                         placeholder="Phone"
                         onChange={handleChange}
-                        inputState={phone}
-                        value={phone.value}
-                        isValid={phone.isValid}
-                        errorMsg={phone.errorMsg}
-                        formValid={formValid}
+                        value={phone}
+                        errorMsg={formErrors.phone}
                     />
                 </SplitDiv>
                 <FormTextArea 
@@ -102,8 +104,7 @@ const ContactForm = props => {
                     labelText="Message"
                     placeholder="Include a brief message with your request"
                     onChange={handleChange}
-                    value={message.value}
-                    formValid={formValid}
+                    value={message}
                 />
                 <FormButton>Send Message</FormButton>
             </Form>
