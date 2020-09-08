@@ -1,59 +1,35 @@
 import {useState} from 'react'
 
-function validateInput(name, value) {
-    switch (name) {
-        case 'email': {
-            return /^\S+@\S+\.\S+$/.test(value)
-        }
-        case 'phone': {
-            return /^\d{10}$/.test(value)
-        }
-        case 'password': {
-            return value.length >= 8
-        } 
-        default: {
-            return true
-        }
-    }
-}
-
-function validateForm(formState) {
-    const formValuesArr = Object.values(formState).filter(el => typeof el !== 'boolean' && typeof el !== 'string');
-    return formValuesArr.every(val => val.isValid); //true if all inputs are valid, false if not
-}
-
-export const useFormSimple = (initialState) => {
-    const [formState, setFormState] = useState({ ...initialState, formValid: true }); 
-    const [ formErrorMsg, setFormErrorMsg ] = useState(null)
+export const useFormSimple = (initialState, submitCallback, validateForm) => {
+    const [formValues, setFormValues] = useState(initialState);
+    const [formErrors, setFormErrors] = useState({});
+    const [backendError, setBackendError] = useState(null);
 
     function handleChange(e) {
         let { name, value, checked, type } = e.target;
         if (type === "checkbox") { value = checked };
-        setFormState({
-            ...formState,
-            [name]: {
-                ...formState[name],
-                isValid: validateInput(name, value),  
-                //all formState items (except 'formValid') should follow format { value: 'some value', isValid: bool, errorMsg: 'msg to display if !isValid && !formValid'}
-                value: value
-            }
+        setFormValues({
+            ...formValues,
+            [name]: value
         })
     }
 
-    function checkFormValidity() {
-        setFormState( { ...formState, formValid: true })
-        let isValid = true;
-        if (!validateForm(formState)) {
-            setFormState( { ...formState, formValid: false })
-            console.log('Invalid inputs');
-            isValid = false;
+    function validateAndSubmit(e) {
+        e.preventDefault();
+        let errors = {};
+        //run validation only if a validation argument was passed into the hook
+        if (validateForm) {
+            errors = validateForm(formValues); //returns errors object
+            setFormErrors(errors);
         } 
-        return isValid;
+        //if no errors, submit form, else exit operation and display errors
+        Object.entries(errors).length === 0 && submitCallback(formValues)
     }
+    //submitCallback is passed in as param to this hook - contains any form-specific submit handling logic
     
     function resetForm() {
-        setFormState({ ...initialState, formValid: true})
+        setFormValues({...initialState})
     }
 
-    return [ formState, setFormState, formErrorMsg, setFormErrorMsg, handleChange, checkFormValidity, resetForm ]
+    return [ formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm ]
 }
