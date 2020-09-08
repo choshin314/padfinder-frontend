@@ -2,7 +2,7 @@ import React from 'react'
 import styled, {css} from 'styled-components'
 
 const FormInput = (props) => {
-    const {labelText, showLabel, id, name, placeholder, type, value, inputState, formValid, onChange, required, minmax} = props;
+    const {labelText, showLabel, id, name, placeholder, type, value, errorMsg, onChange, required, minmax} = props;
     if (minmax) return (
         <InputWrapper>
             <Label showLabel={showLabel}>{labelText}</Label>
@@ -38,7 +38,7 @@ const FormInput = (props) => {
                 onChange={onChange} 
                 required={required}
             />
-            {inputState && !formValid && !inputState.isValid && (<Error>{inputState.errorMsg}</Error>)}
+            {errorMsg && (<Error>{errorMsg}</Error>)}
         </InputWrapper>  
     )
 }
