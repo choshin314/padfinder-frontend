@@ -29,14 +29,14 @@ const validateForm = values => {
 }
 
 const ContactForm = props => {
-    const { formValues, setFormValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm } = useFormSimple(initialState, submitCallback, validateForm);
-    const { name, email, moveInDate, phone, message } = formValues;
+    const { inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm } = useFormSimple(initialState, submitCallback, validateForm);
+    const { name, email, moveInDate, phone, message } = inputValues;
     const {expandedProperty} = useContext(PropertyModalContext); 
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
 
     function handleDateChange(date) {
-        setFormValues({
-            ...formValues,
+        setInputValues({
+            ...inputValues,
             moveInDate: date
         })
     }
@@ -46,7 +46,7 @@ const ContactForm = props => {
         resetForm();
     }
 
-    console.log(formValues)
+    console.log(inputValues)
 
     return (
         <Card>
@@ -61,7 +61,7 @@ const ContactForm = props => {
                     labelText="Name"
                     placeholder="Your Name"
                     value={name}
-                    errorMsg={formErrors.name}
+                    errorMsg={inputErrors.name}
                     onChange={handleChange}
                     required
                 />
@@ -72,7 +72,7 @@ const ContactForm = props => {
                     labelText="Email"
                     placeholder="Email Address"
                     value={email}
-                    errorMsg={formErrors.email}
+                    errorMsg={inputErrors.email}
                     onChange={handleChange}
                     required
                 />
@@ -95,7 +95,7 @@ const ContactForm = props => {
                         placeholder="Phone"
                         onChange={handleChange}
                         value={phone}
-                        errorMsg={formErrors.phone}
+                        errorMsg={inputErrors.phone}
                     />
                 </SplitDiv>
                 <FormTextArea 
