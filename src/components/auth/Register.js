@@ -33,7 +33,7 @@ const validateForm = values => {
 
 const Register = () => {
 
-    const [formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm] = useFormSimple(initialState, handleAuthSubmit, validateForm)
+    const {formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm} = useFormSimple(initialState, handleAuthSubmit, validateForm)
     const authContext = useContext(AuthContext);
     let history = useHistory()
 

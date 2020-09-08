@@ -16,7 +16,7 @@ const initialState = {
 const Login = () => {
     const authContext = useContext(AuthContext);
     let history = useHistory()
-    const [formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm] = useFormSimple(initialState, submitCallback)
+    const {formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm} = useFormSimple(initialState, submitCallback)
     
     async function submitCallback(values) {
         try {

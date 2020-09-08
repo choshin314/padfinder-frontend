@@ -31,5 +31,14 @@ export const useFormSimple = (initialState, submitCallback, validateForm) => {
         setFormValues({...initialState})
     }
 
-    return [ formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm ]
+    return { 
+        formValues, 
+        setFormValues,
+        formErrors, 
+        handleChange,
+        validateAndSubmit, 
+        backendError, 
+        setBackendError, 
+        resetForm 
+    }
 }
