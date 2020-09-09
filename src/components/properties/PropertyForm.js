@@ -1,100 +1,108 @@
-import React, {useState, useContext } from 'react'
+import React, {useContext} from 'react'
+import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
-import ImgSlider from '../shared/ImgSlider'
 import {useForm} from '../../hooks/useForm'
+import {useImageUpload} from '../../hooks/useImageUpload'
 import FormButton from '../formElements/FormButton'
 import FormInput from '../formElements/FormInput'
 import FormSelect from '../formElements/FormSelect'
 import FormDatePicker from '../formElements/FormDatePicker'
-import imgIcon from '../../assets/image-icon.jpg'
-import {AuthContext} from '../../context/AuthContext'
+import ImageUpload from '../formElements/ImageUpload'
 
-const initialState = {
-    type: "apartment",
-    available_date: null,
-    address: {
-        street: undefined,
-        city: undefined,
-        state: undefined,
-        zip: undefined
-    },
-    details: {
-        rent: [undefined, undefined],
-        beds: [undefined, undefined],
-        baths: [undefined, undefined],
-        size: [undefined, undefined],
-        dogs: false,
-        cats: false,
-        neighborhood: undefined,
-        parking: undefined,
-        laundry: undefined,
-        utilities: undefined
-    }
-}
+import {AuthContext} from '../../context/AuthContext'
 
 const stateAbbrevs = [
     'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'
 ]
 
-const PropertyForm = ({multi}) => {
-    const [state, dispatch, handleInputChange, handleInputChangeNested, handleMinMaxChange] = useForm(initialState);
-    const { type, available_date, address, details } = state;
-    const [selectedFiles, setSelectedFiles] = useState(null);
-    const [ formErrorMsg, setFormErrorMsg ] = useState(null);
-    const authContext = useContext(AuthContext);
+const initialState = {
+    type: "apartment",
+    available_date: null,
+    street: undefined,
+    city: undefined,
+    state: undefined,
+    zip: undefined,
+    rent_min: undefined,
+    rent_max: undefined,
+    beds_min: undefined,
+    beds_max: undefined,
+    baths_min: undefined,
+    baths_max: undefined,
+    size_min: undefined,
+    size_max: undefined,
+    dogs: false,
+    cats: false,
+    neighborhood: undefined,
+    parking: undefined,
+    laundry: undefined,
+    utilities: undefined
+}
 
-    function handleSelectFiles(e) {
-        let files = e.target.files; //this is a FileList
-        files = [...files]; //convert FileList to Array
-        //only set selectedFiles if they are in jpeg OR png AND 300kb or less, otherwise display error message
-        if (files.some(file => (!(file.type === 'image/jpeg' || file.type === 'image/png')))) {
-            setFormErrorMsg('Photos must be .jpeg, .jpg, or .png format')
-            return
-        } else if (files.some(file => file.size > 300000)) {
-            setFormErrorMsg('Photos must be 300kb or smaller')
-            return
-        } else {
-            setFormErrorMsg(null)
-            setSelectedFiles(files);
-        }
+const validateForm = values => {
+    let errors = {};
+    if (!/^[0-9]{5}$/.test(values.zip)) {
+        errors.zip = '5-digit ZIP code required'
+    }
+    return errors;
+}
+
+const PropertyUpdate = ({multi}) => {
+    const {selectedImages, imageSelectErr, handleImageSelect, getImageArr} = useImageUpload();
+    const {inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitForm, validateForm);
+    const {type, available_date, street, city, state, zip, rent_min, rent_max, beds_min, beds_max, baths_min, baths_max, size_min, size_max, dogs, cats, neighborhood, parking, laundry, utilities} = inputValues;
+    const authContext = useContext(AuthContext);
+    const history = useHistory();
+
+    function handleDateChange(date) {
+        setInputValues({
+            ...inputValues,
+            available_date: date
+        })
+    }
+
+    //rent, beds, baths, and size needs to be 2-value array even if property is single-unit
+    function getMinMaxArr(min, max) {
+        return (multi ? [min, max] : [min, min])
     }
 
     /*
     Gatekeepers on submit:
     1.) Check if logged in && isLister -> if no, setFormErrorMsg('must log in...')
-    2.) Check if photos -> if no, setFormErrorMsg('pics required...')
+    2.) Check if at least 3 photos are being uploaded.  
     */
 
-    async function handleSubmit(e) {
-        e.preventDefault();
-        setFormErrorMsg(null);
-        if (!authContext.user || !authContext.user.isLister) return setFormErrorMsg('You must be logged in as a Listing Agent/Property Manager to create a listing.')
-        if (!selectedFiles || selectedFiles.length < 4) return setFormErrorMsg('At least 4 photos are required for every listing.  Otherwise what\'s the point?')
+    async function submitForm() {
+        setOtherErrors(null);
+        if (!authContext.user || !authContext.user.isLister) return setOtherErrors('You must be logged in as a Listing Agent/Property Manager to create a listing.')
+        if (!selectedImages || selectedImages.length < 3) return setOtherErrors('At least 3 photos are required for every listing.')
+        if (!multi) {
 
+        }
         try {
             let formData = new FormData();
             formData.append('type', JSON.stringify(type));
             formData.append('available_date', JSON.stringify(available_date));
             formData.append('address', JSON.stringify({ 
-                ...address,
-                street: address.street.trim(),
-                city: address.city.trim(),
+                street: street.trim(),
+                city: city.trim(),
+                state,
+                zip
             }));
             formData.append('details', JSON.stringify({
-                rent: details.rent,
-                beds: details.beds,
-                baths: details.baths,
-                size: details.size,
-                pet_policy: { dogs: details.dogs, cats: details.cats },
-                neighborhood: details.neighborhood,
-                laundry: details.laundry,
-                utilities: details.utilities,
-                parking: details.parking
+                rent: getMinMaxArr(rent_min, rent_max),
+                beds: getMinMaxArr(beds_min, beds_max),
+                baths: getMinMaxArr(baths_min, baths_max),
+                size: getMinMaxArr(size_min, size_max),
+                pet_policy: { dogs, cats },
+                neighborhood,
+                laundry,
+                utilities,
+                parking
             }));
-            selectedFiles.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
-            console.log(authContext.user.token);
+            selectedImages.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
+
             const response = await fetch(
                 `${process.env.REACT_APP_SERVER_URL}/api/properties/new`,
                 {
@@ -107,68 +115,62 @@ const PropertyForm = ({multi}) => {
             );
             const data = await response.json();
             if (response.status !== 201) throw new Error(data.message);
+            history.push('/listings')
             console.log(data);
         } catch(err) {
-            setFormErrorMsg(err.message);
+            setOtherErrors(err.message);
             console.log(err);
         }
     }
 
-    //convert FileList to array, to pass down to ImgSlider
-    function getImgArr() {
-        return selectedFiles.map(file => {
-            let image = { src: URL.createObjectURL(file), name: file.name };
-            return image;
-        });
-    }
-
-    console.log(state);
-
     return (
         <Container>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={validateAndSubmit}>
                 <FormSection>
                     <h3>Property Address</h3>
                     <FormInput 
                         labelText="Street Address" 
-                        id="address-street" 
+                        id="update-street" 
                         name="street" 
                         placeholder="Street" 
                         type="text" 
-                        value={address.street}
-                        onChange={(e) => handleInputChangeNested(e,'address')}
+                        value={street}
+                        errorMsg={inputErrors.street}
+                        onChange={handleChange}
                         required
                     />
                     <FormInput 
                         labelText="City" 
-                        id="address-city" 
+                        id="update-city" 
                         name="city" 
                         placeholder="City" 
                         type="text" 
-                        value={address.city}
-                        onChange={(e) => handleInputChangeNested(e, 'address')}
+                        value={city}
+                        errorMsg={inputErrors.city}
+                        onChange={handleChange}
                         required
                     />
                     <SplitContainer>
                         <FormSelect 
                             labelText="State" 
                             labelHidden
-                            id="address-state" 
+                            id="update-state" 
                             name="state" 
                             placeholder="Select State"
-                            onChange={(e) => handleInputChangeNested(e, 'address')}
+                            onChange={handleChange}
                             required
                         >
                             {stateAbbrevs.map(abbrev => <option value={abbrev} key={abbrev}>{abbrev}</option>)}
                         </FormSelect>
                         <FormInput 
                             labelText="ZIP Code" 
-                            id="address-zip" 
+                            id="update-zip" 
                             name="zip" 
                             placeholder="ZIP Code" 
                             type="text" 
-                            value={address.zip}
-                            onChange={(e) => handleInputChangeNested(e, 'address')}
+                            value={zip}
+                            errorMsg={inputErrors.zip}
+                            onChange={handleChange}
                             required
                         />    
                     </SplitContainer>
@@ -179,10 +181,10 @@ const PropertyForm = ({multi}) => {
                     <FormSelect
                         labelText="Property Type"
                         showLabel
-                        id="type"
+                        id="update-type"
                         name="type"
                         placeholder="Select Property Type"
-                        onChange={(e) => handleInputChange(e, false)}
+                        onChange={handleChange}
                         required
                     >
                         <option value="apartment">Apartment</option>
@@ -190,10 +192,10 @@ const PropertyForm = ({multi}) => {
                         <option value="house">House</option>
                     </FormSelect> 
                     <FormDatePicker 
-                        id="available-date"
+                        id="update-available-date"
                         name="available_date"
                         stateValue={available_date} 
-                        dispatch={dispatch} 
+                        handleChange={handleDateChange}
                         minDate={new Date()}
                         placeholderText="Available Date"
                         className="datepicker"
@@ -204,112 +206,136 @@ const PropertyForm = ({multi}) => {
                     {
                         multi ?
 
-                        (<>
+                        (<SplitContainer>
                             <FormInput
-                                name="rent"
+                                name="rent_min"
                                 type="number"
-                                value={details.rent}
+                                value={rent_min}
                                 placeholder="Monthly $$$"
-                                labelText="Rent"
+                                labelText="Min. Rent"
                                 showLabel
-                                onChange={[ 
-                                    (e) => handleMinMaxChange(e, 'details', true), 
-                                    (e) => handleMinMaxChange(e, 'details', false) 
-                                ]}
+                                onChange={handleChange}
                                 required
-                                minmax
                             />
                             <FormInput
-                                name="size"
+                                name="rent_max"
                                 type="number"
-                                value={details.size}
+                                value={rent_max}
+                                placeholder="Monthly $$$"
+                                labelText="Max. Rent"
+                                showLabel
+                                onChange={handleChange}
+                                required
+                            />
+                            <FormInput
+                                name="size_min"
+                                type="number"
+                                value={size_min}
                                 placeholder="Sq. Ft."
-                                labelText="Square Footage"
+                                labelText="Min. Size"
                                 showLabel
-                                onChange={[ 
-                                    (e) => handleMinMaxChange(e, 'details', true), 
-                                    (e) => handleMinMaxChange(e, 'details', false) 
-                                ]}
+                                onChange={handleChange}
                                 required
-                                minmax
                             />
                             <FormInput
-                                id="details-beds"
-                                name="beds"
+                                name="size_max"
                                 type="number"
-                                value={details.beds}
-                                placeholder="# of BDs"
-                                labelText="Bedrooms"
+                                value={size_max}
+                                placeholder="Sq. Ft."
+                                labelText="Max Size"
                                 showLabel
-                                onChange={[ 
-                                    (e) => handleMinMaxChange(e, 'details', true), 
-                                    (e) => handleMinMaxChange(e, 'details', false) 
-                                ]}
+                                onChange={handleChange}
                                 required
-                                minmax
                             />
                             <FormInput
-                                id="details-baths"
-                                name="baths"
+                                id="update-beds"
+                                name="beds_min"
                                 type="number"
-                                value={details.baths}
-                                placeholder="# of BAs"
-                                labelText="Bathrooms"
+                                value={beds_min}
+                                placeholder="Beds"
+                                labelText="Min. Bedrooms"
                                 showLabel
-                                onChange={[ 
-                                    (e) => handleMinMaxChange(e, 'details', true), 
-                                    (e) => handleMinMaxChange(e, 'details', false) 
-                                ]}
+                                onChange={handleChange}
                                 required
-                                minmax
                             />
-                        </>) 
+                            <FormInput
+                                id="update-beds"
+                                name="beds_max"
+                                type="number"
+                                value={beds_max}
+                                placeholder="Beds"
+                                labelText="Max. Bedrooms"
+                                showLabel
+                                onChange={handleChange}
+                                required
+                            />
+                            <FormInput
+                                id="update-baths"
+                                name="baths_min"
+                                type="number"
+                                value={baths_min}
+                                placeholder="Baths"
+                                labelText="Min. Bathrooms"
+                                showLabel
+                                onChange={handleChange}
+                                required
+                            />
+                            <FormInput
+                                id="update-baths"
+                                name="baths_max"
+                                type="number"
+                                value={baths_max}
+                                placeholder="Baths"
+                                labelText="Max. Bathrooms"
+                                showLabel
+                                onChange={handleChange}
+                                required
+                            />
+                        </SplitContainer>) 
 
                         :
                         
                         (<SplitContainer>
                             <FormInput
-                                id="details-rent"
-                                name="rent"
+                                name="rent_min"
                                 type="number"
-                                value={details.rent[0]}
+                                value={rent_min}
                                 placeholder="Monthly $$$"
                                 labelText="Rent"
                                 showLabel
-                                onChange={(e) => handleInputChangeNested(e, 'details', true)}
+                                onChange={handleChange}
                                 required
                             />
                             <FormInput
-                                id="details-size"
-                                name="size"
+                                name="size_min"
                                 type="number"
-                                value={details.size[0]}
+                                value={size_min}
                                 placeholder="Sq. Ft."
-                                labelText="Square Footage"
+                                labelText="Size"
                                 showLabel
-                                onChange={(e) => handleInputChangeNested(e, 'details', true)}
+                                onChange={handleChange}
                                 required
                             />
                             <FormInput
-                                id="details-beds"
-                                name="beds"
+                                id="update-beds"
+                                name="beds_min"
                                 type="number"
-                                value={details.beds[0]}
-                                placeholder="# of BDs"
+                                value={beds_min}
+                                placeholder="Beds"
                                 labelText="Bedrooms"
                                 showLabel
-                                onChange={(e) => handleInputChangeNested(e, 'details', true)}
+                                onChange={handleChange}
                                 required
                             />
                             <FormInput
-                                id="details-baths"
-                                name="baths"
+                                id="update-baths"
+                                name="baths_min"
                                 type="number"
-                                value={details.baths[0]}
-                                placeholder="# of BAs"
+                                value={baths_min}
+                                placeholder="Baths"
                                 labelText="Bathrooms"
                                 showLabel
-                                onChange={(e) => handleInputChangeNested(e, 'details', true)}
+                                onChange={handleChange}
                                 required
                             />
                         </SplitContainer>)
@@ -318,10 +344,10 @@ const PropertyForm = ({multi}) => {
                         <FormSelect
                             labelText="Dogs Allowed?"
                             showLabel
-                            id="details-dogs"
+                            id="update-dogs"
                             name="dogs"
                             placeholder="Select Dog Policy"
-                            onChange={(e) => handleInputChangeNested(e, 'details')}
+                            onChange={handleChange}
                             required
                         >
                             <option value={true}>Dogs welcome</option>
@@ -330,10 +356,10 @@ const PropertyForm = ({multi}) => {
                         <FormSelect
                             labelText="Cats Allowed?"
                             showLabel
-                            id="details-cats"
+                            id="update-cats"
                             name="cats"
                             placeholder="Select Cat Policy"
-                            onChange={(e) => handleInputChangeNested(e, 'details')}
+                            onChange={handleChange}
                             required
                         >
                             <option value={true}>Cats welcome</option>
@@ -342,62 +368,62 @@ const PropertyForm = ({multi}) => {
                         <FormSelect
                             labelText="Parking Facilities"
                             showLabel
-                            id="details-parking"
+                            id="update-parking"
                             name="parking"
                             placeholder="Select Parking Options"
-                            onChange={(e) => handleInputChangeNested(e, 'details')}
+                            onChange={handleChange}
                             required
                         >
-                            <option value="street">On-Street</option>
-                            <option value="gated">Gated Lot</option>
-                            <option value="garage">Covered Garage</option>
+                            <option value="on street">On-Street</option>
+                            <option value="gated lot">Gated Lot</option>
+                            <option value="covered garage">Covered Garage</option>
                         </FormSelect>
                         <FormSelect
                             labelText="Laundry Options"
                             showLabel
-                            id="details-laundry"
+                            id="update-laundry"
                             name="laundry"
                             placeholder="Select Laundry Options"
-                            onChange={(e) => handleInputChangeNested(e, 'details')}
+                            onChange={handleChange}
                             required
                         >
                             <option value="in unit">In-Unit</option>
-                            <option value="shared">Shared On-Site</option>
+                            <option value="shared on site">Shared On-Site</option>
                             <option value="none">None</option>
                         </FormSelect>
                         <FormSelect
                             labelText="Utiities Required"
                             showLabel
-                            id="details-utilities"
+                            id="update-utilities"
                             name="utilities"
                             placeholder="Specify Required Utilities"
-                            onChange={(e) => handleInputChangeNested(e, 'details')}
+                            onChange={handleChange}
                             required
                         >
                             <option value="electric">Electric Only</option>
                             <option value="gas">Gas Only</option>
-                            <option value="both">Electric and Gas</option>
+                            <option value="electric and gas">Electric and Gas</option>
                         </FormSelect>
                     </SplitContainer>
                 </FormSection> 
                 <FormSection border>
-                    <PreviewDiv>
-                        <h3>Upload Photos and Review</h3>
-                        {!selectedFiles ? <PreviewDivFiller /> : <ImgSlider images={getImgArr()}/>}
-                    </PreviewDiv>
-                    <ImageUploadLabel htmlFor="propertyImgUpload" bg="black">SELECT PHOTOS</ImageUploadLabel>
-                    <FileInput id="propertyImgUpload" type="file" multiple accept=".png, .jpg, .jpeg" onChange={handleSelectFiles} /> 
+                    <ImageUpload
+                        selectedImages={selectedImages}
+                        handleSelect={handleImageSelect}
+                        getImageArr={getImageArr}
+                        errorMsg={imageSelectErr}
+                    />
                 </FormSection>
                 <FormSection border>
                     <FormButton type="submit">SUBMIT LISTING</FormButton>
                 </FormSection>
             </Form>
-            {formErrorMsg && <FormError>{formErrorMsg}</FormError>}
+            {otherErrors && <FormError>{otherErrors}</FormError>}
         </Container>
     )
 }
 
-export default PropertyForm
+export default PropertyUpdate
 
 
 const Container = styled.div`
@@ -430,38 +456,6 @@ const FormSection = styled.div`
         margin: .5rem 0;
         text-align: center;
     }
-`
-
-const ImageUploadLabel = styled.label`
-    width: 100%;
-    background-color: ${props => props.bg || 'var(--primary-color)'};
-    color: ${props => props.color || 'white'};
-    text-align: center;
-    font-family: 'Roboto';
-    font-size: 1.1rem;
-    line-height: 2;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-`
-
-const FileInput = styled.input`
-    display: none;
-`
-const PreviewDiv = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`
-const PreviewDivFiller = styled.div`
-    width: 100%;
-    height: 300px;
-    background: url(${imgIcon});
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center center;
 `
 
 const FormError = styled.p`
