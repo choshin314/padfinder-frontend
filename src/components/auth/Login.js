@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
-import {useFormSimple} from '../../hooks/useFormSimple'
+import {useForm} from '../../hooks/useForm'
 import {AuthContext} from '../../context/AuthContext'
 
 const initialState = {
@@ -16,7 +16,7 @@ const initialState = {
 const Login = () => {
     const authContext = useContext(AuthContext);
     let history = useHistory()
-    const {formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm} = useFormSimple(initialState, submitCallback)
+    const {formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm} = useForm(initialState, submitCallback)
     
     async function submitCallback(values) {
         try {

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
-import {useFormSimple} from '../../hooks/useFormSimple'
+import {useForm} from '../../hooks/useForm'
 import {AuthContext} from '../../context/AuthContext'
 
 const initialState = {
@@ -33,7 +33,7 @@ const validateForm = values => {
 
 const Register = () => {
 
-    const {formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm} = useFormSimple(initialState, handleAuthSubmit, validateForm)
+    const {formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm} = useForm(initialState, handleAuthSubmit, validateForm)
     const authContext = useContext(AuthContext);
     let history = useHistory()
 

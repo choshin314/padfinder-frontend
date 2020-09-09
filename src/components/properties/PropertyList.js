@@ -9,7 +9,7 @@ const PropertyList = ({ properties, errorMsg }) => {
     return (
         <Container>
             <Heading>MANAGE YOUR LISTINGS</Heading>
-            {!properties || properties.length < 1 && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
+            {(!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
             {properties && properties.map(property => (
                 <CardWrapper>
                     <PropertyCard
@@ -37,6 +37,8 @@ const Container = styled.div`
     & > div {
         display: flex;
     }
+
+    @media(min-width: )
 `
 const Heading = styled.h1`
     width: 100%;

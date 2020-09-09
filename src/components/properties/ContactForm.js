@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import styled from 'styled-components'
 
-import {useFormSimple} from '../../hooks/useFormSimple'
+import {useForm} from '../../hooks/useForm'
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import FormTextArea from '../formElements/FormTextArea'
@@ -29,7 +29,7 @@ const validateForm = values => {
 }
 
 const ContactForm = props => {
-    const { inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm } = useFormSimple(initialState, submitCallback, validateForm);
+    const { inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitCallback, validateForm);
     const { name, email, moveInDate, phone, message } = inputValues;
     const {expandedProperty} = useContext(PropertyModalContext); 
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
