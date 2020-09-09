@@ -8,6 +8,7 @@ import {devices} from '../styledLib'
 
 const PropertyModal = () => {
     const {expandedProperty, toggleModal} = useContext(PropertyModalContext);
+
     return (
         <Modal toggleModal={toggleModal}>
             <Container>
@@ -24,6 +25,17 @@ const PropertyModal = () => {
 
 export default PropertyModal
 
+/*
+1. take in props to determine which property modal to display:
+    a. Non-editable (Photos on left, Details + Contact Form on right)
+    b. Editable (Photos on left, Edit Form on right)
+
+2. Editable Form:
+    -Photos: checkboxes for deletion
+    -Form: same as Create Listing form, except pre-filled
+        -Select Photos -> Add More Photos
+*/
+
 const Container = styled.div`
     width: 100%;
     min-height: 100%;
@@ -39,9 +51,10 @@ const Container = styled.div`
 `
 
 const PhotoGrid = styled.div`
+    grid-row-start: 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(5, 1fr);
+
     grid-gap: 5px;
     margin-top: 2rem;
     padding-bottom: 1rem;
@@ -49,14 +62,21 @@ const PhotoGrid = styled.div`
     overflow-y: auto;
     & div {
         grid-area: span 1 / span 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(0,0,0,.8);
+        height: 200px;
 
         & img {
             object-fit: contain;
             max-width: 100%;
+            max-height: 100%;
         }
     }
     @media(min-width: ${devices.tablet}){
         margin: none;
         border: none;
+        grid-row-start: 1;
     }
 `//in the future, make grid-template-rows: ${photoarray.length / 2}
