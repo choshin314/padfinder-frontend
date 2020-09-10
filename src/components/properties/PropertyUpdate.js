@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext} from 'react'
 import styled from 'styled-components'
 
 import PropertyForm from './PropertyForm'
@@ -7,9 +7,9 @@ import {Wrapper} from '../styledLib'
 
 
 const PropertyUpdate = () => {
-    const [multi, setMulti] = useState(false);
     const {expandedProperty} = useContext(PropertyModalContext);
     const {type, available_date, address, details, photos} = expandedProperty;
+    const multi = details.rent[1] > details.rent[0];
 
     const initialState = {
         type,
@@ -33,15 +33,6 @@ const PropertyUpdate = () => {
         laundry: details.laundry,
         utilities: details.utilities
     }
-
-
-    //initialize state with expandedProperty's values
-    //grey out the address block (street, city, state, zip)
-    //grey out the property type
-    /*
-    on submit, 
-        send back everything in same model as CREATE listing
-    */
 
     return (
         <Wrapper maxWidth="620px">
