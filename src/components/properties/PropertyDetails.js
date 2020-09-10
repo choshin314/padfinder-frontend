@@ -8,7 +8,13 @@ import ContactForm from './ContactForm'
 import {Wrapper} from '../styledLib'
 
 const PropertyDetails = props => {
-    const {type, address, details} = props.property; 
+    const {available_date, type, address, details} = props.property; 
+
+    function getFormattedDate(date) {
+        let rawDate = new Date(date);
+        let displayDate = `${rawDate.getMonth() + 1}/${rawDate.getDay() + 1}/${rawDate.getFullYear()}`;
+        return displayDate;
+    }
 
     return (
         <WrapperDiv>
@@ -35,12 +41,12 @@ const PropertyDetails = props => {
             </InfoContainer>
             <InfoContainer>
                 <Subheading>Facts & Policies</Subheading>
-                <Grid>
+                <BigGrid>
                     <InfoList>
                         <Detail>
                             <Grid>  
                                 <span>Available: </span>
-                                <span>{details.available_date || 'Today'}</span>
+                                <span>{getFormattedDate(available_date) || 'Today'}</span>
                             </Grid>
                         </Detail>
                         <Detail>
@@ -83,7 +89,7 @@ const PropertyDetails = props => {
                         </Detail>
 
                     </InfoList>
-                </Grid>
+                </BigGrid>
             </InfoContainer>
             <InfoContainer>
                 <ContactForm />
@@ -121,10 +127,12 @@ const InfoContainer = styled.div`
 `
 
 const InfoList = styled.ul`
+    width: 100%;
     list-style: none;
     padding: 0;
     margin: 0;
     line-height: 1.5;
+    text-align: left;
 `
 const Subheading = styled.h2`
     font-size: 1.3rem;
@@ -135,10 +143,21 @@ const Flex = styled.li`
     align-items: baseline;
 `
 
+const BigGrid = styled.div`
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+    text-align: left;
+    @media(min-width: 768px) {
+        grid-template-columns: 1fr 1fr;
+    }
+`
+
 const Grid = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 5px;
+    text-align: left;
 `
 
 const Detail = styled.li`
