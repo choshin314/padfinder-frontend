@@ -39,7 +39,7 @@ const PropertyDetails = props => {
                     <InfoList>
                         <Detail>
                             <Grid>  
-                                <span>Available On: </span>
+                                <span>Available: </span>
                                 <span>{details.available_date || 'Today'}</span>
                             </Grid>
                         </Detail>

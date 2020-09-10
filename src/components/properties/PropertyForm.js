@@ -17,14 +17,92 @@ const stateAbbrevs = [
     'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'
 ]
 
+const validateForm = values => {
+    let errors = {};
+    if (!/^[0-9]{5}$/.test(values.zip)) {
+        errors.zip = '5-digit ZIP code required'
+    }
+    return errors;
+}
 
-const PropertyUpdate = props => {
-    const { multi, inputValues, inputErrors, otherErrors, handleChange, handleDateChange, handleSubmit, imageUploadProps } = props;
-    const { selectedImages, handleImageSelect, getImageArr, imageSelectErr } = imageUploadProps;
+const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
+    const {selectedImages, imageSelectErr, handleImageSelect, getImageArr} = useImageUpload();
+    const {inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitForm, validateForm);
+    const {type, available_date, street, city, state, zip, rent_min, rent_max, beds_min, beds_max, baths_min, baths_max, size_min, size_max, dogs, cats, neighborhood, parking, laundry, utilities} = inputValues;
+    const authContext = useContext(AuthContext);
+    const history = useHistory();
+
+    function handleDateChange(date) {
+        setInputValues({
+            ...inputValues,
+            available_date: date
+        })
+    }
+
+    //rent, beds, baths, and size needs to be 2-value array even if property is single-unit
+    function getMinMaxArr(min, max) {
+        return (multi ? [min, max] : [min, min])
+    }
+
+    /*
+    Gatekeepers on submit:
+    1.) Check if logged in && isLister -> if no, setFormErrorMsg('must log in...')
+    2.) Check if at least 3 photos are being uploaded.  
+    */
+
+    async function submitForm() {
+        setOtherErrors(null);
+        if (!authContext.user || !authContext.user.isLister) return setOtherErrors('You must be logged in as a Listing Agent/Property Manager to create a listing.')
+        if (!selectedImages || selectedImages.length < 3) return setOtherErrors('At least 3 photos are required for every listing.')
+        if (!multi) {
+
+        }
+        try {
+            let formData = new FormData();
+            formData.append('type', JSON.stringify(type));
+            formData.append('available_date', JSON.stringify(available_date));
+            formData.append('address', JSON.stringify({ 
+                street: street.trim(),
+                city: city.trim(),
+                state,
+                zip
+            }));
+            formData.append('details', JSON.stringify({
+                rent: getMinMaxArr(rent_min, rent_max),
+                beds: getMinMaxArr(beds_min, beds_max),
+                baths: getMinMaxArr(baths_min, baths_max),
+                size: getMinMaxArr(size_min, size_max),
+                pet_policy: { dogs, cats },
+                neighborhood,
+                laundry,
+                utilities,
+                parking
+            }));
+            selectedImages.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
+
+            const response = await fetch(
+                fetchConfig.url,
+                {
+                    method: fetchConfig.method,
+                    body: formData,
+                    headers: {
+                        Authorization: `Bearer ${authContext.user.token}`
+                    }
+                }
+            );
+            const data = await response.json();
+            if (response.status !== 201) throw new Error(data.message);
+            history.push('/listings')
+            console.log(data);
+        } catch(err) {
+            setOtherErrors(err.message);
+            console.log(err);
+        }
+    }
 
     return (
         <Container>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={validateAndSubmit}>
                 <FormSection>
                     <h3>Property Address</h3>
                     <FormInput 
@@ -33,7 +111,7 @@ const PropertyUpdate = props => {
                         name="street" 
                         placeholder="Street" 
                         type="text" 
-                        value={inputValues.street}
+                        value={street}
                         errorMsg={inputErrors.street}
                         onChange={handleChange}
                         required
@@ -44,7 +122,7 @@ const PropertyUpdate = props => {
                         name="city" 
                         placeholder="City" 
                         type="text" 
-                        value={inputValues.city}
+                        value={city}
                         errorMsg={inputErrors.city}
                         onChange={handleChange}
                         required
@@ -67,7 +145,7 @@ const PropertyUpdate = props => {
                             name="zip" 
                             placeholder="ZIP Code" 
                             type="text" 
-                            value={inputValues.zip}
+                            value={zip}
                             errorMsg={inputErrors.zip}
                             onChange={handleChange}
                             required
@@ -93,7 +171,7 @@ const PropertyUpdate = props => {
                     <FormDatePicker 
                         id="update-available-date"
                         name="available_date"
-                        stateValue={inputValues.available_date} 
+                        stateValue={available_date} 
                         handleChange={handleDateChange}
                         minDate={new Date()}
                         placeholderText="Available Date"
@@ -109,7 +187,7 @@ const PropertyUpdate = props => {
                             <FormInput
                                 name="rent_min"
                                 type="number"
-                                value={inputValues.rent_min}
+                                value={rent_min}
                                 placeholder="Monthly $$$"
                                 labelText="Min. Rent"
                                 showLabel
@@ -119,7 +197,7 @@ const PropertyUpdate = props => {
                             <FormInput
                                 name="rent_max"
                                 type="number"
-                                value={inputValues.rent_max}
+                                value={rent_max}
                                 placeholder="Monthly $$$"
                                 labelText="Max. Rent"
                                 showLabel
@@ -129,7 +207,7 @@ const PropertyUpdate = props => {
                             <FormInput
                                 name="size_min"
                                 type="number"
-                                value={inputValues.size_min}
+                                value={size_min}
                                 placeholder="Sq. Ft."
                                 labelText="Min. Size"
                                 showLabel
@@ -139,7 +217,7 @@ const PropertyUpdate = props => {
                             <FormInput
                                 name="size_max"
                                 type="number"
-                                value={inputValues.size_max}
+                                value={size_max}
                                 placeholder="Sq. Ft."
                                 labelText="Max Size"
                                 showLabel
@@ -150,7 +228,7 @@ const PropertyUpdate = props => {
                                 id="update-beds"
                                 name="beds_min"
                                 type="number"
-                                value={inputValues.beds_min}
+                                value={beds_min}
                                 placeholder="Beds"
                                 labelText="Min. Bedrooms"
                                 showLabel
@@ -161,7 +239,7 @@ const PropertyUpdate = props => {
                                 id="update-beds"
                                 name="beds_max"
                                 type="number"
-                                value={inputValues.beds_max}
+                                value={beds_max}
                                 placeholder="Beds"
                                 labelText="Max. Bedrooms"
                                 showLabel
@@ -172,7 +250,7 @@ const PropertyUpdate = props => {
                                 id="update-baths"
                                 name="baths_min"
                                 type="number"
-                                value={inputValues.baths_min}
+                                value={baths_min}
                                 placeholder="Baths"
                                 labelText="Min. Bathrooms"
                                 showLabel
@@ -183,7 +261,7 @@ const PropertyUpdate = props => {
                                 id="update-baths"
                                 name="baths_max"
                                 type="number"
-                                value={inputValues.baths_max}
+                                value={baths_max}
                                 placeholder="Baths"
                                 labelText="Max. Bathrooms"
                                 showLabel
@@ -198,7 +276,7 @@ const PropertyUpdate = props => {
                             <FormInput
                                 name="rent_min"
                                 type="number"
-                                value={inputValues.rent_min}
+                                value={rent_min}
                                 placeholder="Monthly $$$"
                                 labelText="Rent"
                                 showLabel
@@ -208,7 +286,7 @@ const PropertyUpdate = props => {
                             <FormInput
                                 name="size_min"
                                 type="number"
-                                value={inputValues.size_min}
+                                value={size_min}
                                 placeholder="Sq. Ft."
                                 labelText="Size"
                                 showLabel
@@ -219,7 +297,7 @@ const PropertyUpdate = props => {
                                 id="update-beds"
                                 name="beds_min"
                                 type="number"
-                                value={inputValues.beds_min}
+                                value={beds_min}
                                 placeholder="Beds"
                                 labelText="Bedrooms"
                                 showLabel
@@ -230,7 +308,7 @@ const PropertyUpdate = props => {
                                 id="update-baths"
                                 name="baths_min"
                                 type="number"
-                                value={inputValues.baths_min}
+                                value={baths_min}
                                 placeholder="Baths"
                                 labelText="Bathrooms"
                                 showLabel
@@ -322,7 +400,7 @@ const PropertyUpdate = props => {
     )
 }
 
-export default PropertyUpdate
+export default PropertyForm
 
 
 const Container = styled.div`
