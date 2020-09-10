@@ -5,20 +5,45 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt as faTrashAltFull } from '@fortawesome/free-solid-svg-icons'
 import { faTrashAlt as faTrashAltEmpty, faEye, faEdit } from '@fortawesome/free-regular-svg-icons'
 
+import {AuthContext} from '../../context/AuthContext'
 import {PropertyModalContext} from '../../context/PropertyModalContext'
 
 const PropertyCard = props => {
     const {_id, photos, details, address, type} = props.property;
-    console.log(props.property);
-    const {rent, beds, baths, size} = details;
-    const {toggleModal, propertyMethods} = useContext(PropertyModalContext); //on click, save the property in context. To be consumed by PropertyModal.
-
+    const { rent, beds, baths, size } = details;
+    const { toggleModal, propertyMethods } = useContext(PropertyModalContext); //on click, save the property in context. To be consumed by PropertyModal.
+    const authContext = useContext(AuthContext);
     const history = useHistory();
     const match = useRouteMatch();
 
-    const handleClickEdit = e => {
+    function handleClickView() {
+        toggleModal();
+        propertyMethods.openProperty(props.property);
+    }
+
+    function handleClickEdit() {
         propertyMethods.openProperty(props.property);
         history.push(`${match.url}/edit/${_id}`)
+    }
+
+    async function handleClickDelete() {
+        if (confirmDelete()) {
+            try {
+                await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/delete/${_id}`,{
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${authContext.user.token}`
+                    }
+                })
+                props.setProperties(prev => prev.filter(listing => listing._id !== _id))
+            } catch(err) {
+                console.log(err.message)
+            }
+        }
+    }
+
+    function confirmDelete() {
+        return true;
     }
 
     return (
@@ -26,10 +51,7 @@ const PropertyCard = props => {
             <ImageDiv>
                 <img src={photos[0].href} alt={address.street} />
             </ImageDiv>
-            <InfoList onClick={() => {
-                toggleModal();
-                propertyMethods.openProperty(props.property);
-            }}>
+            <InfoList onClick={handleClickView}>
                 <Address>{address.street}, {address.city}, {address.state} {address.zip}</Address>
                 <Detail>{details.neighborhood || `${type} for Rent`}</Detail>    
                 {
@@ -44,7 +66,7 @@ const PropertyCard = props => {
                 }
             </InfoList>
             <ButtonGroup>
-                <Button>
+                <Button onClick={handleClickView}>
                     <FontAwesomeIcon fixedWidth icon={faEye} />
                     VIEW
                 </Button>
@@ -52,7 +74,7 @@ const PropertyCard = props => {
                     <FontAwesomeIcon fixedWidth icon={faEdit} />
                     EDIT
                 </Button>
-                <Button>
+                <Button onClick={handleClickDelete}>
                     <FontAwesomeIcon fixedWidth icon={faTrashAltEmpty} />
                     DELETE
                 </Button>

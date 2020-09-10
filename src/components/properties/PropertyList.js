@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import PropertyCard from './PropertyCard'
 
-const PropertyList = ({ properties, errorMsg }) => {
-    console.log(properties);
+const PropertyList = ({ properties, setProperties, errorMsg }) => {
 
+    //need to pass down 'setProperties' (which is rly setListings or setFavorites) to enable live removal of Cards on 'delete'
     return (
         <Container>
             <Heading>MANAGE YOUR LISTINGS</Heading>
@@ -15,6 +15,7 @@ const PropertyList = ({ properties, errorMsg }) => {
                     <PropertyCard
                         key={property._id}
                         property={property}
+                        setProperties={setProperties}
                     />
                 </CardWrapper>
             ))}
