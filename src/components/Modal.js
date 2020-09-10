@@ -1,4 +1,5 @@
 import React from 'react'
+import ReactDOM from 'react-dom'
 import { withRouter } from 'react-router-dom'
 import styled from 'styled-components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -7,20 +8,23 @@ import {faWindowClose} from '@fortawesome/free-regular-svg-icons'
 import {devices} from './styledLib'
 
 const Modal = props => {
-    return (
-        <ModalWrapper onClick={() => props.toggleModal()}>
+    const modalNode = document.getElementById('modal-div');
+
+    return ReactDOM.createPortal(
+        (<ModalWrapper onClick={() => props.toggleModal()}>
             <ModalDiv onClick={(e) => e.stopPropagation()}>
                 <ModalExitBtn onClick={() => props.toggleModal()}>
-                    <FontAwesomeIcon icon={faWindowClose} size="2x" />
+                    <FontAwesomeIcon icon={faWindowClose}  size="lg"/>
                 </ModalExitBtn>    
                 {props.children}
             </ModalDiv>
-        </ModalWrapper>
+        </ModalWrapper>),
+        modalNode
     )
 }
 
 const ModalWrapper = styled.div`
-    height: 100%;
+    
     position: fixed;
     top: 0;
     bottom: 0;
@@ -28,33 +32,31 @@ const ModalWrapper = styled.div`
     left: 0;
     background-color: rgba(0,0,0,.5);
     z-index: 100;
+    text-align: center;
 `
 
 const ModalDiv = styled.div`
-    width: 100%;
+    display: inline-block;
     max-width: 1244px;
     max-height: 90vh;
-    height: 100%;
-    padding: 1rem;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
     margin-left: auto;
     margin-right: auto;
+    top: 50%;
+    transform: translateY(-50%);
     background: white;
     box-shadow: 0 0 0 rgba(0,0,0,.5);
     position: relative;
     overflow-y: auto;
+    border-radius: 5px;
 
     @media(min-width: ${devices.tablet}) {
-        overflow-y: hidden;
         max-height: 95vh;
     }
 `
 
 const ModalExitBtn = styled.button`
-    width: 3rem;
-    height: 3rem;
-    border: 2px solid white;
+    padding: .5rem;
+    border: none;
     background: transparent;
     position: absolute;
     right: 0;

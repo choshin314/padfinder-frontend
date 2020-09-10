@@ -39,6 +39,7 @@ export default PropertyModal
 const Container = styled.div`
     width: 100%;
     min-height: 100%;
+    padding: 1rem;
     position: relative;
     display: grid;
     grid-template-columns: 1fr;
