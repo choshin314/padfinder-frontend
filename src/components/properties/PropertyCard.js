@@ -1,22 +1,35 @@
 import React, {useContext} from 'react'
+import {useHistory, useRouteMatch} from 'react-router-dom'
 import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt as faTrashAltFull } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt as faTrashAltEmpty, faEye, faEdit } from '@fortawesome/free-regular-svg-icons'
 
 import {PropertyModalContext} from '../../context/PropertyModalContext'
 
 const PropertyCard = props => {
     const {_id, photos, details, address, type} = props.property;
+    console.log(props.property);
     const {rent, beds, baths, size} = details;
-    const {toggleModal, setExpandedProperty} = useContext(PropertyModalContext); //on click, save the property in context. To be consumed by PropertyModal.
+    const {toggleModal, propertyMethods} = useContext(PropertyModalContext); //on click, save the property in context. To be consumed by PropertyModal.
+
+    const history = useHistory();
+    const match = useRouteMatch();
+
+    const handleClickEdit = e => {
+        propertyMethods.openProperty(props.property);
+        history.push(`${match.url}/edit/${_id}`)
+    }
 
     return (
-        <Container onClick={() => {
-            toggleModal();
-            setExpandedProperty(props.property);
-        }}>
+        <Container>
             <ImageDiv>
                 <img src={photos[0].href} alt={address.street} />
             </ImageDiv>
-            <InfoList>
+            <InfoList onClick={() => {
+                toggleModal();
+                propertyMethods.openProperty(props.property);
+            }}>
                 <Address>{address.street}, {address.city}, {address.state} {address.zip}</Address>
                 <Detail>{details.neighborhood || `${type} for Rent`}</Detail>    
                 {
@@ -30,9 +43,24 @@ const PropertyCard = props => {
                     <Detail>{beds[0]}-{beds[1]} bd | {baths[0]}-{baths[1]} ba | {size[0]}-{size[1]} sqft</Detail>
                 }
             </InfoList>
+            <ButtonGroup>
+                <Button>
+                    <FontAwesomeIcon fixedWidth icon={faEye} />
+                    VIEW
+                </Button>
+                <Button onClick={handleClickEdit}>
+                    <FontAwesomeIcon fixedWidth icon={faEdit} />
+                    EDIT
+                </Button>
+                <Button>
+                    <FontAwesomeIcon fixedWidth icon={faTrashAltEmpty} />
+                    DELETE
+                </Button>
+            </ButtonGroup>
         </Container>
     )
 }
+
 export default PropertyCard
 
 
@@ -45,7 +73,6 @@ const Container = styled.div`
     padding: 0;
     box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.24);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    cursor: pointer;
     &:hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     }
@@ -65,6 +92,7 @@ const InfoList = styled.ul`
     list-style: none;
     padding: 1rem;
     margin: 0;
+    cursor: pointer;
 `
 
 const Flex = styled.li`
@@ -82,4 +110,35 @@ const Detail = styled.li`
     font-size: .8rem;
     line-height: 1.5;
     text-transform: capitalize;
+`
+
+const ButtonGroup = styled.div`
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+`
+
+const Button = styled.div`
+    background: rgba(0,0,0,.3);
+    outline: none;
+    padding: .25rem .5rem;
+    cursor: pointer;
+    &:hover {
+        background: rgba(0,0,0,.7);
+    }
+
+    &:active {
+        background-color: var(--primary-color);
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+    }
+    
+    & > svg {
+        margin-right: .5rem;
+    }
 `

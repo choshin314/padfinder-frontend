@@ -10,6 +10,7 @@ import Home from './pages/Home'
 import MapView from './pages/MapView'
 import NewListing from './pages/NewListing'
 import ManageListings from './pages/ManageListings'
+import UpdateListing from './pages/UpdateListing'
 import Authentication from './pages/Authentication'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route exact path="/"><Home /></Route>
             <Route exact path="/authenticate"><Authentication /></Route>
             <Route exact path="/search/:searchquery"><MapView /></Route>  
+            <Route exact path="/listings/edit/:propertyId"><UpdateListing /></Route>
             <Route exact path="/listings/new"><NewListing /></Route>
             <Route exact path="/listings"><ManageListings /></Route>
           </Switch>
