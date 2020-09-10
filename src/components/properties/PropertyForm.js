@@ -22,6 +22,9 @@ const validateForm = values => {
     if (!/^[0-9]{5}$/.test(values.zip)) {
         errors.zip = '5-digit ZIP code required'
     }
+    if (values.neighborhood && values.neighborhood.length < 4) {
+        errors.neighborhood = 'Must be at least 4 characters'
+    }
     return errors;
 }
 
@@ -180,6 +183,17 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                         showLabel
                         required
                     />
+                    <FormInput
+                        id="neighborhood"
+                        name="neighborhood"
+                        value={neighborhood}
+                        errorMsg={inputErrors.neighborhood}
+                        labelText="Neighborhood"
+                        showLabel
+                        placeholder={`e.g., "The Grove"`}
+                        onChange={handleChange}
+                    />
+
                     {
                         multi ?
 
