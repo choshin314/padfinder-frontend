@@ -33,7 +33,7 @@ const validateForm = values => {
 
 const Register = () => {
 
-    const {formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm} = useForm(initialState, handleAuthSubmit, validateForm)
+    const {inputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm} = useForm(initialState, handleAuthSubmit, validateForm)
     const authContext = useContext(AuthContext);
     let history = useHistory()
 
@@ -50,13 +50,13 @@ const Register = () => {
             resetForm();
             history.push('/');
         } catch(err) {
-            return setBackendError(err.message);
+            return setOtherErrors(err.message);
         }
     }
 
     return (
         <Container>
-            {backendError && <BackendError>{backendError}</BackendError>}
+            {otherErrors && <BackendError>{otherErrors}</BackendError>}
             <Form onSubmit={validateAndSubmit}>
                 <FormInput
                     id="email"
@@ -64,8 +64,8 @@ const Register = () => {
                     labelText="Email Address"
                     type="email"
                     placeholder="Enter email address"
-                    value={formValues.email}
-                    errorMsg={formErrors.email}
+                    value={inputValues.email}
+                    errorMsg={inputErrors.email}
                     onChange={handleChange} 
                     required
                 />
@@ -75,8 +75,8 @@ const Register = () => {
                     labelText="Password"
                     type="password" 
                     placeholder="Enter password"
-                    value={formValues.password}
-                    errorMsg={formErrors.password}
+                    value={inputValues.password}
+                    errorMsg={inputErrors.password}
                     onChange={handleChange} 
                     required
                 />
@@ -86,11 +86,11 @@ const Register = () => {
                         name="isLister"
                         type="checkbox" 
                         onChange={handleChange}
-                        checked={formValues.isLister}
+                        checked={inputValues.isLister}
                     />
                     <label htmlFor="isLister">I will be listing properties for lease</label>
                 </Checkbox>
-                {formValues.isLister && (
+                {inputValues.isLister && (
                     <ListerContainer>
                         <FormInput
                             id="first_name"
@@ -98,8 +98,8 @@ const Register = () => {
                             labelText="First Name"
                             type="text"
                             placeholder="First Name"
-                            value={formValues.first_name}
-                            errorMsg={formErrors.first_name}
+                            value={inputValues.first_name}
+                            errorMsg={inputErrors.first_name}
                             onChange={handleChange}
                             required
                         />
@@ -109,8 +109,8 @@ const Register = () => {
                             labelText="Last Name"
                             type="text"
                             placeholder="Last Name"
-                            value={formValues.last_name}
-                            errorMsg={formErrors.last_name}
+                            value={inputValues.last_name}
+                            errorMsg={inputErrors.last_name}
                             onChange={handleChange}
                             required
                         />
@@ -120,8 +120,8 @@ const Register = () => {
                             labelText="Company Name"
                             type="text"
                             placeholder='Company Name'
-                            value={formValues.company}
-                            errorMsg={formErrors.company}
+                            value={inputValues.company}
+                            errorMsg={inputErrors.company}
                             onChange={handleChange}
                             required
                         />
@@ -131,8 +131,8 @@ const Register = () => {
                             labelText="Phone Number"
                             type="tel"
                             placeholder="Phone Number"
-                            value={formValues.phone}
-                            errorMsg={formErrors.phone}
+                            value={inputValues.phone}
+                            errorMsg={inputErrors.phone}
                             onChange={handleChange}
                             required
                         />

@@ -16,7 +16,7 @@ const initialState = {
 const Login = () => {
     const authContext = useContext(AuthContext);
     let history = useHistory()
-    const {formValues, formErrors, handleChange, validateAndSubmit, backendError, setBackendError, resetForm} = useForm(initialState, submitCallback)
+    const {inputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm} = useForm(initialState, submitCallback)
     
     async function submitCallback(values) {
         try {
@@ -31,7 +31,7 @@ const Login = () => {
             resetForm();
             history.push('/');
         } catch(err) {
-            setBackendError(err.message)
+            setOtherErrors(err.message)
         }
     }
 
@@ -44,8 +44,8 @@ const Login = () => {
                     labelText="Email Address"
                     type="email"
                     placeholder="Enter email address"
-                    value={formValues.email}
-                    errorMsg={formErrors.email}
+                    value={inputValues.email}
+                    errorMsg={inputErrors.email}
                     onChange={handleChange} 
                     required
                 />
@@ -55,14 +55,14 @@ const Login = () => {
                     labelText="Password"
                     type="password" 
                     placeholder="Enter password"
-                    value={formValues.password}
-                    errorMsg={formErrors.password}
+                    value={inputValues.password}
+                    errorMsg={inputErrors.password}
                     onChange={handleChange} 
                     required
                 />
                 <FormButton type="submit">Log In</FormButton>
             </Form>
-            {backendError && <BackendError>{backendError}</BackendError>}
+            {otherErrors && <BackendError>{otherErrors}</BackendError>}
         </Container>
     )
 }
