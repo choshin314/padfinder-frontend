@@ -14,7 +14,7 @@ const PropertyModal = () => {
             <Container>
                 <PhotoGrid>
                     {expandedProperty && expandedProperty.photos.map(propertyImage => (
-                        <div key={expandedProperty._id}><img src={propertyImage.href} /></div>
+                        <div key={propertyImage.href}><img src={propertyImage.href} alt="" /></div>
                     ))}
                 </PhotoGrid>
                 <PropertyDetails property={expandedProperty}/>

@@ -11,9 +11,8 @@ const PropertyList = ({ properties, setProperties, errorMsg }) => {
             <Heading>MANAGE YOUR LISTINGS</Heading>
             {(!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
             {properties && properties.map(property => (
-                <CardWrapper>
+                <CardWrapper key={property._id}>
                     <PropertyCard
-                        key={property._id}
                         property={property}
                         setProperties={setProperties}
                     />
