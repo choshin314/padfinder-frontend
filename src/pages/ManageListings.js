@@ -4,11 +4,11 @@ import PropertyList from '../components/properties/PropertyList'
 import PropertyModal from '../components/properties/PropertyModal'
 import { Wrapper } from '../components/styledLib'
 import {AuthContext} from '../context/AuthContext'
-import {PropertyModalContext} from '../context/PropertyModalContext'
+import {PropertyContext} from '../context/PropertyContext'
 
 const ManageListings = () => {
     const authContext = useContext(AuthContext);
-    const { modalOpen, toggleModal } = useContext(PropertyModalContext);
+    const { modalOpen, toggleModal } = useContext(PropertyContext);
     const [ listings, setListings ] = useState();
     const [ errorMsg, setErrorMsg ] = useState(null);
 

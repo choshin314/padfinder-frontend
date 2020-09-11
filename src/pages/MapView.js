@@ -6,11 +6,11 @@ import PropertyCard from '../components/properties/PropertyCard'
 import PropertyModal from '../components/properties/PropertyModal'
 import {devices} from '../components/styledLib'
 import {MapContext} from '../context/MapContext'
-import {PropertyModalContext} from '../context/PropertyModalContext'
+import {PropertyContext} from '../context/PropertyContext'
 
 const MapView = props => {
     const {nearbyProperties} = useContext(MapContext);
-    const {modalOpen, toggleModal} = useContext(PropertyModalContext);
+    const {modalOpen, toggleModal} = useContext(PropertyContext);
 
     return (
         <>

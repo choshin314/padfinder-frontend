@@ -3,11 +3,11 @@ import styled from 'styled-components'
 
 import Modal from '../Modal'
 import PropertyDetails from './PropertyDetails'
-import {PropertyModalContext} from '../../context/PropertyModalContext'
+import {PropertyContext} from '../../context/PropertyContext'
 import {devices} from '../styledLib'
 
 const PropertyModal = () => {
-    const {expandedProperty, toggleModal} = useContext(PropertyModalContext);
+    const {expandedProperty, toggleModal} = useContext(PropertyContext);
 
     return (
         <Modal toggleModal={toggleModal}>

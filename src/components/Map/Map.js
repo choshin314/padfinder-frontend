@@ -3,7 +3,7 @@ import {GoogleMap, useLoadScript, Marker, InfoWindow} from '@react-google-maps/a
 import styled from 'styled-components'
 
 import {MapContext} from '../../context/MapContext'
-import {PropertyModalContext} from '../../context/PropertyModalContext'
+import {PropertyContext} from '../../context/PropertyContext'
 import SearchInput from './SearchInput'
 import house from '../../assets/home-solid.svg'
 import aptBldg from '../../assets/building-solid.svg'
@@ -39,7 +39,7 @@ let icon = (property) => {
 const Map = props => {
     const mapContext = useContext(MapContext);
     const { coordinates, nearbyProperties, dispatch } = mapContext;
-    const { toggleModal, setExpandedProperty } = useContext(PropertyModalContext);
+    const { toggleModal, setExpandedProperty } = useContext(PropertyContext);
     const [selected, setSelected] = useState();
 
     const {isLoaded, loadError} = useLoadScript({

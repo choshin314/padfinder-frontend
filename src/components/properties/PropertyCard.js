@@ -1,17 +1,30 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import {useHistory, useRouteMatch} from 'react-router-dom'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt as faTrashAltFull } from '@fortawesome/free-solid-svg-icons'
 import { faTrashAlt as faTrashAltEmpty, faEye, faEdit } from '@fortawesome/free-regular-svg-icons'
 
 import {AuthContext} from '../../context/AuthContext'
-import {PropertyModalContext} from '../../context/PropertyModalContext'
+import {PropertyContext} from '../../context/PropertyContext'
+import {useToggle} from '../../hooks/useToggle'
+import ConfirmDelete from './ConfirmDelete'
+import FavoriteOption from './FavoriteOption'
+
+//List of Favs 
+//Render PropertyCards -> onUnFavorite, remove from List of Favs
+    //Click PropertyCard 
+    //Render Modal
+        //should have isFavorite already
+        //onClick, unFavorite
+        //onClick again, reFavorite
+//Before rendering, needs to check AuthContext.user.favorites
 
 const PropertyCard = props => {
+    const [ showDeletionModal, toggleDeletionModal ] = useToggle();
+    const [ deletionConfirmed, setDeletionConfirmed ] = useState(false);
     const {_id, photos, details, address, type} = props.property;
     const { rent, beds, baths, size } = details;
-    const { toggleModal, propertyMethods } = useContext(PropertyModalContext); //on click, save the property in context. To be consumed by PropertyModal.
+    const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
     const authContext = useContext(AuthContext);
     const history = useHistory();
     const match = useRouteMatch();
@@ -26,25 +39,43 @@ const PropertyCard = props => {
         history.push(`${match.url}/edit/${_id}`)
     }
 
-    async function handleClickDelete() {
-        if (confirmDelete()) {
-            try {
-                await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/delete/${_id}`,{
-                    method: 'DELETE',
-                    headers: {
-                        Authorization: `Bearer ${authContext.user.token}`
-                    }
-                })
-                props.setProperties(prev => prev.filter(listing => listing._id !== _id))
-            } catch(err) {
-                console.log(err.message)
-            }
-        }
+    /*Deletion is a multi-step process:
+        1) Click 'Delete' button triggers 'handleClickDelete' -> Opens deletion confirmation modal (ConfirmDelete)
+        2) In ConfirmDelete, we have two buttons:
+            a.) Cancel -> calls 'toggleDeletionModal', which we pass down as props.  
+            b.) Delete -> calls 'handleConfirmDelete', which we pass down as props
+                i. Calls 'toggleDeletionModal,' closing the modal
+                ii. Calls 'handleConfirmDelete', which we pass down as props
+                    -This sets our state 'deletionConfirmed' to true, which triggers our effect (deletionConfirmed is a dependency of the effect)
+                    -The effect calls the actual 'deleteProperty' function, i.e. the typical 'onSubmit' to the backend
+    */
+    function handleClickDelete() {
+       toggleDeletionModal();
     }
 
-    function confirmDelete() {
-        return true;
+    function handleConfirmDelete() {
+        toggleDeletionModal();
+        setDeletionConfirmed(true);
     }
+
+    async function deleteProperty() {
+        try {
+            await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/delete/${_id}`,{
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${authContext.user.token}`
+                }
+            })
+            props.setProperties(prev => prev.filter(listing => listing._id !== _id))
+        } catch(err) {
+            console.log(err.message)
+        }
+        setDeletionConfirmed(false);
+    }
+
+    useEffect(() => {
+        if (deletionConfirmed) deleteProperty();
+    }, [deletionConfirmed])
 
     return (
         <Container>
@@ -78,7 +109,11 @@ const PropertyCard = props => {
                     <FontAwesomeIcon fixedWidth icon={faTrashAltEmpty} />
                     DELETE
                 </Button>
+                <Button >
+                    <FavoriteOption propertyId={_id}/>
+                </Button>
             </ButtonGroup>
+            {showDeletionModal && <ConfirmDelete toggleModal={toggleDeletionModal} street={address.street} handleConfirmDelete={handleConfirmDelete}/>}
         </Container>
     )
 }

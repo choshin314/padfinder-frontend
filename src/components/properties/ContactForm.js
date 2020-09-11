@@ -7,7 +7,7 @@ import FormButton from '../formElements/FormButton'
 import FormTextArea from '../formElements/FormTextArea'
 import FormDatePicker from '../formElements/FormDatePicker'
 import Card from '../Card'
-import {PropertyModalContext} from '../../context/PropertyModalContext'
+import {PropertyContext} from '../../context/PropertyContext'
 
 const initialState = {
     name: '',
@@ -31,7 +31,7 @@ const validateForm = values => {
 const ContactForm = props => {
     const { inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitCallback, validateForm);
     const { name, email, moveInDate, phone, message } = inputValues;
-    const {expandedProperty} = useContext(PropertyModalContext); 
+    const {expandedProperty} = useContext(PropertyContext); 
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
 
     function handleDateChange(date) {
@@ -45,8 +45,6 @@ const ContactForm = props => {
         console.log('Sending to backend for email')
         resetForm();
     }
-
-    console.log(inputValues)
 
     return (
         <Card>

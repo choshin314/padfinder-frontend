@@ -1,13 +1,13 @@
 import React, {useState} from 'react'
 
-const PropertyModalContext = React.createContext()
+const PropertyContext = React.createContext()
 
 function checkLocalStorage(key, defaultValue) {
     let localItem = localStorage.getItem(key);
     return ( localItem ? JSON.parse(localItem) : defaultValue );
 }
 
-const PropertyModalContextProvider = (props) => {
+const PropertyContextProvider = (props) => {
     const [expandedProperty, setExpandedProperty] = useState(checkLocalStorage('expandedProperty', null));
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -30,17 +30,16 @@ const PropertyModalContextProvider = (props) => {
     }
 
     return (
-        <PropertyModalContext.Provider value={{
+        <PropertyContext.Provider value={{
             expandedProperty, 
             setExpandedProperty,
             propertyMethods,
             modalOpen,
-            toggleModal,
-            setModalOpen
+            toggleModal
         }}>
             {props.children}
-        </PropertyModalContext.Provider>
+        </PropertyContext.Provider>
     )
 }
 
-export {PropertyModalContext, PropertyModalContextProvider}
+export {PropertyContext, PropertyContextProvider}

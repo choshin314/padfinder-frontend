@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import {AuthContextProvider} from './context/AuthContext'
 import {MapContextProvider} from './context/MapContext'
-import {PropertyModalContextProvider} from './context/PropertyModalContext'
+import {PropertyContextProvider} from './context/PropertyContext'
 import MainNav from './components/nav/MainNav'
 import Home from './pages/Home'
 import MapView from './pages/MapView'
@@ -18,7 +18,7 @@ function App() {
   return (
     <AuthContextProvider>
     <MapContextProvider>
-    <PropertyModalContextProvider>
+    <PropertyContextProvider>
       <Router>
         <MainNav />
         <Main>
@@ -32,7 +32,7 @@ function App() {
           </Switch>
         </Main>
       </Router>  
-    </PropertyModalContextProvider>
+    </PropertyContextProvider>
     </MapContextProvider>
     </AuthContextProvider>
   );

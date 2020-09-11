@@ -2,12 +2,12 @@ import React, {useContext} from 'react'
 import styled from 'styled-components'
 
 import PropertyForm from './PropertyForm'
-import {PropertyModalContext} from '../../context/PropertyModalContext'
+import {PropertyContext} from '../../context/PropertyContext'
 import {Wrapper} from '../styledLib'
 
 
 const PropertyUpdate = () => {
-    const {expandedProperty} = useContext(PropertyModalContext);
+    const {expandedProperty} = useContext(PropertyContext);
     const {type, available_date, address, details, photos} = expandedProperty;
     const multi = details.rent[1] > details.rent[0];
 
