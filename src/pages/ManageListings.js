@@ -15,7 +15,7 @@ const ManageListings = () => {
         let isMounted = true;
         const fetchProperties = async () => {
             try {
-                const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}`, {
+                const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}/listings`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${authContext.user.token}`
