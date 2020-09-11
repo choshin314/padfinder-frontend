@@ -3,12 +3,12 @@ import styled from 'styled-components'
 
 import PropertyCard from './PropertyCard'
 
-const PropertyList = ({ properties, setProperties, errorMsg }) => {
+const PropertyList = ({ title, properties, setProperties, errorMsg }) => {
 
     //need to pass down 'setProperties' (which is rly setListings or setFavorites) to enable live removal of Cards on 'delete'
     return (
         <Container>
-            <Heading>MANAGE YOUR LISTINGS</Heading>
+            <Heading>MANAGE YOUR {title.toUpperCase()}</Heading>
             {(!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
             {properties && properties.map(property => (
                 <CardWrapper key={property._id}>

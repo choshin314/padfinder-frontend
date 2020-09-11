@@ -37,7 +37,12 @@ const ManageListings = () => {
     return (
         <>
         <Wrapper>
-            <PropertyList properties={listings} setProperties={setListings} errorMsg={errorMsg} />
+            <PropertyList 
+                title="listings"
+                properties={listings} 
+                setProperties={setListings} 
+                errorMsg={errorMsg} 
+            />
         </Wrapper>
         {modalOpen && <PropertyModal toggleModal={toggleModal}/>}
         </>
