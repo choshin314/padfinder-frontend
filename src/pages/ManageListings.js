@@ -8,8 +8,7 @@ import {PropertyContext} from '../context/PropertyContext'
 
 const ManageListings = () => {
     const authContext = useContext(AuthContext);
-    const { modalOpen, toggleModal } = useContext(PropertyContext);
-    const [ listings, setListings ] = useState();
+    const { modalOpen, toggleModal, listings, setListings } = useContext(PropertyContext);
     const [ errorMsg, setErrorMsg ] = useState(null);
 
     useEffect(() => {

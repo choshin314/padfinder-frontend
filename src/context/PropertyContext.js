@@ -21,11 +21,11 @@ const PropertyContextProvider = (props) => {
     }
 
     const propertyMethods = {
-        openProperty: function(property) {
+        selectProperty: function(property) {
             setExpandedProperty(property);
             localStorage.setItem('expandedProperty', JSON.stringify(property))
         },
-        closeProperty: function(property) {
+        deselectProperty: function() {
             setExpandedProperty(null);
             localStorage.removeItem('expandedProperty');
         }
@@ -47,6 +47,8 @@ const PropertyContextProvider = (props) => {
             propertyMethods,
             modalOpen,
             toggleModal,
+            listings,
+            setListings,
             favs,
             setFavs,
             updateFavState
