@@ -10,6 +10,8 @@ function checkLocalStorage(key, defaultValue) {
 const PropertyContextProvider = (props) => {
     const [expandedProperty, setExpandedProperty] = useState(checkLocalStorage('expandedProperty', null));
     const [modalOpen, setModalOpen] = useState(false);
+    const [listings, setListings] = useState([]);
+    const [favs, setFavs] = useState([]);
 
     const toggleModal = () => {
         if (modalOpen) {
@@ -29,13 +31,25 @@ const PropertyContextProvider = (props) => {
         }
     }
 
+    function updateFavState(property, action) {
+        if (action === 'add') {
+            setFavs([...favs, property])
+        } else {
+            let updatedFavs = favs.filter(fav => fav._id !== property._id);
+            setFavs(updatedFavs);
+        }
+    }
+
     return (
         <PropertyContext.Provider value={{
             expandedProperty, 
             setExpandedProperty,
             propertyMethods,
             modalOpen,
-            toggleModal
+            toggleModal,
+            favs,
+            setFavs,
+            updateFavState
         }}>
             {props.children}
         </PropertyContext.Provider>
