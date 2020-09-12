@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -9,9 +9,7 @@ import {MapContext} from '../../context/MapContext'
 const SearchInput = (props) => {
     const { coordinates, nearbyProperties, displayAddress, dispatch } = useContext(MapContext);
     let history = useHistory();
-
-    const startingText = () => { return (displayAddress.length > 1 ? displayAddress : null )}
-    const [inputText, setInputText] = useState(startingText);
+    const [inputText, setInputText] = useState('');
 
     const handleInput = e => {
         let value = e.target.value;
@@ -48,6 +46,10 @@ const SearchInput = (props) => {
 
         history.push(`/search/${queryString}`)
     };
+
+    useEffect(() => {
+        setInputText(displayAddress)
+    }, [displayAddress])
 
     return (
         <SearchForm onSubmit={handleSubmit} mini={props.mini ? true:false}>
