@@ -7,8 +7,8 @@ import { faTrashAlt as faTrashAltEmpty, faEye, faEdit } from '@fortawesome/free-
 import {AuthContext} from '../../context/AuthContext'
 import {PropertyContext} from '../../context/PropertyContext'
 import {useToggle} from '../../hooks/useToggle'
-import ConfirmDelete from './ConfirmDelete'
 import FavoriteOption from './FavoriteOption'
+import AlertModal from '../shared/AlertModal'
 
 //List of Favs 
 //Render PropertyCards -> onUnFavorite, remove from List of Favs
@@ -113,7 +113,13 @@ const PropertyCard = props => {
                     <FavoriteOption property={props.property}/>
                 </Button>
             </ButtonGroup>
-            {showDeletionModal && <ConfirmDelete toggleModal={toggleDeletionModal} street={address.street} handleConfirmDelete={handleConfirmDelete}/>}
+            
+            {showDeletionModal && <AlertModal 
+                toggleModal={toggleDeletionModal} 
+                message={`Are you sure you want to delete ${address.street}?`} 
+                affirmText="DELETE"
+                handleClick={handleConfirmDelete}
+            />}
         </Container>
     )
 }
