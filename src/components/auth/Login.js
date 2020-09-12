@@ -6,6 +6,7 @@ import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import {useForm} from '../../hooks/useForm'
 import {AuthContext} from '../../context/AuthContext'
+import {useLoginLogout} from '../../hooks/useLoginLogout'
 
 const initialState = {
     email: '',
@@ -15,6 +16,7 @@ const initialState = {
 
 const Login = () => {
     const authContext = useContext(AuthContext);
+    const {login} = useLoginLogout();
     let history = useHistory()
     const {inputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm} = useForm(initialState, submitCallback)
     
@@ -27,7 +29,7 @@ const Login = () => {
             });
             let userData = await response.json();
             if (response.status !== 200) throw new Error(userData.message); 
-            authContext.login(userData);
+            login(userData);
             resetForm();
             history.push('/');
         } catch(err) {

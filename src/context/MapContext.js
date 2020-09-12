@@ -13,6 +13,9 @@ function reducerFunction(state, action) {
         case "UPDATE_NEARBY": {
             return { ...state, nearbyProperties: action.value }
         }; 
+        case "RESET": {
+            return { coordinates: {}, nearbyProperties: [], displayAddress: ''}
+        }
         default: return state;
     }
 }

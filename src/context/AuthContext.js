@@ -11,19 +11,9 @@ const AuthContextProvider = props => {
     //if it's saved in localstorage, initialize it w/ that.  Otherwise, initialize state fresh.
     const [ user, setUser ] = useState(checkLocalStorage('pfUser', null))
 
-    function login(userData) {
-        setUser(userData);
-        localStorage.setItem('pfUser', JSON.stringify(userData));
-    }
-
-    function logout() {
-        setUser(null);
-        localStorage.removeItem('pfUser');
-    }
-
     return (
         <AuthContext.Provider value={{
-            user, setUser, login, logout
+            user, setUser
         }} >
             {props.children}
         </AuthContext.Provider>

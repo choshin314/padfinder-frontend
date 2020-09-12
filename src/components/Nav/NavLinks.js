@@ -3,9 +3,11 @@ import {Link, useHistory} from 'react-router-dom'
 import styled, {css} from 'styled-components'
 
 import {AuthContext} from '../../context/AuthContext'
+import {useLoginLogout} from '../../hooks/useLoginLogout'
 
 const NavLinks = ({border}) => {
     const authContext = useContext(AuthContext);
+    const {logout} = useLoginLogout();
     let history = useHistory();
 
     return (
@@ -16,7 +18,7 @@ const NavLinks = ({border}) => {
         {!authContext.user ?
             <NavItem border={border}><Link to="/authenticate">Sign In / Register</Link></NavItem> :
             <NavItem border={border}><button onClick={() => {
-                authContext.logout();
+                logout();
                 history.push('/');
             }}>Logout</button></NavItem>
         }
