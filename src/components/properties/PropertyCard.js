@@ -31,11 +31,11 @@ const PropertyCard = props => {
 
     function handleClickView() {
         toggleModal();
-        propertyMethods.openProperty(props.property);
+        propertyMethods.selectProperty(props.property);
     }
 
     function handleClickEdit() {
-        propertyMethods.openProperty(props.property);
+        propertyMethods.selectProperty(props.property);
         history.push(`${match.url}/edit/${_id}`)
     }
 
@@ -110,7 +110,7 @@ const PropertyCard = props => {
                     DELETE
                 </Button>
                 <Button >
-                    <FavoriteOption propertyId={_id}/>
+                    <FavoriteOption property={props.property}/>
                 </Button>
             </ButtonGroup>
             {showDeletionModal && <ConfirmDelete toggleModal={toggleDeletionModal} street={address.street} handleConfirmDelete={handleConfirmDelete}/>}

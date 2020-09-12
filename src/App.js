@@ -10,6 +10,7 @@ import Home from './pages/Home'
 import MapView from './pages/MapView'
 import NewListing from './pages/NewListing'
 import ManageListings from './pages/ManageListings'
+import ManageFavs from './pages/ManageFavs'
 import UpdateListing from './pages/UpdateListing'
 import Authentication from './pages/Authentication'
 
@@ -29,6 +30,7 @@ function App() {
             <Route exact path="/listings/edit/:propertyId"><UpdateListing /></Route>
             <Route exact path="/listings/new"><NewListing /></Route>
             <Route exact path="/listings"><ManageListings /></Route>
+            <Route exact path="/favorites"><ManageFavs /></Route>
           </Switch>
         </Main>
       </Router>  

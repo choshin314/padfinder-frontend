@@ -1,9 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faHeart as fasHeart } from '@fortawesome/free-solid-svg-icons'
-import {faHeart as farHeart} from '@fortawesome/free-regular-svg-icons'
 
+import FavoriteOption from './FavoriteOption'
 import ContactForm from './ContactForm'
 import {Wrapper} from '../styledLib'
 
@@ -20,7 +18,7 @@ const PropertyDetails = props => {
         <WrapperDiv>
             <FlexHeader>
                 <h1>Property Details</h1>
-                <span>Save <span><FontAwesomeIcon icon={farHeart} size={'1x'}/></span></span>
+                <FavoriteOption color="red" propertyId={props.property._id}/>
             </FlexHeader>
             <InfoContainer>
                 <InfoList>
@@ -106,16 +104,11 @@ const FlexHeader = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: baseline;
     font-weight: bold;
 
     & > h1 {
         font-size: 1.5rem;
-    }
-
-    & > span {
-        font-size: 1.1rem;
-        cursor: pointer;
     }
 `
 
