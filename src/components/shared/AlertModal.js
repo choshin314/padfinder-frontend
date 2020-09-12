@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Modal from '../Modal'
 
 const AlertModal = props => {
-    const {toggleModal, message, handleClick} = props;
+    const {toggleModal, message, affirmText, handleClick} = props;
     return (
         <Modal toggleModal={props.toggleModal}>
         <Wrapper>
@@ -12,7 +12,7 @@ const AlertModal = props => {
                 <p>{message}</p>
                 <BtnDiv>
                     <ModalBtn inverse onClick={toggleModal}>CANCEL</ModalBtn>
-                    <ModalBtn onClick={handleClick}>DELETE</ModalBtn>
+                    <ModalBtn onClick={handleClick}>{affirmText}</ModalBtn>
                 </BtnDiv>
             </Container>
             
