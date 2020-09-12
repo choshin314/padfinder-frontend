@@ -169,7 +169,7 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                     >
                         <option value="apartment">Apartment</option>
                         <option value="condo">Condo</option>
-                        <option value="house">House</option>
+                        <option value="single_family">House</option>
                     </FormSelect> 
                     <FormDatePicker 
                         id="update-available-date"
@@ -406,7 +406,7 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                     />
                 </FormSection>
                 <FormSection border>
-                    <FormButton type="submit">SUBMIT LISTING</FormButton>
+                    <FormButton type="submit">SUBMIT {updateMode ? 'UPDATES' : 'LISTING'}</FormButton>
                 </FormSection>
             </Form>
             {otherErrors && <FormError>{otherErrors}</FormError>}
