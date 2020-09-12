@@ -19,7 +19,7 @@ const MapView = props => {
                 <Map mainMap/>
             </MapDiv>
             <SidePanel>
-                {nearbyProperties.length > 0 && nearbyProperties.map(p => <PropertyCard property={p} toggleModal={toggleModal}/>)}
+                {nearbyProperties.length > 0 && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} toggleModal={toggleModal}/>)}
             </SidePanel>
         </GridContainer>
         {modalOpen && <PropertyModal toggleModal={toggleModal}/>}
