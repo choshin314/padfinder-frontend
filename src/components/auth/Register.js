@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import {useForm} from '../../hooks/useForm'
-import {AuthContext} from '../../context/AuthContext'
+import {useLoginLogout} from '../../hooks/useLoginLogout'
 
 const initialState = {
     email: '',
@@ -25,16 +25,19 @@ const validateForm = values => {
     if (values.password.length < 8) {
         errors.password = "Password must be at least 8 characters"
     }
-    if (!/^\d{10}$/.test(values.phone)) {
-        errors.phone = "10-digit phone number required (numbers only)"
+    if (values.isLister) {
+        if (!/^\d{10}$/.test(values.phone)) {
+            errors.phone = "10-digit phone number required (numbers only)"
+        }
     }
+    
     return errors;
 }
 
 const Register = () => {
 
-    const {inputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm} = useForm(initialState, handleAuthSubmit, validateForm)
-    const authContext = useContext(AuthContext);
+    const {inputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm} = useForm(initialState, handleAuthSubmit, validateForm);
+    const {login} = useLoginLogout();
     let history = useHistory()
 
     async function handleAuthSubmit(values) {
@@ -46,7 +49,7 @@ const Register = () => {
             })
             let user = await response.json();
             if (response.status !== 201) throw new Error(user.message);
-            authContext.login(user);
+            login(user);
             resetForm();
             history.push('/');
         } catch(err) {
