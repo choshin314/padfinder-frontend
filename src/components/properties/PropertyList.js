@@ -1,15 +1,19 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import styled from 'styled-components'
 
+import {AuthContext} from '../../context/AuthContext'
 import PropertyCard from './PropertyCard'
 
 const PropertyList = ({ title, properties, setProperties, errorMsg }) => {
-
+    const {user} = useContext(AuthContext);
     //need to pass down 'setProperties' (which is rly setListings or setFavorites) to enable live removal of Cards on 'delete'
     return (
         <Container>
             <Heading>MANAGE YOUR {title.toUpperCase()}</Heading>
-            {(!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
+            {!user && <ErrorDisplay>Login to see your {title}</ErrorDisplay>}
+            {user && !user.isLister && title === 'listings' && <ErrorDisplay>You must be logged in as a Property Manager/Agent to manage listings</ErrorDisplay>}
+            {user && user.isLister && title === 'listings' && (!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
+            {user && title === 'favorites' && (!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
             {properties && properties.map(property => (
                 <CardWrapper key={property._id}>
                     <PropertyCard
