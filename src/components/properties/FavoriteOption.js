@@ -28,6 +28,20 @@ const FavoriteOption = ({property, color}) => {
         setIsFavorite(true);
     }
 
+    async function removeFavorite() {
+        if (!authContext.user) return toggleLoginModal(); //send to Auth page if not logged in
+        await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}/favorites/remove/${property._id}`, {
+            method: 'PATCH',
+            headers: {
+                Authorization: `Bearer ${authContext.user.token}`
+            }
+        });
+        setIsFavorite(false);
+    }
+
+    function handleClick() {
+        isFavorite ? removeFavorite() : addFavorite()
+    } 
 
 
     const navigateToAuth = () => history.push('/authenticate');
@@ -55,48 +69,16 @@ const FavoriteOption = ({property, color}) => {
     }, []);
 
     useEffect(() => {
-        console.log(favs);
-        console.log(property);
-        let x = favs.find(f => f['_id'] === property['_id'])
-        console.log(x)
-        if(x) {
+        let foundFavorite = favs.find(f => f['_id'] === property['_id'])
+        if(foundFavorite) {
             setIsFavorite(true);
         } else {
             setIsFavorite(false);
         }
     }, [favs]);
 
-    // function deleteFavorite() {
-    //     console.log(propertyId);
-    //     toggleIsFavorite()
-    // }
-
-    // function saveFavorite() {
-    //     console.log('Saving favorite');
-    //     toggleIsFavorite()
-    // }
-
-    // function handleFavorite() {
-    //     isFavorite ? deleteFavorite() : saveFavorite()
-    // }
-
-    // async function deleteProperty() {
-    //     try {
-    //         await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/delete/${_id}`,{
-    //             method: 'DELETE',
-    //             headers: {
-    //                 Authorization: `Bearer ${authContext.user.token}`
-    //             }
-    //         })
-    //         props.setProperties(prev => prev.filter(listing => listing._id !== _id))
-    //     } catch(err) {
-    //         console.log(err.message)
-    //     }
-    //     setDeletionConfirmed(false);
-    // }
-
     return (
-        <FavSpan onClick={addFavorite} color={color}> 
+        <FavSpan onClick={handleClick} color={color}> 
             {isFavorite ? <FontAwesomeIcon icon={fasHeart} /> : <FontAwesomeIcon icon={farHeart} />}
             {isFavorite ? 'SAVED' : 'SAVE' }
             {showLoginModal && <AlertModal 
