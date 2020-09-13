@@ -19,18 +19,16 @@ const FavoriteOption = ({property, color}) => {
 
     async function addFavorite() {
         if (!authContext.user) return toggleLoginModal(); //send to Auth page if not logged in
-        console.log(property._id);
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}/favorites/add`, {
+        await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}/favorites/add/${property._id}`, {
             method: 'PATCH',
             headers: {
-                Authorization: `Bearer ${authContext.user.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({propertyId: property._id})
+                Authorization: `Bearer ${authContext.user.token}`
+            }
         });
-        const data = await response.json();
         setIsFavorite(true);
     }
+
+
 
     const navigateToAuth = () => history.push('/authenticate');
 
