@@ -61,7 +61,6 @@ const Map = props => {
         try {
             const response = await fetch(`http://localhost:5000/api/properties/nearby/${newCoords.lat}-${newCoords.lng}`);
             const nearbyProperties = await response.json();
-            // mapContext.setNearbyProperties(nearbyProperties);
             dispatch({ type: "UPDATE_NEARBY", value: nearbyProperties })
         } catch(err) {
             console.log(err, 'Failed to fetch nearby properties');
@@ -84,9 +83,9 @@ const Map = props => {
             onLoad={onMapLoad}
             onDragEnd={saveNewCoords}
         >
-            {props.mainMap && nearbyProperties.map(property => (
+            {nearbyProperties.length > 0 && nearbyProperties.map(property => (
                 <Marker 
-                    key={property.id} 
+                    key={property._id} 
                     position={property.address.coordinates}
                     icon={icon(property)}
                     onClick={() => setSelected(property)}

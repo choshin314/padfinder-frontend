@@ -37,13 +37,11 @@ const SearchInput = (props) => {
         //need to display these in map markers/infowindows and property cards for the sidebar
         try {
             const response = await fetch(`http://localhost:5000/api/properties/nearby/${newCoords.lat}-${newCoords.lng}`);
-            const nearbyProperties = await response.json();
-            // mapContext.setNearbyProperties(nearbyProperties);
-            dispatch({ type: "UPDATE_NEARBY", value: nearbyProperties })
+            const nearby = await response.json();
+            dispatch({ type: "UPDATE_NEARBY", value: nearby })
         } catch(err) {
             console.log(err, 'Failed to fetch nearby properties');
         }
-
         history.push(`/search/${queryString}`)
     };
 

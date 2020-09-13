@@ -31,7 +31,7 @@ const ManageListings = () => {
         };
         fetchProperties();  
         return () => isMounted = false; //cleanup - prevents setListings if component isn't mounted
-    }, [listings]);
+    }, []);
 
     //need to pass down setListings as 'setProperties' to enable live removal of Cards on 'delete'
     return (
