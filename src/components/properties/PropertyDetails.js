@@ -18,7 +18,7 @@ const PropertyDetails = props => {
         <WrapperDiv>
             <FlexHeader>
                 <h1>Property Details</h1>
-                <FavoriteOption color="red" propertyId={props.property._id}/>
+                <FavoriteOption color="red" property={props.property}/>
             </FlexHeader>
             <InfoContainer>
                 <InfoList>
