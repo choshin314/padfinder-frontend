@@ -14,7 +14,7 @@ const PropertyList = ({ title, properties, setProperties, errorMsg }) => {
             {user && !user.isLister && title === 'listings' && <ErrorDisplay>You must be logged in as a Property Manager/Agent to manage listings</ErrorDisplay>}
             {user && user.isLister && title === 'listings' && (!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
             {user && title === 'favorites' && (!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
-            {properties && properties.map(property => (
+            {properties.length > 0 && properties.map(property => (
                 <CardWrapper key={property._id}>
                     <PropertyCard
                         property={property}
