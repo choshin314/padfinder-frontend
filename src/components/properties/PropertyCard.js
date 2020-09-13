@@ -20,10 +20,11 @@ import AlertModal from '../shared/AlertModal'
 //Before rendering, needs to check AuthContext.user.favorites
 
 const PropertyCard = props => {
+    const { property, setProperties } = props;
+    const { _id, photos, details, address, type } = property;
+    const { rent, beds, baths, size } = details;
     const [ showDeletionModal, toggleDeletionModal ] = useToggle();
     const [ deletionConfirmed, setDeletionConfirmed ] = useState(false);
-    const {_id, photos, details, address, type} = props.property;
-    const { rent, beds, baths, size } = details;
     const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
     const authContext = useContext(AuthContext);
     const history = useHistory();
@@ -31,11 +32,11 @@ const PropertyCard = props => {
 
     function handleClickView() {
         toggleModal();
-        propertyMethods.selectProperty(props.property);
+        propertyMethods.selectProperty(property);
     }
 
     function handleClickEdit() {
-        propertyMethods.selectProperty(props.property);
+        propertyMethods.selectProperty(property);
         history.push(`${match.url}/edit/${_id}`)
     }
 
@@ -66,7 +67,7 @@ const PropertyCard = props => {
                     Authorization: `Bearer ${authContext.user.token}`
                 }
             })
-            props.setProperties(prev => prev.filter(listing => listing._id !== _id))
+            setProperties(prev => prev.filter(listing => listing._id !== _id))
         } catch(err) {
             console.log(err.message)
         }
@@ -110,7 +111,7 @@ const PropertyCard = props => {
                     DELETE
                 </Button>
                 <Button >
-                    <FavoriteOption property={props.property}/>
+                    <FavoriteOption property={property}/>
                 </Button>
             </ButtonGroup>
             
