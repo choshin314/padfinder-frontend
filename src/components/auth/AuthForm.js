@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import styled, {css} from 'styled-components'
 
-import {Wrapper} from '../styledLib'
+import {Wrapper} from '../shared/styledLib'
 import Login from './Login'
 import Register from './Register'
 

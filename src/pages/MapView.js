@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Map from '../components/map/Map'
 import PropertyCard from '../components/properties/PropertyCard'
 import PropertyModal from '../components/properties/PropertyModal'
-import {devices} from '../components/styledLib'
+import {devices} from '../components/shared/styledLib'
 import {MapContext} from '../context/MapContext'
 import {PropertyContext} from '../context/PropertyContext'
 

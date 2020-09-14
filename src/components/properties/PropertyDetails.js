@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import FavoriteOption from './FavoriteOption'
 import ContactForm from './ContactForm'
-import {Wrapper} from '../styledLib'
+import {Wrapper} from '../shared/styledLib'
 
 const PropertyDetails = props => {
     const {available_date, type, address, details} = props.property; 

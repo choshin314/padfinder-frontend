@@ -1,6 +1,6 @@
 import React from 'react'
 
-import HeroSection from '../components/HeroSection'
+import HeroSection from '../components/shared/HeroSection'
 import cityscape from '../assets/cityscape.svg'
 import Searchbox from '../components/map/Searchbox'
 

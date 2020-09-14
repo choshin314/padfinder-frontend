@@ -1,10 +1,10 @@
 import React, {useContext} from 'react'
 import styled from 'styled-components'
 
-import Modal from '../Modal'
+import Modal from '../shared/Modal'
 import PropertyDetails from './PropertyDetails'
 import {PropertyContext} from '../../context/PropertyContext'
-import {devices} from '../styledLib'
+import {devices} from '../shared/styledLib'
 
 const PropertyModal = () => {
     const {expandedProperty, toggleModal} = useContext(PropertyContext);

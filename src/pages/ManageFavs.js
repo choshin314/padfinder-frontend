@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react'
 
 import PropertyList from '../components/properties/PropertyList'
 import PropertyModal from '../components/properties/PropertyModal'
-import { Wrapper } from '../components/styledLib'
+import { Wrapper } from '../components/shared/styledLib'
 import {AuthContext} from '../context/AuthContext'
 import {PropertyContext} from '../context/PropertyContext'
 

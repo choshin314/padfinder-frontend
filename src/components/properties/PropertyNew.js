@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import styled, {css} from 'styled-components'
 
 import PropertyForm from './PropertyForm'
-import {Wrapper} from '../styledLib'
+import {Wrapper} from '../shared/styledLib'
 
 const initialState = {
     type: "apartment",

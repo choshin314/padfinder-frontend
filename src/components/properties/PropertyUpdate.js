@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import PropertyForm from './PropertyForm'
 import {PropertyContext} from '../../context/PropertyContext'
-import {Wrapper} from '../styledLib'
+import {Wrapper} from '../shared/styledLib'
 
 
 const PropertyUpdate = () => {

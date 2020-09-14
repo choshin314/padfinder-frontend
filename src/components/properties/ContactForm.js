@@ -6,7 +6,7 @@ import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import FormTextArea from '../formElements/FormTextArea'
 import FormDatePicker from '../formElements/FormDatePicker'
-import Card from '../Card'
+import Card from '../shared/Card'
 import {PropertyContext} from '../../context/PropertyContext'
 
 const initialState = {
