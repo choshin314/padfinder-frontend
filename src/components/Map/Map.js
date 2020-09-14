@@ -86,7 +86,10 @@ const Map = props => {
             {nearbyProperties.length > 0 && nearbyProperties.map(property => (
                 <Marker 
                     key={property._id} 
-                    position={property.address.coordinates}
+                    position={{
+                        lat: property.location.coordinates[1], 
+                        lng: property.location.coordinates[0]
+                    }}
                     icon={icon(property)}
                     onClick={() => setSelected(property)}
                 />
