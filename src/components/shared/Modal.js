@@ -7,18 +7,27 @@ import {faWindowClose} from '@fortawesome/free-regular-svg-icons'
 
 import {devices} from './styledLib'
 
+const ModalContent = props => {
+    const {toggleModal, noClick, background} = props;
+    return (
+        <ModalWrapper onClick={() => props.toggleModal()}>
+            <ModalDiv onClick={(e) => e.stopPropagation()} background={background} noClick={noClick}>
+                {!noClick && (
+                    <ModalExitBtn onClick={() => props.toggleModal()}>
+                        <FontAwesomeIcon icon={faWindowClose}  size="lg"/>
+                    </ModalExitBtn>
+                )}    
+                {props.children}
+            </ModalDiv>
+        </ModalWrapper>
+    )
+}
+
 const Modal = props => {
     const modalNode = document.getElementById('modal-div');
 
     return ReactDOM.createPortal(
-        (<ModalWrapper onClick={() => props.toggleModal()}>
-            <ModalDiv onClick={(e) => e.stopPropagation()}>
-                <ModalExitBtn onClick={() => props.toggleModal()}>
-                    <FontAwesomeIcon icon={faWindowClose}  size="lg"/>
-                </ModalExitBtn>    
-                {props.children}
-            </ModalDiv>
-        </ModalWrapper>),
+        (<ModalContent {...props} />),
         modalNode
     )
 }
@@ -43,7 +52,7 @@ const ModalDiv = styled.div`
     margin-right: auto;
     top: 50%;
     transform: translateY(-50%);
-    background: white;
+    background: ${props => props.background ? props.background : 'white'};
     box-shadow: 0 0 0 rgba(0,0,0,.5);
     position: relative;
     overflow-y: auto;
