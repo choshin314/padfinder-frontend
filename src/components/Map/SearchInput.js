@@ -16,33 +16,26 @@ const SearchInput = (props) => {
         setInputText(value);
     }
 
-    //on search submit, send value to context - Maps component will need to consume this
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let queryString = inputText.trim().replace(/ /g, '+').replace(/,/g, '');
-        let newCoords;
+        let queryString = inputText.trim().replace(/ /g, '+').replace(/,/g, '+');
+        let coordinates;
 
-        //convert queried address to lat lng and store in mapcontext.  Map component will need coordinates as center.
+        //send search query to backend. backend will return:
+            //1. converted search coordinates, 2. formatted search address, 3. properties within 3.2 miles
         try {
-            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${queryString}&key=${process.env.REACT_APP_MAPS_KEY}`);
-            const responseData = await response.json();
-            newCoords = responseData.results[0].geometry.location;
-            const displayAddy = responseData.results[0].formatted_address;
-            dispatch({ type: "UPDATE_COORDS+ADDRESS", value: [newCoords, displayAddy] })
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/${queryString}`);
+            if (response.status >= 400) {
+                const { message } = await response.json();
+                throw new Error(message);
+            }
+            const { coordinates, formatted_address, nearbyProperties } = await response.json();
+            dispatch({ type: "UPDATE_COORDS+ADDRESS", value: [coordinates, formatted_address] });
+            dispatch({ type: 'UPDATE_NEARBY', value: nearbyProperties });
+            history.push(`/search/${queryString}`)
         } catch(err) {
             console.log(err);
         }
-
-        //retrieve array of properties that are within 3(ish) miles from queried property. Store it in mapcontext.
-        //need to display these in map markers/infowindows and property cards for the sidebar
-        try {
-            const response = await fetch(`http://localhost:5000/api/properties/nearby/${newCoords.lat}-${newCoords.lng}`);
-            const nearby = await response.json();
-            dispatch({ type: "UPDATE_NEARBY", value: nearby })
-        } catch(err) {
-            console.log(err, 'Failed to fetch nearby properties');
-        }
-        history.push(`/search/${queryString}`)
     };
 
     useEffect(() => {
