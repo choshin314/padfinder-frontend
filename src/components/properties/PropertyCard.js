@@ -10,22 +10,13 @@ import {useToggle} from '../../hooks/useToggle'
 import FavoriteOption from './FavoriteOption'
 import AlertModal from '../shared/AlertModal'
 
-//List of Favs 
-//Render PropertyCards -> onUnFavorite, remove from List of Favs
-    //Click PropertyCard 
-    //Render Modal
-        //should have isFavorite already
-        //onClick, unFavorite
-        //onClick again, reFavorite
-//Before rendering, needs to check AuthContext.user.favorites
-
 const PropertyCard = props => {
     const { property, setProperties } = props;
     const { _id, photos, details, address, type } = property;
     const { rent, beds, baths, size } = details;
     const [ showDeletionModal, toggleDeletionModal ] = useToggle();
     const [ deletionConfirmed, setDeletionConfirmed ] = useState(false);
-    const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
+    const { toggleModal, propertyMethods, listings } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
     const authContext = useContext(AuthContext);
     const history = useHistory();
     const match = useRouteMatch();
@@ -67,7 +58,7 @@ const PropertyCard = props => {
                     Authorization: `Bearer ${authContext.user.token}`
                 }
             })
-            setProperties(prev => prev.filter(listing => listing._id !== _id))
+            setProperties(listings.filter(listing => listing._id !== _id))
         } catch(err) {
             console.log(err.message)
         }

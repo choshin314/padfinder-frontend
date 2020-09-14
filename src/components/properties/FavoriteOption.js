@@ -19,24 +19,35 @@ const FavoriteOption = ({property, color}) => {
 
     async function addFavorite() {
         if (!authContext.user) return toggleLoginModal(); //send to Auth page if not logged in
-        await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}/favorites/add/${property._id}`, {
-            method: 'PATCH',
-            headers: {
-                Authorization: `Bearer ${authContext.user.token}`
-            }
-        });
-        setIsFavorite(true);
+        try {
+            await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}/favorites/add/${property._id}`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${authContext.user.token}`
+                }
+            });
+            setFavs([...favs, property]);
+            setIsFavorite(true);
+        } catch(err) {
+            console.log(err.message);
+        }
+        
     }
 
     async function removeFavorite() {
         if (!authContext.user) return toggleLoginModal(); //send to Auth page if not logged in
-        await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}/favorites/remove/${property._id}`, {
-            method: 'PATCH',
-            headers: {
-                Authorization: `Bearer ${authContext.user.token}`
-            }
-        });
-        setIsFavorite(false);
+        try {
+            await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/${authContext.user.userId}/favorites/remove/${property._id}`, {
+                method: 'PATCH',
+                headers: {
+                    Authorization: `Bearer ${authContext.user.token}`
+                }
+            });
+            setFavs(favs.filter(fav => fav._id !== property._id));
+            setIsFavorite(false);
+        } catch(err) {
+            console.log(err.message);
+        }
     }
 
     function handleClick() {
@@ -66,7 +77,7 @@ const FavoriteOption = ({property, color}) => {
         };
         fetchProperties();  
         return () => isMounted = false; //cleanup - prevents setListings if component isn't mounted
-    }, []);
+    }, [isFavorite]);
 
     useEffect(() => {
         let foundFavorite = favs.find(f => f['_id'] === property['_id'])
