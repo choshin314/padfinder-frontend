@@ -10,7 +10,9 @@ import {devices} from './styledLib'
 const ModalContent = props => {
     const {toggleModal, noClick, background} = props;
     return (
-        <ModalWrapper onClick={() => props.toggleModal()}>
+        <ModalWrapper onClick={() => {
+            return (noClick ? null : props.toggleModal())
+        }}>
             <ModalDiv onClick={(e) => e.stopPropagation()} background={background} noClick={noClick}>
                 {!noClick && (
                     <ModalExitBtn onClick={() => props.toggleModal()}>
