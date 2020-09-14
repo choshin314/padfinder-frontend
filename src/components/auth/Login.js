@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
+import LoadingModal from '../shared/LoadingModal'
 import {useForm} from '../../hooks/useForm'
 import {AuthContext} from '../../context/AuthContext'
 import {useLoginLogout} from '../../hooks/useLoginLogout'
@@ -18,7 +19,7 @@ const Login = () => {
     const authContext = useContext(AuthContext);
     const {login} = useLoginLogout();
     let history = useHistory()
-    const {inputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm} = useForm(initialState, submitCallback)
+    const {inputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors, resetForm} = useForm(initialState, submitCallback)
     
     async function submitCallback(values) {
         try {
@@ -39,6 +40,7 @@ const Login = () => {
 
     return (
         <Container>
+            {isSubmitting && <LoadingModal />}
             <Form onSubmit={validateAndSubmit}>
                 <FormInput
                     id="email"

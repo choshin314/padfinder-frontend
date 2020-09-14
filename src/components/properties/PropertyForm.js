@@ -5,12 +5,12 @@ import { v4 as uuidv4 } from 'uuid'
 
 import {useForm} from '../../hooks/useForm'
 import {useImageUpload} from '../../hooks/useImageUpload'
+import LoadingModal from '../shared/LoadingModal'
 import FormButton from '../formElements/FormButton'
 import FormInput from '../formElements/FormInput'
 import FormSelect from '../formElements/FormSelect'
 import FormDatePicker from '../formElements/FormDatePicker'
 import ImageUpload from '../formElements/ImageUpload'
-
 import {AuthContext} from '../../context/AuthContext'
 
 const stateAbbrevs = [
@@ -30,7 +30,7 @@ const validateForm = values => {
 
 const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
     const {selectedImages, imageSelectErr, handleImageSelect, getImageArr} = useImageUpload();
-    const {inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitForm, validateForm);
+    const {inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitForm, validateForm);
     const {type, available_date, street, city, state, zip, rent_min, rent_max, beds_min, beds_max, baths_min, baths_max, size_min, size_max, dogs, cats, neighborhood, parking, laundry, utilities} = inputValues;
     const authContext = useContext(AuthContext);
     const history = useHistory();
@@ -57,9 +57,6 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
         setOtherErrors(null);
         if (!authContext.user || !authContext.user.isLister) return setOtherErrors('You must be logged in as a Listing Agent/Property Manager to create a listing.')
         if (!selectedImages || selectedImages.length < 3) return setOtherErrors('At least 3 photos are required for every listing.')
-        if (!multi) {
-
-        }
         try {
             let formData = new FormData();
             formData.append('type', JSON.stringify(type));
@@ -96,15 +93,14 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
             const data = await response.json();
             if (response.status !== 201) throw new Error(data.message);
             history.push('/listings')
-            console.log(data);
         } catch(err) {
             setOtherErrors(err.message);
-            console.log(err);
         }
     }
 
     return (
         <Container>
+            {isSubmitting && <LoadingModal />}
             <Form onSubmit={validateAndSubmit}>
                 <FormSection>
                     <h3>Property Address</h3>

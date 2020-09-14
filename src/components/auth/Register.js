@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
+import LoadingModal from '../shared/LoadingModal'
 import {useForm} from '../../hooks/useForm'
 import {useLoginLogout} from '../../hooks/useLoginLogout'
 
@@ -36,7 +37,7 @@ const validateForm = values => {
 
 const Register = () => {
 
-    const {inputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm} = useForm(initialState, handleAuthSubmit, validateForm);
+    const {inputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors, resetForm} = useForm(initialState, handleAuthSubmit, validateForm);
     const {login} = useLoginLogout();
     let history = useHistory()
 
@@ -60,6 +61,7 @@ const Register = () => {
     return (
         <Container>
             {otherErrors && <BackendError>{otherErrors}</BackendError>}
+            {isSubmitting && <LoadingModal />}
             <Form onSubmit={validateAndSubmit}>
                 <FormInput
                     id="email"
