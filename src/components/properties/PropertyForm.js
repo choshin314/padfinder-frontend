@@ -55,8 +55,12 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
 
     async function submitForm() {
         setOtherErrors(null);
-        if (!authContext.user || !authContext.user.isLister) return setOtherErrors('You must be logged in as a Listing Agent/Property Manager to create a listing.')
-        if (!selectedImages || selectedImages.length < 3) return setOtherErrors('At least 3 photos are required for every listing.')
+        if (!authContext.user || !authContext.user.isLister) {
+            return setOtherErrors('You must be logged in as a Listing Agent/Property Manager to create a listing.')
+        }
+        if (!selectedImages || selectedImages.length < 3) {
+            return setOtherErrors('At least 3 photos are required for every listing.')
+        }
         try {
             let formData = new FormData();
             formData.append('type', JSON.stringify(type));
