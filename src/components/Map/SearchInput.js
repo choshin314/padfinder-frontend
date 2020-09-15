@@ -25,10 +25,7 @@ const SearchInput = (props) => {
         //1. converted search coordinates, 2. formatted search address, 3. properties within 3.2 miles
         try {
             const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/string/${queryString}`);
-            if (response.status >= 400) {
-                const { message } = await response.json();
-                throw new Error(message);
-            }
+            if (response.status === 404) return dispatch({ type: "UPDATE_NEARBY", value: [] });
             const { coordinates, formatted_address, nearbyProperties } = await response.json();
             dispatch({ type: "UPDATE_COORDS+ADDRESS", value: [coordinates, formatted_address] });
             dispatch({ type: 'UPDATE_NEARBY', value: nearbyProperties });
