@@ -59,7 +59,7 @@ const Map = props => {
         newCoords = { lat: newCoords.lat(), lng: newCoords.lng()}
         dispatch({type: "UPDATE_COORDS", value: newCoords});
         try {
-            const response = await fetch(`http://localhost:5000/api/properties/nearby/${newCoords.lat}-${newCoords.lng}`);
+            const response = await fetch(`http://localhost:5000/api/properties/nearby/coordinates/${newCoords.lat}-${newCoords.lng}`);
             const nearbyProperties = await response.json();
             dispatch({ type: "UPDATE_NEARBY", value: nearbyProperties })
         } catch(err) {
