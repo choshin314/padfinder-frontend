@@ -62,10 +62,19 @@ const MapDiv = styled.div`
     @media (min-width: ${devices.tablet}) {
         grid-column: span 4;
     }
+    @media (min-width: ${devices.laptop}) {
+        grid-column: span 3;
+    }
 `
 
 const SidePanelContainer = styled.div`
+    max-height: 100%;
     grid-column: span 2;
+
+    @media(min-width: ${devices.laptop}) {
+        grid-column: span 3;
+        overflow-y: auto;
+    }
     @media(min-width: ${devices.wide}) {
         padding: 1rem;
     }
@@ -79,7 +88,6 @@ const SidePanelTitle = styled.h1`
 
 const SidePanel = styled.div`
     position: relative;
-    height: 100%;
     min-height: 50vh;
     display: grid;
     align-content: start;
