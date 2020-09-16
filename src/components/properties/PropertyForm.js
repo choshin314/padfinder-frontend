@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import LoadingModal from '../shared/LoadingModal'
 import FormButton from '../formElements/FormButton'
 import FormInput from '../formElements/FormInput'
+import FormInputRange from '../formElements/FormInputRange'
 import FormSelect from '../formElements/FormSelect'
 import FormDatePicker from '../formElements/FormDatePicker'
 import ImageUpload from '../formElements/ImageUpload'
@@ -78,7 +79,6 @@ const PropertyForm = ({multi, isSubmitting, values, errors, handlers, updateMode
                 </FormSection>
                 <FormSection border> 
                     <h3>Property Details</h3>
-
                     <FormSelect
                         labelText="Property Type"
                         showLabel
@@ -117,100 +117,48 @@ const PropertyForm = ({multi, isSubmitting, values, errors, handlers, updateMode
                         placeholder={`e.g., "The Grove"`}
                         onChange={handleChange}
                     />
-
-                    {
-                        multi ?
-
-                        (<SplitContainer>
-                            <FormInput
-                                name="rent_min"
-                                type="number"
-                                value={inputValues.rent_min}
-                                placeholder="Monthly $$$"
-                                labelText="Min. Rent"
+                    <SplitContainer>
+                        { multi ?
+                        (<>
+                            <FormInputRange 
+                                baseId="rent"
+                                baseName="rent"
+                                values={[inputValues.rent_min, inputValues.rent_max]}
+                                placeholder="Rent $"
                                 showLabel
                                 onChange={handleChange}
                                 required
                             />
-                            <FormInput
-                                name="rent_max"
-                                type="number"
-                                value={inputValues.rent_max}
-                                placeholder="Monthly $$$"
-                                labelText="Max. Rent"
-                                showLabel
-                                onChange={handleChange}
-                                required
-                            />
-                            <FormInput
-                                name="size_min"
-                                type="number"
-                                value={inputValues.size_min}
+                            <FormInputRange
+                                baseId="size"
+                                baseName="size"
+                                values={[inputValues.size_min, inputValues.size_max]}
                                 placeholder="Sq. Ft."
-                                labelText="Min. Size"
                                 showLabel
                                 onChange={handleChange}
                                 required
                             />
-                            <FormInput
-                                name="size_max"
-                                type="number"
-                                value={inputValues.size_max}
-                                placeholder="Sq. Ft."
-                                labelText="Max Size"
-                                showLabel
-                                onChange={handleChange}
-                                required
-                            />
-                            <FormInput
-                                id="update-beds"
-                                name="beds_min"
-                                type="number"
-                                value={inputValues.beds_min}
+                            <FormInputRange
+                                baseId="beds"
+                                baseName="beds"
+                                values={[inputValues.beds_min, inputValues.beds_max]}
                                 placeholder="Beds"
-                                labelText="Min. Bedrooms"
                                 showLabel
                                 onChange={handleChange}
                                 required
                             />
-                            <FormInput
-                                id="update-beds"
-                                name="beds_max"
-                                type="number"
-                                value={inputValues.beds_max}
-                                placeholder="Beds"
-                                labelText="Max. Bedrooms"
-                                showLabel
-                                onChange={handleChange}
-                                required
-                            />
-                            <FormInput
-                                id="update-baths"
-                                name="baths_min"
-                                type="number"
-                                value={inputValues.baths_min}
+                            <FormInputRange
+                                baseId="baths"
+                                baseName="baths"
+                                values={[inputValues.baths_min, inputValues.baths_max]}
                                 placeholder="Baths"
-                                labelText="Min. Bathrooms"
                                 showLabel
                                 onChange={handleChange}
                                 required
                             />
-                            <FormInput
-                                id="update-baths"
-                                name="baths_max"
-                                type="number"
-                                value={inputValues.baths_max}
-                                placeholder="Baths"
-                                labelText="Max. Bathrooms"
-                                showLabel
-                                onChange={handleChange}
-                                required
-                            />
-                        </SplitContainer>) 
-
+                        </>)
                         :
-                        
-                        (<SplitContainer>
+                        (<>
                             <FormInput
                                 name="rent_min"
                                 type="number"
@@ -253,8 +201,9 @@ const PropertyForm = ({multi, isSubmitting, values, errors, handlers, updateMode
                                 onChange={handleChange}
                                 required
                             />
-                        </SplitContainer>)
-                    }
+                        </>)
+                        }
+                    </SplitContainer>
                     <SplitContainer>
                         <FormSelect
                             labelText="Dogs Allowed?"
