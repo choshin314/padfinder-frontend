@@ -1,15 +1,19 @@
 import React from 'react'
 import styled, {css} from 'styled-components'
 
-const FormSelect = ({labelText, showLabel, id, name, placeholder, required, onChange, children}) => (
-    <InputWrapper>
-        <Label htmlFor={id} showLabel={showLabel} >{labelText}</Label>
-        <select id={id} name={name} onChange={onChange} required={required}>
-            <option value="" disabled selected>{placeholder}</option>
-            {children}
-        </select>
-    </InputWrapper>
-)
+const FormSelect = (props) => {
+    const {labelText, showLabel, id, name, value, errorMsg, placeholder, required, disabled, onChange, children} = props;
+    return (
+        <InputWrapper>
+            <Label htmlFor={id} showLabel={showLabel} >{labelText}</Label>
+            <select value={value} id={id} name={name} onChange={onChange} required={required} disabled={disabled}>
+                <option value="default" disabled={disabled}>{placeholder}</option>
+                {children}
+            </select>
+            {errorMsg && (<Error>{errorMsg}</Error>)}
+        </InputWrapper>
+    )
+}
 
 export default FormSelect
 
@@ -34,4 +38,9 @@ const Label = styled.label`
     display: none;
     margin-bottom: 1rem;
     ${props => props.showLabel && css` display: block;` }
+`
+
+const Error = styled.p`
+    color: red;
+    font-size: .8rem;
 `

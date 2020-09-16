@@ -2,30 +2,8 @@ import React from 'react'
 import styled, {css} from 'styled-components'
 
 const FormInput = (props) => {
-    const {labelText, showLabel, id, name, placeholder, type, value, errorMsg, onChange, required, minmax} = props;
-    if (minmax) return (
-        <InputWrapper>
-            <Label showLabel={showLabel}>{labelText}</Label>
-            <SplitContainer>
-                <Input
-                    name={name}
-                    placeholder={`Min. ${placeholder}`}
-                    type={type}
-                    value={value.min}
-                    onChange={onChange[0]} 
-                    required={required}
-                />
-                <Input
-                    name={name}
-                    placeholder={`Max. ${placeholder}`}
-                    type={type}
-                    value={value.max}
-                    onChange={onChange[1]} 
-                    required={required}
-                />
-            </SplitContainer>
-        </InputWrapper>  
-    );
+    const {labelText, showLabel, id, name, placeholder, type, value, errorMsg, onChange, required, disabled} = props;
+
     return (
         <InputWrapper>
             <Label htmlFor={id} showLabel={showLabel}>{labelText}</Label>
@@ -37,6 +15,7 @@ const FormInput = (props) => {
                 value={value}
                 onChange={onChange} 
                 required={required}
+                disabled={disabled}
             />
             {errorMsg && (<Error>{errorMsg}</Error>)}
         </InputWrapper>  
