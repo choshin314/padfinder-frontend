@@ -2,7 +2,7 @@ import {useState} from 'react'
 
 export const useImageUpload = () => {
     const [selectedImages, setSelectedImages] = useState(null);
-    const [imageSelectErr, setImageSelectErr] = useState(null);
+    const [imageSelectErrors, setImageSelectErrors] = useState(null);
 
     function handleImageSelect(e) {
         let files = e.target.files; //this is a FileList
@@ -10,18 +10,18 @@ export const useImageUpload = () => {
         files = [...files]; //convert FileList to Array
         //only set selectedFiles if they are in jpeg OR png AND 300kb or less, otherwise display error message
         if (files.some(file => (!(file.type === 'image/jpeg' || file.type === 'image/png')))) {
-            return setImageSelectErr('Photos must be .jpeg, .jpg, or .png format')
+            return setImageSelectErrors('Photos must be .jpeg, .jpg, or .png format')
         } else if (files.some(file => file.size > 300000)) {
-            return setImageSelectErr('Photos must be 300kb or smaller')
+            return setImageSelectErrors('Photos must be 300kb or smaller')
         } else {
-            setImageSelectErr(null)
+            setImageSelectErrors(null)
             setSelectedImages(files);
         }
     }
 
     return ({
         selectedImages, 
-        imageSelectErr, 
+        imageSelectErrors, 
         handleImageSelect
     })
 }
