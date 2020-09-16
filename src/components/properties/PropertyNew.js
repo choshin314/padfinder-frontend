@@ -5,26 +5,26 @@ import PropertyForm from './PropertyForm'
 import {Wrapper} from '../shared/styledLib'
 
 const initialState = {
-    type: "apartment",
+    type: "default",
     available_date: null,
-    street: undefined,
-    city: undefined,
-    state: undefined,
-    zip: undefined,
-    rent_min: undefined,
-    rent_max: undefined,
-    beds_min: undefined,
-    beds_max: undefined,
-    baths_min: undefined,
-    baths_max: undefined,
-    size_min: undefined,
-    size_max: undefined,
+    street: '',
+    city: '',
+    state: '',
+    zip: '',
+    rent_min: '',
+    rent_max: '',
+    beds_min: '',
+    beds_max: '',
+    baths_min: '',
+    baths_max: '',
+    size_min: '',
+    size_max: '',
     dogs: false,
     cats: false,
-    neighborhood: undefined,
-    parking: undefined,
-    laundry: undefined,
-    utilities: undefined
+    neighborhood: '',
+    parking: '',
+    laundry: '',
+    utilities: ''
 }
 
 const PropertyNew = () => {
