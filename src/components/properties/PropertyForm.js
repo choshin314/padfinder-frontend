@@ -3,6 +3,7 @@ import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 import { v4 as uuidv4 } from 'uuid'
 
+import {capitalizeString} from '../../helpers'
 import {useForm} from '../../hooks/useForm'
 import {useImageUpload} from '../../hooks/useImageUpload'
 import LoadingModal from '../shared/LoadingModal'
@@ -81,8 +82,8 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
             formData.append('type', JSON.stringify(type));
             formData.append('available_date', JSON.stringify(available_date));
             formData.append('address', JSON.stringify({ 
-                street: street.trim(),
-                city: city.trim(),
+                street: capitalizeString(street.trim()),
+                city: capitalizeString(city.trim()),
                 state,
                 zip
             }));
@@ -92,7 +93,7 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                 baths: getMinMaxArr(baths_min, baths_max),
                 size: getMinMaxArr(size_min, size_max),
                 pet_policy: { dogs, cats },
-                neighborhood,
+                neighborhood: capitalizeString(neighborhood.trim()),
                 laundry,
                 utilities,
                 parking
