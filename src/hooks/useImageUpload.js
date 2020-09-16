@@ -19,17 +19,9 @@ export const useImageUpload = () => {
         }
     }
 
-    function getImageArr() {
-        return selectedImages.map(file => {
-            let image = { src: URL.createObjectURL(file), name: file.name };
-            return image;
-        });
-    }
-
     return ({
         selectedImages, 
         imageSelectErr, 
-        handleImageSelect, 
-        getImageArr
+        handleImageSelect
     })
 }

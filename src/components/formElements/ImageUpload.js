@@ -4,12 +4,20 @@ import styled from 'styled-components'
 import ImgSlider from '../shared/ImgSlider'
 import imgIcon from '../../assets/image-icon.jpg'
 
-const ImageUpload = ({selectedImages, handleSelect, getImageArr, errorMsg}) => {
+const ImageUpload = ({selectedImages, handleSelect, errorMsg}) => {
+    
+    function getImageArr(files) {
+        return files.map(file => {
+            let image = { src: URL.createObjectURL(file), name: file.name };
+            return image;
+        });
+    }
+
     return (
         <InputWrapper>
             <PreviewDiv>
                 <h3>Upload Photos and Review</h3>
-                {!selectedImages ? <PreviewDivFiller /> : <ImgSlider images={getImageArr()}/>}
+                {!selectedImages ? <PreviewDivFiller /> : <ImgSlider images={getImageArr(selectedImages)}/>}
             </PreviewDiv>
             <ImageUploadLabel htmlFor="image-upload" bg="black">SELECT PHOTOS</ImageUploadLabel>
             <FileInput id="image-upload" type="file" multiple accept=".png, .jpg, .jpeg" onChange={handleSelect} /> 
