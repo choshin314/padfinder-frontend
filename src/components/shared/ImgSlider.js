@@ -35,16 +35,18 @@ const ImgSlider = ({images, startingSlide}) => {
     }
 
     function handleSwiping(e) {
+        e.preventDefault()
         if (!isTracking) return;
         const currentX = e.clientX;
         let diffX = Math.abs(currentX - startingX);
         if (diffX < 50) return;
         currentX > startingX ? dispatch({ type: "PREV_SLIDE", finalSlide }) : dispatch({ type: "NEXT_SLIDE", finalSlide });
-        e.preventDefault()
+        
     }
 
     return (
         <SliderFrame
+            ontouchstart={(e) => e.preventDefault()}
             onPointerDown={handleSwipeStart}
             onPointerMove={handleSwiping}
         >
@@ -89,7 +91,6 @@ const SliderTrack = styled.div`
     display: flex;
     transform: translateX(${props => props.currentSlide ? `-${props.currentSlide * 100}%` : '0'});
     transition: transform .2s ease-in-out;
-    
 `
 
 const SliderItem = styled.div`
@@ -97,11 +98,14 @@ const SliderItem = styled.div`
     height: 290px;
     flex: 1 0 100%;
     position: relative;
+    overflow: hidden;
+    touch-action: none;
     & > img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         pointer-events: none;
+        touch-action: none;
     }
 `
 const SliderItemNum = styled.div`
