@@ -1,6 +1,12 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
+import {useHistory} from 'react-router-dom'
+import { v4 as uuidv4 } from 'uuid' 
 import styled, {css} from 'styled-components'
 
+import {AuthContext} from '../../context/AuthContext'
+import {useForm} from '../../hooks/useForm'
+import {useImageUpload} from '../../hooks/useImageUpload'
+import {capitalizeString} from '../../helpers'
 import PropertyForm from './PropertyForm'
 import {Wrapper} from '../shared/styledLib'
 
@@ -27,8 +33,108 @@ const initialState = {
     utilities: "default"
 }
 
+const validateForm = values => {
+    let errors = {};
+    if (!/^[0-9]{5}$/.test(values.zip)) {
+        errors.zip = '5-digit ZIP code required'
+    }
+    if (values.neighborhood && values.neighborhood.length < 4) {
+        errors.neighborhood = 'Must be at least 4 characters'
+    }
+    if (values.state === "default") {
+        errors.state = 'Must select state'
+    }
+    if (values.type === "default") {
+        errors.type = 'Must select type'
+    }
+    if (values.dogs === "default") {
+        errors.dogs = 'Must select dog policy'
+    }
+    if (values.cats === "default") {
+        errors.cats = 'Must select cat policy'
+    }
+    if (values.parking === "default") {
+        errors.parking = 'Must select parking option'
+    }
+    if (values.laundry === "default") {
+        errors.laundry = 'Must select laundry option'
+    }
+    if (values.utilities === "default") {
+        errors.utilities = 'Must select utilities'
+    }
+    return errors;
+}
+
 const PropertyNew = () => {
     const [multi, setMulti] = useState(false);
+    const {inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitForm, validateForm);
+    const {
+        type, available_date, street, city, state, zip, rent_min, rent_max, beds_min, beds_max, baths_min, baths_max, size_min, size_max, dogs, cats, neighborhood, parking, laundry, utilities
+    } = inputValues;
+    const {selectedImages, imageSelectErrors, handleImageSelect} = useImageUpload();
+    const authContext = useContext(AuthContext);
+    const history = useHistory();
+
+    //rent, beds, baths, and size needs to be 2-value array even if property is single-unit
+    function getMinMaxArr(min, max) {
+        return (multi ? [min, max] : [min, min])
+    }
+
+    function handleDateChange(date) {
+        setInputValues({
+            ...inputValues,
+            available_date: date
+        })
+    }
+
+    async function submitForm() {
+        setOtherErrors(null);
+        if (!authContext.user || !authContext.user.isLister) {
+            return setOtherErrors('You must be logged in as a Listing Agent/Property Manager to create a listing.')
+        }
+        if (!selectedImages || selectedImages.length < 3) {
+            return setOtherErrors('At least 3 photos are required for every listing.')
+        }
+        try {
+            let formData = new FormData();
+            formData.append('type', JSON.stringify(type));
+            formData.append('available_date', JSON.stringify(available_date));
+            formData.append('address', JSON.stringify({ 
+                street: capitalizeString(street.trim()),
+                city: capitalizeString(city.trim()),
+                state,
+                zip
+            }));
+            formData.append('details', JSON.stringify({
+                rent: getMinMaxArr(rent_min, rent_max),
+                beds: getMinMaxArr(beds_min, beds_max),
+                baths: getMinMaxArr(baths_min, baths_max),
+                size: getMinMaxArr(size_min, size_max),
+                pet_policy: { dogs, cats },
+                neighborhood: capitalizeString(neighborhood.trim()),
+                laundry,
+                utilities,
+                parking
+            }));
+            selectedImages.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
+
+            const response = await fetch(
+                `${process.env.REACT_APP_SERVER_URL}/api/properties/new`,
+                {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        Authorization: `Bearer ${authContext.user.token}`
+                    }
+                }
+            );
+            const data = await response.json();
+            if (response.status !== 201) throw new Error(data.message);
+            history.push('/listings')
+        } catch(err) {
+            setOtherErrors(err.message);
+        }
+    }
 
     return (
         <Wrapper maxWidth="620px">
@@ -50,10 +156,14 @@ const PropertyNew = () => {
                 </div>
                 <PropertyForm 
                     multi={multi} 
-                    initialState={initialState}
-                    fetchConfig={{
-                        url: `${process.env.REACT_APP_SERVER_URL}/api/properties/new`,
-                        method: 'POST'
+                    isSubmitting={isSubmitting}
+                    values={{inputValues, selectedImages}}
+                    errors={{inputErrors, imageSelectErrors, otherErrors}}
+                    handlers={{
+                        handleChange,
+                        handleDateChange,
+                        handleImageSelect,
+                        validateAndSubmit
                     }}
                 />
             </Container>
