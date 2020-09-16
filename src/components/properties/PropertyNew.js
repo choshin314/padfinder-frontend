@@ -9,7 +9,7 @@ const initialState = {
     available_date: null,
     street: '',
     city: '',
-    state: '',
+    state: "default",
     zip: '',
     rent_min: '',
     rent_max: '',
@@ -19,12 +19,12 @@ const initialState = {
     baths_max: '',
     size_min: '',
     size_max: '',
-    dogs: false,
-    cats: false,
+    dogs: "default",
+    cats: "default",
     neighborhood: '',
-    parking: '',
-    laundry: '',
-    utilities: ''
+    parking: "default",
+    laundry: "default",
+    utilities: "default"
 }
 
 const PropertyNew = () => {

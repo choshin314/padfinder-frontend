@@ -25,6 +25,27 @@ const validateForm = values => {
     if (values.neighborhood && values.neighborhood.length < 4) {
         errors.neighborhood = 'Must be at least 4 characters'
     }
+    if (values.state === "default") {
+        errors.state = 'Must select state'
+    }
+    if (values.type === "default") {
+        errors.type = 'Must select type'
+    }
+    if (values.dogs === "default") {
+        errors.dogs = 'Must select dog policy'
+    }
+    if (values.cats === "default") {
+        errors.cats = 'Must select cat policy'
+    }
+    if (values.parking === "default") {
+        errors.parking = 'Must select parking option'
+    }
+    if (values.laundry === "default") {
+        errors.laundry = 'Must select laundry option'
+    }
+    if (values.utilities === "default") {
+        errors.utilities = 'Must select utilities'
+    }
     return errors;
 }
 
@@ -46,12 +67,6 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
     function getMinMaxArr(min, max) {
         return (multi ? [min, max] : [min, min])
     }
-
-    /*
-    Gatekeepers on submit:
-    1.) Check if logged in && isLister -> if no, setFormErrorMsg('must log in...')
-    2.) Check if at least 3 photos are being uploaded.  
-    */
 
     async function submitForm() {
         setOtherErrors(null);
@@ -118,6 +133,7 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                         errorMsg={inputErrors.street}
                         onChange={handleChange}
                         required
+                        disabled={updateMode}
                     />
                     <FormInput 
                         labelText="City" 
@@ -129,6 +145,7 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                         errorMsg={inputErrors.city}
                         onChange={handleChange}
                         required
+                        disabled={updateMode}
                     />
                     <SplitContainer>
                         <FormSelect 
@@ -136,9 +153,12 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                             labelHidden
                             id="update-state" 
                             name="state" 
+                            value={state}
+                            errorMsg={inputErrors.state}
                             placeholder="Select State"
                             onChange={handleChange}
                             required
+                            disabled={updateMode}
                         >
                             {stateAbbrevs.map(abbrev => <option value={abbrev} key={abbrev}>{abbrev}</option>)}
                         </FormSelect>
@@ -152,6 +172,7 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                             errorMsg={inputErrors.zip}
                             onChange={handleChange}
                             required
+                            disabled={updateMode}
                         />    
                     </SplitContainer>
                 </FormSection>
@@ -163,9 +184,12 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                         showLabel
                         id="update-type"
                         name="type"
+                        value={type}
+                        errorMsg={inputErrors.type}
                         placeholder="Select Property Type"
                         onChange={handleChange}
                         required
+                        disabled={updateMode}
                     >
                         <option value="apartment">Apartment</option>
                         <option value="condo">Condo</option>
@@ -337,6 +361,8 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                             showLabel
                             id="update-dogs"
                             name="dogs"
+                            value={dogs}
+                            errorMsg={inputErrors.dogs}
                             placeholder="Select Dog Policy"
                             onChange={handleChange}
                             required
@@ -349,6 +375,8 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                             showLabel
                             id="update-cats"
                             name="cats"
+                            value={cats}
+                            errorMsg={inputErrors.cats}
                             placeholder="Select Cat Policy"
                             onChange={handleChange}
                             required
@@ -361,6 +389,8 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                             showLabel
                             id="update-parking"
                             name="parking"
+                            value={parking}
+                            errorMsg={inputErrors.parking}
                             placeholder="Select Parking Options"
                             onChange={handleChange}
                             required
@@ -374,6 +404,8 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                             showLabel
                             id="update-laundry"
                             name="laundry"
+                            value={laundry}
+                            errorMsg={inputErrors.laundry}
                             placeholder="Select Laundry Options"
                             onChange={handleChange}
                             required
@@ -387,12 +419,13 @@ const PropertyForm = ({multi, initialState, fetchConfig, updateMode}) => {
                             showLabel
                             id="update-utilities"
                             name="utilities"
+                            value={utilities}
+                            errorMsg={inputErrors.utilities}
                             placeholder="Specify Required Utilities"
                             onChange={handleChange}
                             required
                         >
                             <option value="electric">Electric Only</option>
-                            <option value="gas">Gas Only</option>
                             <option value="electric and gas">Electric and Gas</option>
                         </FormSelect>
                     </SplitContainer>
