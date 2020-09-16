@@ -28,6 +28,7 @@ const Label = styled.label`
     font-size: 1.1rem;
     display: none;
     margin-bottom: 1rem;
+    text-transform: capitalize;
     ${props => props.showLabel && css` display: block;` }
 `
 
