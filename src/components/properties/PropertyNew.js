@@ -8,6 +8,7 @@ import {useForm} from '../../hooks/useForm'
 import {useImageUpload} from '../../hooks/useImageUpload'
 import {capitalizeString} from '../../helpers'
 import PropertyForm from './PropertyForm'
+import FormContainer from '../formElements/FormContainer'
 import {Wrapper} from '../shared/styledLib'
 
 const initialState = {
@@ -154,18 +155,20 @@ const PropertyNew = () => {
                         Multi-Unit
                     </Button>
                 </div>
-                <PropertyForm 
-                    multi={multi} 
-                    isSubmitting={isSubmitting}
-                    values={{inputValues, selectedImages}}
-                    errors={{inputErrors, imageSelectErrors, otherErrors}}
-                    handlers={{
-                        handleChange,
-                        handleDateChange,
-                        handleImageSelect,
-                        validateAndSubmit
-                    }}
-                />
+                <FormContainer isSubmitting={isSubmitting} onSubmit={validateAndSubmit}>
+                    <PropertyForm 
+                        multi={multi} 
+                        isSubmitting={isSubmitting}
+                        values={{inputValues, selectedImages}}
+                        errors={{inputErrors, imageSelectErrors, otherErrors}}
+                        handlers={{
+                            handleChange,
+                            handleDateChange,
+                            handleImageSelect,
+                            validateAndSubmit
+                        }}
+                    />
+                </FormContainer>
             </Container>
         </Wrapper>
     )
