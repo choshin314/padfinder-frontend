@@ -67,9 +67,13 @@ const MenuWrapper = styled.div`
         display: flex;
         flex-direction: column;
         list-style: none;
-        font-size: 2.5rem;
+        font-size: 2rem;
+
+        & li {
+            line-height: 2.5;
+        }
         & button {
-            font-size: 2.5rem;
+            font-size: 2rem;
             padding: 0;
         }
     }

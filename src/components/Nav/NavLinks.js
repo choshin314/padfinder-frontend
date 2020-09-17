@@ -12,7 +12,7 @@ const NavLinks = ({border}) => {
 
     return (
         <>
-        <NavItem border={border}><Link to="/favorites">My Favorites</Link></NavItem>
+        <NavItem border={border}><Link to="/favorites">Favorites</Link></NavItem>
         <NavItem border={border}><Link to="/listings">Manage Listings</Link></NavItem>
         <NavItem border={border}><Link to="/listings/new">Add Listing</Link></NavItem>
         {!authContext.user ?
@@ -53,7 +53,6 @@ const NavItem = styled.li`
         text-transform: uppercase;
         border: none;
         background: transparent;
-        font-size: 1rem;
         cursor: pointer;
     }
 `

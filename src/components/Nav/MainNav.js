@@ -38,9 +38,19 @@ const NavBarFull = styled.ul`
     list-style: none;
     padding: 0;
     display: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+    button {
+        font-weight: inherit;
+        font-size: inherit;
+        font-family: inherit;
+        letter-spacing: inherit;
+    }
     @media (min-width: 800px) {
         display: flex;
         justify-content: space-between;
+        align-items: baseline;
     }
 `
 
