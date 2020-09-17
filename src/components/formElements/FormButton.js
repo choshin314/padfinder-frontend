@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const FormButton = props => (
-    <Button bg={props.bg} color={props.color} type="submit">{props.children}</Button>
+const FormButton = ({onClick, bg, color, type, children}) => (
+    <Button onClick={onClick} bg={bg} color={color} type={type}>{children}</Button>
 )
 
 const Button = styled.button`
