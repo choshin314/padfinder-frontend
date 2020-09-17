@@ -8,7 +8,9 @@ import {PropertyContext} from '../../context/PropertyContext'
 import {useForm} from '../../hooks/useForm'
 import {useImageUpload} from '../../hooks/useImageUpload'
 import {capitalizeString} from '../../helpers'
+import FormContainer from '../formElements/FormContainer'
 import PropertyForm from './PropertyForm'
+import UpdatePhotos from './UpdatePhotos'
 import {Wrapper} from '../shared/styledLib'
 
 const validateForm = values => {
@@ -72,8 +74,10 @@ const PropertyUpdate = () => {
     }
     const {inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitForm, validateForm);
     const {type, available_date, street, city, state, zip, rent_min, rent_max, beds_min, beds_max, baths_min, baths_max, size_min, size_max, dogs, cats, neighborhood, parking, laundry, utilities} = inputValues;
+
+    const [updatingPhotos, setUpdatingPhotos] = useState(false);
+    const [imagesToDelete, setImagesToDelete] = useState([]);
     const {selectedImages, imageSelectErrors, handleImageSelect} = useImageUpload();
-    
 
     //rent, beds, baths, and size needs to be 2-value array even if property is single-unit
     function getMinMaxArr(min, max) {
@@ -113,7 +117,8 @@ const PropertyUpdate = () => {
                 utilities,
                 parking
             }));
-            if (selectedImages) selectedImages.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
+            if(selectedImages) selectedImages.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
+            formData.append('toBeDeleted', JSON.stringify(imagesToDelete)); 
 
             const response = await fetch(
                 `${process.env.REACT_APP_SERVER_URL}/api/properties/update/${expandedProperty._id}`,
@@ -137,20 +142,28 @@ const PropertyUpdate = () => {
         <Wrapper maxWidth="620px">
             <Container>
                 <h1>Update Property Listing</h1>
-                <PropertyForm 
-                    updateMode
-                    updateProperty={expandedProperty}
-                    multi={multi} 
-                    isSubmitting={isSubmitting}
-                    values={{inputValues, selectedImages}}
-                    errors={{inputErrors, imageSelectErrors, otherErrors}}
-                    handlers={{
-                        handleChange,
-                        handleDateChange,
-                        handleImageSelect,
-                        validateAndSubmit
-                    }}
-                />
+                <FormContainer isSubmitting={isSubmitting} onSubmit={validateAndSubmit}>
+                    {!updatingPhotos && (<PropertyForm 
+                        updateMode
+                        setUpdatingPhotos={setUpdatingPhotos}
+                        multi={multi} 
+                        values={{inputValues}}
+                        errors={{inputErrors, otherErrors}}
+                        handlers={{
+                            handleChange,
+                            handleDateChange
+                        }}
+                    />)}
+                    {updatingPhotos && (<UpdatePhotos 
+                        property={expandedProperty} 
+                        setUpdatingPhotos={setUpdatingPhotos}
+                        selectedImages={selectedImages}
+                        selectErrors={imageSelectErrors}
+                        selectHandler={handleImageSelect}
+                        imagesToDelete={imagesToDelete}
+                        setImagesToDelete={setImagesToDelete}
+                    />)}
+                </FormContainer>
             </Container>
         </Wrapper>
     )
