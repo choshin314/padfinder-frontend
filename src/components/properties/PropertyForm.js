@@ -8,17 +8,20 @@ import FormInputRange from '../formElements/FormInputRange'
 import FormSelect from '../formElements/FormSelect'
 import FormDatePicker from '../formElements/FormDatePicker'
 import ImageUpload from '../formElements/ImageUpload'
+import UpdatePhotos from './UpdatePhotos'
+
 
 const stateAbbrevs = [
     'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'
 ]
 
-const PropertyForm = ({multi, isSubmitting, values, errors, handlers, updateMode}) => {
+const PropertyForm = ({multi, isSubmitting, values, errors, handlers, updateMode, updateProperty}) => {
     const {inputValues, selectedImages} = values;
     const {inputErrors, imageSelectErrors, otherErrors} = errors;
     const {handleChange, handleDateChange, handleImageSelect, validateAndSubmit} = handlers;
 
     return (
+        <>
         <Container>
             {isSubmitting && <LoadingModal />}
             <Form onSubmit={validateAndSubmit}>
@@ -292,6 +295,8 @@ const PropertyForm = ({multi, isSubmitting, values, errors, handlers, updateMode
             </Form>
             {otherErrors && <FormError>{otherErrors}</FormError>}
         </Container>
+        <UpdatePhotos property={updateProperty} />
+        </>
     )
 }
 

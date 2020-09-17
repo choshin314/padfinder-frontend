@@ -1,11 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 import {devices} from './styledLib'
 
 const PhotoGrid = props => {
     return (
-        <Grid>
+        <Grid reverseStacking={props.reverseStacking}>
             {props.children}
         </Grid>
     )
@@ -14,8 +14,8 @@ const PhotoGrid = props => {
 export default PhotoGrid
 
 const Grid = styled.div`
-    grid-row-start: 2;
-
+    ${props => props.reverseStacking && css`grid-row-start: 2;`}
+    
     display: grid;
     align-content: start;
     grid-template-columns: 1fr 1fr;
@@ -41,6 +41,6 @@ const Grid = styled.div`
     @media(min-width: ${devices.tablet}){
         margin: none;
         border: none;
-        grid-row-start: 1;
+        ${props => props.reverseStacking && css`grid-row-start: 1;`}
     }
 `

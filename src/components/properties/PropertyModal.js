@@ -13,7 +13,7 @@ const PropertyModal = () => {
     return (
         <Modal toggleModal={toggleModal}>
             <Container>
-                <PhotoGrid>
+                <PhotoGrid reverseStacking>
                     {expandedProperty && expandedProperty.photos.map(propertyImage => (
                         <div key={propertyImage.href}><img src={propertyImage.href} alt="" /></div>
                     ))}

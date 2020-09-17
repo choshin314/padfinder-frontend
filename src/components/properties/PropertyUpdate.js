@@ -89,11 +89,8 @@ const PropertyUpdate = () => {
 
     async function submitForm() {
         setOtherErrors(null);
-        if (!authContext.user || !authContext.user.isLister) {
-            return setOtherErrors('You must be logged in as a Listing Agent/Property Manager to create a listing.')
-        }
-        if (!selectedImages || selectedImages.length < 3) {
-            return setOtherErrors('At least 3 photos are required for every listing.')
+        if (!authContext.user || (authContext.user.userId !== expandedProperty.creator)) {
+            return setOtherErrors('You must be logged in as the Listing Agent/Manager for this property.')
         }
         try {
             let formData = new FormData();
@@ -116,12 +113,12 @@ const PropertyUpdate = () => {
                 utilities,
                 parking
             }));
-            selectedImages.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
+            if (selectedImages) selectedImages.forEach(file => formData.append('photos', file, `${uuidv4() + file.name}`));
 
             const response = await fetch(
-                `${process.env.REACT_APP_SERVER_URL}/api/properties/new`,
+                `${process.env.REACT_APP_SERVER_URL}/api/properties/update/${expandedProperty._id}`,
                 {
-                    method: 'POST',
+                    method: 'PATCH',
                     body: formData,
                     headers: {
                         Authorization: `Bearer ${authContext.user.token}`
@@ -142,6 +139,7 @@ const PropertyUpdate = () => {
                 <h1>Update Property Listing</h1>
                 <PropertyForm 
                     updateMode
+                    updateProperty={expandedProperty}
                     multi={multi} 
                     isSubmitting={isSubmitting}
                     values={{inputValues, selectedImages}}
