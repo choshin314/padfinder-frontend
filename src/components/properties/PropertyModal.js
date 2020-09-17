@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import Modal from '../shared/Modal'
 import PropertyDetails from './PropertyDetails'
+import PhotoGrid from '../shared/PhotoGrid'
 import {PropertyContext} from '../../context/PropertyContext'
 import {devices} from '../shared/styledLib'
 
@@ -51,33 +52,3 @@ const Container = styled.div`
     }
 `
 
-const PhotoGrid = styled.div`
-    grid-row-start: 2;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    grid-gap: 5px;
-    margin-top: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(0,0,0,0.3);
-    overflow-y: auto;
-    & div {
-        grid-area: span 1 / span 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: rgba(0,0,0,.8);
-        height: 200px;
-
-        & img {
-            object-fit: contain;
-            max-width: 100%;
-            max-height: 100%;
-        }
-    }
-    @media(min-width: ${devices.tablet}){
-        margin: none;
-        border: none;
-        grid-row-start: 1;
-    }
-`//in the future, make grid-template-rows: ${photoarray.length / 2}
