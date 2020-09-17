@@ -2,9 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 
 import PhotoGrid from '../shared/PhotoGrid'
+import PhotoGridItem from '../shared/PhotoGridItem'
+import ImageUpload from '../formElements/ImageUpload'
+import FormButton from '../formElements/FormButton'
+
 
 const UpdatePhotos = props => {
-    const {property} = props;
+    const {property, selectedImages, selectErrors, selectHandler, setUpdatingPhotos, imagesToDelete, setImagesToDelete } = props;
 
     return (
         <Container>
@@ -12,15 +16,33 @@ const UpdatePhotos = props => {
                 <h3>Mark Photos for Deletion</h3>
                 <PhotoGrid>
                     {property.photos.map(propertyImage => (
-                        <div key={propertyImage.href}><img src={propertyImage.href} alt="" /></div>
+                        <PhotoGridItem 
+                            key={propertyImage.href} 
+                            href={propertyImage.href} 
+                            imagesToDelete={imagesToDelete}
+                            setImagesToDelete={setImagesToDelete}
+                        />
                     ))}
                 </PhotoGrid>
+            </FormSection>
+            <FormSection border>
+                <ImageUpload
+                    selectedImages={selectedImages}
+                    errorMsg={selectErrors}
+                    handleSelect={selectHandler}
+                />
+            </FormSection>
+            <FormSection border>
+                <FormButton onClick={(e) => setUpdatingPhotos(false)}>GO BACK TO EDIT DETAILS</FormButton>
+                <CtrText>-OR-</CtrText>
+                <FormButton type="submit">SUBMIT UPDATES</FormButton>
             </FormSection>
         </Container>
     )
 }
 
 export default UpdatePhotos
+
 
 const Container = styled.div`
     width: 100%;
@@ -30,6 +52,12 @@ const Container = styled.div`
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     display: flex;
     flex-direction: column;
+`
+
+const CtrText = styled.p`
+    text-align: center;
+    color: var(--primary-color);
+    font-weight: bold;
 `
 
 const FormSection = styled.div`
