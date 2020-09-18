@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import {devices} from '../shared/styledLib'
 import SearchInput from './SearchInput'
 
 const Searchbox = () => {
@@ -17,20 +18,25 @@ const Div = styled.div`
     width: 90%;
     min-width: 300px;
     margin: 0 auto;
-    color: var(--primary-color);
     z-index: 1;
     position: relative;
-    transform: translateY(-50%);
-    @media(max-width: 768px) {
-        margin-top: 3rem;       
-    }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
 
     & h1 {
-        font-size: 3rem;
+        margin-top: 0;
+        font-size: 2rem;
         font-weight: bold;
         text-align: center;
         z-index: 100;
-        text-shadow: 2px 2px 2px #00ffff;
+        color: white;
+        text-shadow: 5px 5px 5px var(--primary-color);
+        @media(min-width: ${devices.tablet}) {
+            font-size: 3rem;
+        }
     }
 `
 
