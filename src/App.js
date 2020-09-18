@@ -42,8 +42,10 @@ function App() {
 
 export default App;
 
-const Main = styled.div`
+const Main = styled.main`
   width: 100%;
   height: 100%;
   padding-top: 4rem;
+  display: flex;
+  flex-direction: column;
 `
