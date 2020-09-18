@@ -19,10 +19,10 @@ const MapView = props => {
                 <Map mainMap/>
             </MapDiv>
             <SidePanelContainer>
-                <SidePanelTitle>Pads Nearby</SidePanelTitle>
+                <SidePanelTitle>Rentals Nearby</SidePanelTitle>
                 {nearbyProperties.length === 0 && (
                     <NoResultsMsg>
-                        <h4>Sorry, we couldn't find any listings within 3 miles of your search.</h4>
+                        <h4>Sorry, we couldn't find any listings nearby.</h4>
                         <p>Try searching a different location!</p>
                     </NoResultsMsg>
                 )}
