@@ -9,14 +9,13 @@ import {PropertyContext} from '../../context/PropertyContext'
 import {useToggle} from '../../hooks/useToggle'
 import FavoriteOption from './FavoriteOption'
 import AlertModal from '../shared/AlertModal'
+import BtnDeleteProperty from './BtnDeleteProperty'
 
 const PropertyCard = props => {
     const { property, setProperties } = props;
     const { _id, photos, details, address, type } = property;
     const { rent, beds, baths, size } = details;
-    const [ showDeletionModal, toggleDeletionModal ] = useToggle();
-    const [ deletionConfirmed, setDeletionConfirmed ] = useState(false);
-    const { toggleModal, propertyMethods, listings } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
+    const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
     const authContext = useContext(AuthContext);
     const history = useHistory();
     const match = useRouteMatch();
@@ -31,62 +30,25 @@ const PropertyCard = props => {
         history.push(`${match.url}/edit/${_id}`)
     }
 
-    /*Deletion is a multi-step process:
-        1) Click 'Delete' button triggers 'handleClickDelete' -> Opens deletion confirmation modal (ConfirmDelete)
-        2) In ConfirmDelete, we have two buttons:
-            a.) Cancel -> calls 'toggleDeletionModal', which we pass down as props.  
-            b.) Delete -> calls 'handleConfirmDelete', which we pass down as props
-                i. Calls 'toggleDeletionModal,' closing the modal
-                ii. Calls 'handleConfirmDelete', which we pass down as props
-                    -This sets our state 'deletionConfirmed' to true, which triggers our effect (deletionConfirmed is a dependency of the effect)
-                    -The effect calls the actual 'deleteProperty' function, i.e. the typical 'onSubmit' to the backend
-    */
-    function handleClickDelete() {
-       toggleDeletionModal();
-    }
-
-    function handleConfirmDelete() {
-        toggleDeletionModal();
-        setDeletionConfirmed(true);
-    }
-
-    async function deleteProperty() {
-        try {
-            await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/delete/${_id}`,{
-                method: 'DELETE',
-                headers: {
-                    Authorization: `Bearer ${authContext.user.token}`
-                }
-            })
-            setProperties(listings.filter(listing => listing._id !== _id))
-        } catch(err) {
-            console.log(err.message)
-        }
-        setDeletionConfirmed(false);
-    }
-
-    useEffect(() => {
-        if (deletionConfirmed) deleteProperty();
-    }, [deletionConfirmed])
-
     return (
         <Container>
             <ImageDiv>
                 <img src={photos[0].href} alt={address.street} />
             </ImageDiv>
             <InfoList onClick={handleClickView}>
-                <Address>{address.street}, {address.city}, {address.state} {address.zip}</Address>
+                <Address>{address.street}, {address.city}, {address.state} </Address>
                 <Detail>{details.neighborhood || `${type} for Rent`}</Detail>    
-                {
-                    rent[1] === rent[0] ? 
-                    <Detail>${rent[0]}/mo</Detail> :
-                    <Detail>${rent[0]}-${rent[1]}/mo</Detail>
-                }
                 {
                     beds[1] === beds[0] ? 
                     <Detail>{beds[0]} bd | {baths[0]} ba | {size[0]} sqft</Detail> :
                     <Detail>{beds[0]}-{beds[1]} bd | {baths[0]}-{baths[1]} ba | {size[0]}-{size[1]} sqft</Detail>
                 }
+                {
+                    rent[1] === rent[0] ? 
+                    <Detail>${rent[0]}/mo</Detail> :
+                    <Detail>${rent[0]}-${rent[1]}/mo</Detail>
+                }
+                
             </InfoList>
             <ButtonGroup>
                 <Button onClick={handleClickView}>
@@ -97,21 +59,13 @@ const PropertyCard = props => {
                     <FontAwesomeIcon fixedWidth icon={faEdit} />
                     EDIT
                 </Button>
-                <Button onClick={handleClickDelete}>
-                    <FontAwesomeIcon fixedWidth icon={faTrashAltEmpty} />
-                    DELETE
-                </Button>
+                <BtnDeleteProperty property={property} />
                 <Button >
                     <FavoriteOption property={property}/>
                 </Button>
             </ButtonGroup>
             
-            {showDeletionModal && <AlertModal 
-                toggleModal={toggleDeletionModal} 
-                message={`Are you sure you want to delete ${address.street}?`} 
-                affirmText="DELETE"
-                handleClick={handleConfirmDelete}
-            />}
+
         </Container>
     )
 }
@@ -128,6 +82,7 @@ const Container = styled.div`
     padding: 0;
     box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.24);
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    color: var(--dark-grey);
     &:hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     }
@@ -159,6 +114,7 @@ const Address = styled.li`
     font-size: 1rem;
     font-weight: bold;
     text-transform: capitalize;
+    line-height: 1.5;
 `
 
 const Detail = styled.li`
