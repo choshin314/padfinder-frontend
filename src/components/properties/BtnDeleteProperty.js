@@ -43,19 +43,19 @@ const BtnDeleteProperty = ({property}) => {
         if (deletionConfirmed) deleteProperty();
     }, [deletionConfirmed])
 
-    return (
+    return (authContext.user && (authContext.user._id === property.creator)) ? (
         <>
-        <CardBtn onClick={handleClickDelete}>
-            <FontAwesomeIcon fixedWidth icon={faTrashAltEmpty} />
-        </CardBtn>
-        {showDeletionModal && <AlertModal 
-            toggleModal={toggleDeletionModal} 
-            message={`Are you sure you want to delete ${address.street}?`} 
-            affirmText="DELETE"
-            handleClick={handleConfirmDelete}
-        />}    
+            <CardBtn onClick={handleClickDelete}>
+                <FontAwesomeIcon fixedWidth icon={faTrashAltEmpty} />
+            </CardBtn>
+            {showDeletionModal && <AlertModal 
+                toggleModal={toggleDeletionModal} 
+                message={`Are you sure you want to delete ${address.street}?`} 
+                affirmText="DELETE"
+                handleClick={handleConfirmDelete}
+            />}    
         </>
-    )
+    ) : null
 }
 
 export default BtnDeleteProperty
