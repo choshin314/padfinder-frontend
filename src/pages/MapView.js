@@ -82,8 +82,7 @@ const SidePanelContainer = styled.div`
 
 const SidePanelTitle = styled.h1`
     text-align: center;
-    color: var(--primary-color);
-    
+
 `
 
 const SidePanel = styled.div`
