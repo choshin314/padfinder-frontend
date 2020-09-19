@@ -75,7 +75,7 @@ const FavoriteOption = ({property, color}) => {
                 console.log(err.message);
             }
         };
-        fetchProperties();  
+        if(authContext.user) fetchProperties();  
         return () => isMounted = false; //cleanup - prevents setListings if component isn't mounted
     }, [isFavorite]);
 

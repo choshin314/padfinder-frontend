@@ -1,22 +1,20 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext} from 'react'
 import {useHistory, useRouteMatch} from 'react-router-dom'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt as faTrashAltEmpty, faEye, faEdit } from '@fortawesome/free-regular-svg-icons'
+import { faEye, faEdit } from '@fortawesome/free-regular-svg-icons'
 
-import {AuthContext} from '../../context/AuthContext'
 import {PropertyContext} from '../../context/PropertyContext'
-import {useToggle} from '../../hooks/useToggle'
+import {CardBtn} from './CardBtn'
 import FavoriteOption from './FavoriteOption'
-import AlertModal from '../shared/AlertModal'
 import BtnDeleteProperty from './BtnDeleteProperty'
+import BtnEditProperty from './BtnEditProperty'
 
 const PropertyCard = props => {
-    const { property, setProperties } = props;
+    const { property } = props;
     const { _id, photos, details, address, type } = property;
     const { rent, beds, baths, size } = details;
     const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
-    const authContext = useContext(AuthContext);
     const history = useHistory();
     const match = useRouteMatch();
 
@@ -51,21 +49,16 @@ const PropertyCard = props => {
                 
             </InfoList>
             <ButtonGroup>
-                <Button onClick={handleClickView}>
+                <CardBtn onClick={handleClickView}>
                     <FontAwesomeIcon fixedWidth icon={faEye} />
-                    VIEW
-                </Button>
-                <Button onClick={handleClickEdit}>
-                    <FontAwesomeIcon fixedWidth icon={faEdit} />
-                    EDIT
-                </Button>
+                    <span>VIEW</span>
+                </CardBtn>
+                <BtnEditProperty property={property} />
                 <BtnDeleteProperty property={property} />
-                <Button >
+                <CardBtn >
                     <FavoriteOption property={property}/>
-                </Button>
+                </CardBtn>
             </ButtonGroup>
-            
-
         </Container>
     )
 }
@@ -81,10 +74,11 @@ const Container = styled.div`
     position: relative;
     padding: 0;
     box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.24);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    transition: all 0.5s cubic-bezier(.25,.8,.25,1);
     color: var(--dark-grey);
     &:hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+        transform: translateY(-5px);
     }
 `
 
@@ -132,24 +126,4 @@ const ButtonGroup = styled.div`
     font-size: 1rem;
     font-weight: bold;
     color: white;
-`
-
-const Button = styled.div`
-    background: rgba(0,0,0,.3);
-    outline: none;
-    padding: .25rem .5rem;
-    cursor: pointer;
-    &:hover {
-        background: rgba(0,0,0,.7);
-    }
-
-    &:active {
-        background-color: var(--primary-color);
-        box-shadow: 0 5px #666;
-        transform: translateY(4px);
-    }
-    
-    & > svg {
-        margin-right: .5rem;
-    }
 `

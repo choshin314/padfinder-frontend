@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react'
 import {useLocation} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt as faTrashAltEmpty, faEye, faEdit } from '@fortawesome/free-regular-svg-icons'
+import { faTrashAlt as faTrashAltEmpty } from '@fortawesome/free-regular-svg-icons'
 
 import {AuthContext} from '../../context/AuthContext'
 import {PropertyContext} from '../../context/PropertyContext'
