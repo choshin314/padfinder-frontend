@@ -32,7 +32,6 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-
     & h1 {
         font-size: 1.5rem;
         text-align: center;
@@ -41,7 +40,6 @@ const Container = styled.div`
     & > div {
         display: flex;
     }
-
     @media(min-width: )
 `
 const Heading = styled.h1`
@@ -49,7 +47,6 @@ const Heading = styled.h1`
     text-align: center;
     font-size: 2rem;
     font-weight: bold;
-    color: var(--primary-color);
     margin: 1rem auto;
 `
 

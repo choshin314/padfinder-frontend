@@ -305,6 +305,7 @@ const Container = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+    color: var(--dark-grey);
 `
 const SplitContainer = styled.div`
     display: grid;

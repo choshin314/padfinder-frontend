@@ -33,7 +33,7 @@ const Div = styled.div`
         text-align: center;
         z-index: 100;
         color: white;
-        text-shadow: 5px 5px 5px var(--primary-color);
+        text-shadow: 3px 3px 3px #006D79;
         @media(min-width: ${devices.tablet}) {
             font-size: 3rem;
         }
