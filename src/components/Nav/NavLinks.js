@@ -5,19 +5,19 @@ import styled, {css} from 'styled-components'
 import {AuthContext} from '../../context/AuthContext'
 import {useLoginLogout} from '../../hooks/useLoginLogout'
 
-const NavLinks = ({border}) => {
+const NavLinks = ({border, inverse}) => {
     const authContext = useContext(AuthContext);
     const {logout} = useLoginLogout();
     let history = useHistory();
 
     return (
         <>
-        <NavItem border={border}><Link to="/favorites">Favorites</Link></NavItem>
-        <NavItem border={border}><Link to="/listings">Manage Listings</Link></NavItem>
-        <NavItem border={border}><Link to="/listings/new">Add Listing</Link></NavItem>
+        <NavItem border={border} inverse={inverse}><Link to="/favorites">Favorites</Link></NavItem>
+        <NavItem border={border} inverse={inverse}><Link to="/listings">Manage Listings</Link></NavItem>
+        <NavItem border={border} inverse={inverse}><Link to="/listings/new">Add Listing</Link></NavItem>
         {!authContext.user ?
-            <NavItem border={border}><Link to="/authenticate">Sign In / Register</Link></NavItem> :
-            <NavItem border={border}><button onClick={() => {
+            <NavItem border={border} inverse={inverse}><Link to="/authenticate">Sign In / Register</Link></NavItem> :
+            <NavItem border={border} inverse={inverse}><button onClick={() => {
                 logout();
                 history.push('/');
             }}>Logout</button></NavItem>
@@ -33,23 +33,23 @@ const NavItem = styled.li`
             display: block;
             height: 2px;
             width: 100%;
-            background-color: white;
+            background-color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
         }
         &:last-child::after {
             content: '';
             display: block;
             height: 2px;
             width: 100%;
-            background-color: white;
+            background-color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
         }
     `}
     a {
-        color: white;
+        color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
         text-decoration: none;
         text-transform: uppercase;
     }
     button {
-        color: white;
+        color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
         text-transform: uppercase;
         border: none;
         background: transparent;

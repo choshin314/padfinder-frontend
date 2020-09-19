@@ -19,7 +19,7 @@ const MobileNav = () => {
         <Container isOpen={isOpen} onClick={toggleOpen}>
             <MenuWrapper>
                 <Logo />
-                <ul><NavLinks border/></ul>
+                <ul><NavLinks border inverse/></ul>
             </MenuWrapper>
         </Container>
         </>
@@ -35,7 +35,7 @@ const BurgerBtn = styled.button`
     cursor: pointer;
 
     & svg {
-        color: white;
+        color: var(--primary-color);
     }
 
     @media (min-width: 800px) {

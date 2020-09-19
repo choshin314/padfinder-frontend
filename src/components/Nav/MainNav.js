@@ -21,19 +21,22 @@ const Nav = styled.nav`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--primary-color);
-    color: white;
+    background-color: white;
+    
     overflow: hidden;
     padding: 0 2rem;
     position: fixed;
     z-index: 100;
+    box-shadow: 0px 2px 10px 0px var(--dark-grey);
 
     & > a {
         font-size: 2rem;
+        color: var(--primary-color);
     }
 `
 
 const NavBarFull = styled.ul`
+    color: var(--primary-color);
     flex: 1 1 auto;
     list-style: none;
     padding: 0;
