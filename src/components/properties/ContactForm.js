@@ -9,14 +9,6 @@ import FormDatePicker from '../formElements/FormDatePicker'
 import Card from '../shared/Card'
 import {PropertyContext} from '../../context/PropertyContext'
 
-const initialState = {
-    name: '',
-    email: '',
-    moveInDate: null,
-    phone: '',
-    message: ''
-}
-
 const validateForm = values => {
     let errors = {}
     if (!/^\S+@\S+\.\S+$/.test(values.email)) {
@@ -29,9 +21,17 @@ const validateForm = values => {
 }
 
 const ContactForm = props => {
+    const {expandedProperty} = useContext(PropertyContext); 
+    const initialState = {
+        name: '',
+        email: '',
+        moveInDate: null,
+        phone: '',
+        message: `I'm interested in your property at ${expandedProperty.address.street}.  Please send me more information!`
+    }
     const { inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitCallback, validateForm);
     const { name, email, moveInDate, phone, message } = inputValues;
-    const {expandedProperty} = useContext(PropertyContext); 
+    
     //^^ probably gonna need this later so I can send property listing agent userID + propertyId on form submit
 
     function handleDateChange(date) {
@@ -56,8 +56,9 @@ const ContactForm = props => {
                     type="text"
                     id="contactName"
                     name="name"
-                    labelText="Name"
-                    placeholder="Your Name"
+                    labelText="Your Name:"
+                    showLabel
+                    placeholder="Name"
                     value={name}
                     errorMsg={inputErrors.name}
                     onChange={handleChange}
@@ -67,7 +68,8 @@ const ContactForm = props => {
                     type="email"
                     id="contactEmail"
                     name="email"
-                    labelText="Email"
+                    labelText="Email Address:"
+                    showLabel
                     placeholder="Email Address"
                     value={email}
                     errorMsg={inputErrors.email}
@@ -79,17 +81,19 @@ const ContactForm = props => {
                     <FormDatePicker
                         id="moveInDate"
                         name="moveInDate"
+                        showLabel
                         stateValue={moveInDate}
                         handleChange={handleDateChange}
                         minDate={new Date()}
-                        placeholderText="Move-In Date"
-                        labelText="Move-In Date"
+                        placeholderText="Select Date"
+                        labelText="Move-In Date:"
                     />
                     <FormInput 
                         type="tel"
                         id="contactPhone"
                         name="phone"
-                        labelText="Phone Number"
+                        showLabel
+                        labelText="Phone Number:"
                         placeholder="Phone"
                         onChange={handleChange}
                         value={phone}
@@ -99,7 +103,8 @@ const ContactForm = props => {
                 <FormTextArea 
                     id="contactMessage"
                     name="message"
-                    labelText="Message"
+                    showLabel
+                    labelText="Message:"
                     placeholder="Include a brief message with your request"
                     onChange={handleChange}
                     value={message}

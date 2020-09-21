@@ -1,11 +1,11 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 
 const FormTextArea = (props) => {
-    const {labelText, id, name, placeholder, value, pattern, onChange} = props;
+    const {labelText, showLabel, id, name, placeholder, value, pattern, onChange} = props;
     return (
         <InputWrapper>
-            <Label htmlFor={id}>{labelText}</Label>
+            <Label htmlFor={id} showLabel={showLabel}>{labelText}</Label>
             <TextArea
                 id={id}
                 name={name}
@@ -22,7 +22,11 @@ const FormTextArea = (props) => {
 export default FormTextArea;
 
 const Label = styled.label`
+    font-size: 1.1rem;
     display: none;
+    margin-bottom: 1rem;
+    text-transform: capitalize;
+    ${props => props.showLabel && css` display: block;` }
 `
 
 const TextArea = styled.textarea`
