@@ -17,8 +17,9 @@ const BtnDeleteProperty = ({property}) => {
     const { listings, setListings } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
     const authContext = useContext(AuthContext);
     
-    function handleClickDelete() {
-       toggleDeletionModal();
+    function handleClickDelete(e) {
+        e.stopPropagation();
+        toggleDeletionModal();
     }
 
     function handleConfirmDelete() {

@@ -29,7 +29,7 @@ const PropertyCard = props => {
     }
 
     return (
-        <Container>
+        <Container onClick={handleClickView}>
             <ImageDiv>
                 <img src={photos[0].href} alt={address.street} />
             </ImageDiv>
@@ -76,6 +76,7 @@ const Container = styled.div`
     box-shadow: 0 3px 6px rgba(0,0,0,0.12), 0 3px 6px rgba(0,0,0,0.24);
     transition: all 0.5s cubic-bezier(.25,.8,.25,1);
     color: var(--dark-grey);
+    cursor: pointer;
     &:hover {
         box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
         transform: translateY(-5px);
@@ -96,7 +97,6 @@ const InfoList = styled.ul`
     list-style: none;
     padding: 1rem;
     margin: 0;
-    cursor: pointer;
 `
 
 const Flex = styled.li`

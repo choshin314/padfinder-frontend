@@ -14,7 +14,8 @@ const BtnEditProperty = ({property}) => {
     const match = useRouteMatch();
     const location = useLocation();
 
-    function handleClickEdit() {
+    function handleClickEdit(e) {
+        e.stopPropagation();
         propertyMethods.selectProperty(property);
         history.push(`${match.url}/edit/${property._id}`)
     }

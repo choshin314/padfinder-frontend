@@ -50,7 +50,8 @@ const FavoriteOption = ({property, color}) => {
         }
     }
 
-    function handleClick() {
+    function handleClick(e) {
+        e.stopPropagation();
         isFavorite ? removeFavorite() : addFavorite()
     } 
 
