@@ -11,8 +11,8 @@ const AlertModal = props => {
             <Container>
                 <p>{message}</p>
                 <BtnDiv>
-                    <ModalBtn inverse onClick={toggleModal}>CANCEL</ModalBtn>
                     <ModalBtn onClick={handleClick}>{affirmText}</ModalBtn>
+                    <ModalBtn inverse onClick={toggleModal}>CANCEL</ModalBtn>
                 </BtnDiv>
             </Container>
             
