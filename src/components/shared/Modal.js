@@ -35,7 +35,6 @@ const Modal = props => {
 }
 
 const ModalWrapper = styled.div`
-    
     position: fixed;
     top: 0;
     bottom: 0;
@@ -43,17 +42,15 @@ const ModalWrapper = styled.div`
     left: 0;
     background-color: rgba(0,0,0,.5);
     z-index: 100;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const ModalDiv = styled.div`
     display: inline-block;
     max-width: 1244px;
     max-height: 90vh;
-    margin-left: auto;
-    margin-right: auto;
-    top: 50%;
-    transform: translateY(-50%);
     background: ${props => props.background ? props.background : 'white'};
     box-shadow: 0 0 0 rgba(0,0,0,.5);
     position: relative;
