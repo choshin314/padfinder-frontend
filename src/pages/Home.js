@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import {PropertyContext} from '../context/PropertyContext'
 import {MapContext} from '../context/MapContext'
-import cityscape from '../assets/cityscape.svg'
+import cityscape from '../assets/cityscape.jpg'
 import Searchbox from '../components/map/Searchbox'
 import {devices} from '../components/shared/styledLib'
 import PropertyCard from '../components/properties/PropertyCard'
