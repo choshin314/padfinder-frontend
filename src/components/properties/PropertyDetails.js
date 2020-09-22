@@ -25,12 +25,12 @@ const PropertyDetails = props => {
                     {details.rent[0] === details.rent[1] ? 
                         <Flex>
                             <Subheading>${details.rent[0]}/mo</Subheading>
-                            <Detail>{details.beds[0]} bd | {details.baths[0]} ba | {details.size[0]} sqft</Detail>
+                            <span>{details.beds[0]} bd | {details.baths[0]} ba | {details.size[0]} sqft</span>
                         </Flex>
                         : 
                         <Flex>
                             <Subheading>${details.rent[0]}-{details.rent[1]}/mo</Subheading>
-                            <Detail>{details.beds[0]}-{details.beds[1]} bd | {details.baths[0]}-{details.baths[1]} ba | {details.size[0]}-{details.size[1]} sqft</Detail>
+                            <span>{details.beds[0]}-{details.beds[1]} bd | {details.baths[0]}-{details.baths[1]} ba | {details.size[0]}-{details.size[1]} sqft</span>
                         </Flex>
                     }
                     <Detail>{`${address.street}, ${address.city}, ${address.state} ${address.zip}`}</Detail>
@@ -134,6 +134,11 @@ const Flex = styled.li`
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+    span {
+        font-size: 1.1rem;
+        line-height: 1.3;
+        text-transform: capitalize;
+    }
 `
 
 const BigGrid = styled.div`
