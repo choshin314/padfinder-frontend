@@ -31,7 +31,7 @@ const Nav = styled.nav`
 
     & > a {
         padding: 1rem;
-        height: 100px;
+        height: 70px;
         color: var(--primary-color);
     }
 `
