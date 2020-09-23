@@ -18,32 +18,25 @@ const Home = () => {
 
     async function getClientGeo() {
         setLoading(true);
-        let ipObj;
+        let geoData;
         try {
-            const response = await fetch('https://api.ipify.org/?format=json')
-            ipObj = await response.json();
-        } catch(err) { 
-            console.log(err.message) 
-            setLoading(false);
-        }
-        try {
-            let response= await fetch(`https://geo.ipify.org/api/v1?apiKey=${process.env.REACT_APP_GEOIP_KEY}&ipAddress=${ipObj.ip}`);
-            const geoData = await response.json();
+            const response = await fetch(`http://api.ipstack.com/check?access_key=${process.env.REACT_APP_IPSTACK_KEY}&fields=main`);
+            geoData = await response.json();
             dispatch({ type: 'UPDATE_COORDS+ADDRESS', value: [
-                { lat: geoData.location.lat, lng: geoData.location.lng }, 
-                `${geoData.location.city}, ${geoData.location.postalCode}`
+                { lat: geoData.latitude, lng: geoData.longitude },
+                `${geoData.city}, ${geoData.region_code} ${geoData.zip}`
             ]})
-            return { lat: geoData.location.lat, lng: geoData.location.lng, city: geoData.location.city }
         } catch(err) {
-            console.log(err.message)
+            console.log(err.message);
             setLoading(false);
         }
+        return geoData;
     };
 
     async function getPanelProperties() {
         const geoData = await getClientGeo();
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/panel/${geoData.lat}-${geoData.lng}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/panel/${geoData.latitude}-${geoData.longitude}`)
             const nearby = await response.json();
             dispatch({ type: 'UPDATE_NEARBY', value: nearby });
             setLoading(false);
@@ -52,7 +45,7 @@ const Home = () => {
             setLoading(false);
         }
     }
-    //get client ip, then get ip geolocation - only needed if nearbyProperties isn't cached from a prev search
+    //get nearby listings based on client ip geolocation - only if nearbyProperties isn't cached from a prev search
     useEffect(() => {
         if (!nearbyProperties || nearbyProperties.length === 0) getPanelProperties();
     }, [nearbyProperties])
@@ -71,7 +64,7 @@ const Home = () => {
                     <LoadingCard><LoadingSpinner /></LoadingCard>
                     <LoadingCard><LoadingSpinner /></LoadingCard>
                 </>)}
-                {!loading && nearbyProperties && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} />)}
+                {!loading && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} />)}
             </GridPanel>
             <SeeMoreBtn>
                 <Link to={`/search/${displayAddress.trim().replace(/ /g, '+').replace(/,/g, '')}`}>DISCOVER MORE</Link>
