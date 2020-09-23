@@ -7,9 +7,9 @@ import {faSearch} from '@fortawesome/free-solid-svg-icons'
 import {MapContext} from '../../context/MapContext'
 
 const SearchInput = (props) => {
-    const { coordinates, nearbyProperties, displayAddress, dispatch } = useContext(MapContext);
-    let history = useHistory();
+    const { displayAddress } = useContext(MapContext);
     const [inputText, setInputText] = useState('');
+    let history = useHistory();
 
     const handleInput = e => {
         let value = e.target.value;
@@ -19,20 +19,7 @@ const SearchInput = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let queryString = inputText.trim().replace(/ /g, '+').replace(/,/g, '+');
-        let coordinates;
-
-        //send search query to backend. backend will return:
-        //1. converted search coordinates, 2. formatted search address, 3. properties within 3.2 miles
-        try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/string/${queryString}`);
-            if (response.status === 404) return dispatch({ type: "UPDATE_NEARBY", value: [] });
-            const { coordinates, formatted_address, nearbyProperties } = await response.json();
-            dispatch({ type: "UPDATE_COORDS+ADDRESS", value: [coordinates, formatted_address] });
-            dispatch({ type: 'UPDATE_NEARBY', value: nearbyProperties });
-            history.push(`/search/${queryString}`)
-        } catch(err) {
-            console.log(err);
-        }
+        history.push(`/search/${queryString}`)
     };
 
     useEffect(() => {

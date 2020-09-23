@@ -1,4 +1,5 @@
-import React, {useContext} from 'react'
+import React, {useContext, useEffect} from 'react'
+import {useParams} from 'react-router-dom'
 import styled from 'styled-components'
 
 import Map from '../components/map/Map'
@@ -9,8 +10,24 @@ import {MapContext} from '../context/MapContext'
 import {PropertyContext} from '../context/PropertyContext'
 
 const MapView = props => {
-    const {nearbyProperties} = useContext(MapContext);
+    const {nearbyProperties, dispatch} = useContext(MapContext);
     const {modalOpen, toggleModal} = useContext(PropertyContext);
+    const {searchQuery} = useParams()
+
+    useEffect(() => {
+        async function getProperties() {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/string/${searchQuery}`);
+                if (response.status === 404) return dispatch({ type: "UPDATE_NEARBY", value: [] });
+                const { coordinates, formatted_address, nearbyProperties } = await response.json();
+                dispatch({ type: "UPDATE_COORDS+ADDRESS", value: [coordinates, formatted_address] });
+                dispatch({ type: 'UPDATE_NEARBY', value: nearbyProperties });
+            } catch(err) {
+                console.log(err);
+            }
+        }
+        getProperties()
+    }, [searchQuery])
 
     return (
         <>
