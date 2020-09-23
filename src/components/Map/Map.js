@@ -93,37 +93,38 @@ const Map = props => {
                     }}
                     icon={icon(property)}
                     onClick={() => setSelected(property)}
-                />
-            ))}
-            {selected && (
-                <InfoWindow 
-                    position={selected.address.coordinates}
-                    onCloseClick={() => setSelected(null)}
                 >
-                    <InfoCard>
-                        <h2>{selected.address.street}</h2>
-                        <ul>
-                            { 
-                                !selected.details.rent[1] ? 
-                                <>
-                                <li>${selected.details.rent}/MO</li>
-                                <li>{selected.details.beds}BR / {selected.details.baths}BA</li>
-                                </> :
-                                <>
-                                <li>${selected.details.rent[0]}-${selected.details.rent[1]}/MO</li>
-                                <li>{selected.details.beds[0]}-{selected.details.beds[1]}BR / {selected.details.baths[0]}-{selected.details.baths[1]}BA</li>
-                                </> 
-                            }
-                            <SeeMore onClick={()=> {
-                                toggleModal();
-                                setExpandedProperty(selected);
-                            }}>
-                                See details
-                            </SeeMore>
-                        </ul>
-                    </InfoCard>
-                </InfoWindow>
-            )}
+                    {selected && selected._id === property._id && (
+                        <InfoWindow 
+                            position={selected.address.coordinates}
+                            onCloseClick={() => setSelected(null)}
+                        >
+                            <InfoCard>
+                                <h2>{selected.address.street}</h2>
+                                <ul>
+                                    { 
+                                        selected.details.rent[1] === selected.details.rent[0] ? 
+                                        <>
+                                        <li>${selected.details.rent[0]}/MO</li>
+                                        <li>{selected.details.beds[0]}BR / {selected.details.baths[0]}BA</li>
+                                        </> :
+                                        <>
+                                        <li>${selected.details.rent[0]}-${selected.details.rent[1]}/MO</li>
+                                        <li>{selected.details.beds[0]}-{selected.details.beds[1]}BR / {selected.details.baths[0]}-{selected.details.baths[1]}BA</li>
+                                        </> 
+                                    }
+                                    <SeeMore onClick={()=> {
+                                        toggleModal();
+                                        setExpandedProperty(selected);
+                                    }}>
+                                        See details
+                                    </SeeMore>
+                                </ul>
+                            </InfoCard>
+                        </InfoWindow>
+                    )}
+                </Marker>
+            ))}
         </GoogleMap>
         </>
     )
