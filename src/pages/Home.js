@@ -11,9 +11,8 @@ import PropertyCard from '../components/properties/PropertyCard'
 import PropertyModal from '../components/properties/PropertyModal'
 import LoadingSpinner from '../components/shared/LoadingSpinner'
 
-
 const Home = () => {
-    const {coordinates, nearbyProperties, displayAddress, dispatch} = useContext(MapContext);
+    const {nearbyProperties, displayAddress, dispatch} = useContext(MapContext);
     const [loading, setLoading] = useState(false);
     const {modalOpen, toggleModal} = useContext(PropertyContext);
 
@@ -44,7 +43,7 @@ const Home = () => {
     async function getPanelProperties() {
         const geoData = await getClientGeo();
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/coordinates/${geoData.lat}-${geoData.lng}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/panel/${geoData.lat}-${geoData.lng}`)
             const nearby = await response.json();
             dispatch({ type: 'UPDATE_NEARBY', value: nearby });
             setLoading(false);
@@ -55,11 +54,8 @@ const Home = () => {
     }
     //get client ip, then get ip geolocation - only needed if nearbyProperties isn't cached from a prev search
     useEffect(() => {
-        if (nearbyProperties.length === 0) getPanelProperties();
-    }, [])
-
-    console.log(coordinates);
-    console.log(nearbyProperties)
+        if (!nearbyProperties || nearbyProperties.length === 0) getPanelProperties();
+    }, [nearbyProperties])
 
     return (
         <>
@@ -78,11 +74,8 @@ const Home = () => {
                 {!loading && nearbyProperties && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} />)}
             </GridPanel>
             <SeeMoreBtn>
-                <Link to={`/search/${displayAddress.trim().replace(/ /g, '+').replace(/,/g, '+')}`}>DISCOVER MORE</Link>
+                <Link to={`/search/${displayAddress.trim().replace(/ /g, '+').replace(/,/g, '')}`}>DISCOVER MORE</Link>
             </SeeMoreBtn>
-        </Section>
-        <Section>
-
         </Section>
         {modalOpen && <PropertyModal toggleModal={toggleModal}/>}
         </>

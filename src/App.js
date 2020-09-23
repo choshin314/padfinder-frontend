@@ -61,7 +61,7 @@ function App() {
                 <Footer />
               </Route>
           </Switch>
-          <Route exact path="/search/:searchquery"><MapView /></Route>  
+          <Route exact path="/search/:searchQuery"><MapView /></Route>  
         </PageWrapper>
       </Router>  
     </PropertyContextProvider>
