@@ -18,7 +18,7 @@ const MobileNav = () => {
         <BurgerBtn onClick={toggleOpen}><FontAwesomeIcon icon={faBars} size="3x"/></BurgerBtn>
         <Container isOpen={isOpen} onClick={toggleOpen}>
             <MenuWrapper>
-                <Logo />
+                <LogoWrapper><Logo white/></LogoWrapper>
                 <ul><NavLinks border inverse/></ul>
             </MenuWrapper>
         </Container>
@@ -52,6 +52,12 @@ const Container = styled.div`
     transition: transform .2s ease-in-out;
     transform: ${props => props.isOpen ? 'scaleX(1)' : 'scaleX(0)'};
     transform-origin: right;
+`
+
+const LogoWrapper = styled.div`
+    & > a {
+        height: 3rem;
+    }
 `
 
 const MenuWrapper = styled.div`
