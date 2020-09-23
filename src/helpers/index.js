@@ -3,3 +3,7 @@ export function capitalizeString(string) {
     const cappedArr = uncappedArr.map(subStr => subStr[0].toUpperCase() + subStr.slice(1));
     return cappedArr.join(' ');
 }
+
+export function convertToQueryString(string) {
+    return string.trim().replace(/ /g, '+').replace(/,/g, '')
+}
