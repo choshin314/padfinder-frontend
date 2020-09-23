@@ -47,6 +47,9 @@ const NavItem = styled.li`
         color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
         text-decoration: none;
         text-transform: uppercase;
+        &:hover {
+            color: var(--accent);
+        }
     }
     button {
         color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
@@ -54,6 +57,9 @@ const NavItem = styled.li`
         border: none;
         background: transparent;
         cursor: pointer;
+        &:hover {
+            color: var(--accent);
+        }
     }
 `
 
