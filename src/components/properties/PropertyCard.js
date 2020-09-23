@@ -1,5 +1,4 @@
 import React, {useContext} from 'react'
-import {useHistory, useRouteMatch} from 'react-router-dom'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEdit } from '@fortawesome/free-regular-svg-icons'
@@ -15,17 +14,10 @@ const PropertyCard = props => {
     const { _id, photos, details, address, type } = property;
     const { rent, beds, baths, size } = details;
     const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
-    const history = useHistory();
-    const match = useRouteMatch();
 
     function handleClickView() {
         toggleModal();
         propertyMethods.selectProperty(property);
-    }
-
-    function handleClickEdit() {
-        propertyMethods.selectProperty(property);
-        history.push(`${match.url}/edit/${_id}`)
     }
 
     return (
@@ -97,12 +89,6 @@ const InfoList = styled.ul`
     list-style: none;
     padding: 1rem;
     margin: 0;
-`
-
-const Flex = styled.li`
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
 `
 const Address = styled.li`
     font-size: 1rem;
