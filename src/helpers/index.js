@@ -7,3 +7,9 @@ export function capitalizeString(string) {
 export function convertToQueryString(string) {
     return string.trim().replace(/ /g, '+').replace(/,/g, '')
 }
+
+export function convertDateToMMDDYYYY(date) {
+    let rawDate = new Date(date);
+    let displayDate = `${rawDate.getMonth() + 1}/${rawDate.getDay() + 1}/${rawDate.getFullYear()}`;
+    return displayDate;
+}
