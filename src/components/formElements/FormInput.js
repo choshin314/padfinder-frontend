@@ -60,11 +60,3 @@ const Error = styled.p`
     color: red;
     font-size: .8rem;
 `
-
-const SplitContainer = styled.div`
-    width: 100%;
-    height: 2.5rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-`

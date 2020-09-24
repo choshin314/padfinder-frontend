@@ -11,11 +11,11 @@ const ModalContent = props => {
     const {toggleModal, noClick, background} = props;
     return (
         <ModalWrapper onClick={() => {
-            return (noClick ? null : props.toggleModal())
+            return (noClick ? null : toggleModal())
         }}>
             <ModalDiv onClick={(e) => e.stopPropagation()} background={background} noClick={noClick}>
                 {!noClick && (
-                    <ModalExitBtn onClick={() => props.toggleModal()}>
+                    <ModalExitBtn onClick={() => toggleModal()}>
                         <FontAwesomeIcon icon={faWindowClose}  size="lg"/>
                     </ModalExitBtn>
                 )}    

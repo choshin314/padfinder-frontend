@@ -27,7 +27,7 @@ const MapView = props => {
             }
         }
         getProperties()
-    }, [searchQuery])
+    }, [searchQuery, dispatch])
 
     return (
         <>

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -31,12 +31,10 @@ const validateForm = values => {
             errors.phone = "10-digit phone number required (numbers only)"
         }
     }
-    
     return errors;
 }
 
 const Register = () => {
-
     const {inputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors, resetForm} = useForm(initialState, handleAuthSubmit, validateForm);
     const {login} = useLoginLogout();
     let history = useHistory()
@@ -141,7 +139,6 @@ const Register = () => {
                             onChange={handleChange}
                             required
                         />
-
                     </ListerContainer>
                 )}
                 <FormButton type="submit">Register</FormButton>

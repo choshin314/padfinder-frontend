@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer } from 'react'
 
 const MapContext = React.createContext();
 
@@ -27,7 +27,6 @@ function checkLocalStorage(key, orValue) {
 
 const MapContextProvider = props => {
     //if it's saved in localstorage, initialize it w/ that.  Otherwise, initialize state fresh.
-
     const [ state, dispatch ] = useReducer(reducerFunction, {
         coordinates: checkLocalStorage('coordinates', {}),
         nearbyProperties: checkLocalStorage('nearbyProperties', []),

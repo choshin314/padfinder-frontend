@@ -1,7 +1,7 @@
 import React, {useState, useContext} from 'react'
 import {useHistory} from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid' 
-import styled, {css} from 'styled-components'
+import styled from 'styled-components'
 
 import {AuthContext} from '../../context/AuthContext'
 import {PropertyContext} from '../../context/PropertyContext'
@@ -132,6 +132,7 @@ const PropertyUpdate = () => {
             );
             const data = await response.json();
             if (response.status !== 201) throw new Error(data.message);
+            resetForm();
             history.push('/listings')
         } catch(err) {
             setOtherErrors(err.message);

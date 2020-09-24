@@ -1,7 +1,5 @@
 import {useState} from 'react'
 
-import {useToggle} from './useToggle'
-
 export const useForm = (initialState, submitCallback, validateForm) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [inputValues, setInputValues] = useState(initialState);

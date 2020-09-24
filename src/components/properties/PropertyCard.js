@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
 import styled from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye, faEdit } from '@fortawesome/free-regular-svg-icons'
+import { faEye } from '@fortawesome/free-regular-svg-icons'
 
 import {PropertyContext} from '../../context/PropertyContext'
 import {CardBtn} from './CardBtn'
@@ -11,7 +11,7 @@ import BtnEditProperty from './BtnEditProperty'
 
 const PropertyCard = props => {
     const { property } = props;
-    const { _id, photos, details, address, type } = property;
+    const { photos, details, address, type } = property;
     const { rent, beds, baths, size } = details;
     const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
 

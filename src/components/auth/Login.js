@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React from 'react'
 import {useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -6,7 +6,6 @@ import FormInput from '../formElements/FormInput'
 import FormButton from '../formElements/FormButton'
 import LoadingModal from '../shared/LoadingModal'
 import {useForm} from '../../hooks/useForm'
-import {AuthContext} from '../../context/AuthContext'
 import {useLoginLogout} from '../../hooks/useLoginLogout'
 
 const initialState = {
@@ -16,7 +15,6 @@ const initialState = {
 
 
 const Login = () => {
-    const authContext = useContext(AuthContext);
     const {login} = useLoginLogout();
     let history = useHistory()
     const {inputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors, resetForm} = useForm(initialState, submitCallback)

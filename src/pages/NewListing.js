@@ -1,9 +1,8 @@
-import React, {useState} from 'react'
+import React from 'react'
 
 import PropertyNew from '../components/properties/PropertyNew'
 
 const NewListing = () => {
-    const [multi, setMulti] = useState(false);
     return (
         <PropertyNew />
     )

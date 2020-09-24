@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import LoadingModal from '../shared/LoadingModal'
 import FormButton from '../formElements/FormButton'
 import FormInput from '../formElements/FormInput'
 import FormInputRange from '../formElements/FormInputRange'
@@ -317,9 +316,6 @@ const CtrText = styled.p`
     text-align: center;
     color: var(--primary-color);
     font-weight: bold;
-`
-const Form = styled.form`
-    width: 100%;
 `
 
 const FormSection = styled.div`

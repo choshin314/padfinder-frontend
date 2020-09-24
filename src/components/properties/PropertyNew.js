@@ -68,7 +68,7 @@ const validateForm = values => {
 
 const PropertyNew = () => {
     const [multi, setMulti] = useState(false);
-    const {inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors, resetForm } = useForm(initialState, submitForm, validateForm);
+    const {inputValues, setInputValues, inputErrors, handleChange, validateAndSubmit, isSubmitting, otherErrors, setOtherErrors } = useForm(initialState, submitForm, validateForm);
     const {
         type, available_date, street, city, state, zip, rent_min, rent_max, beds_min, beds_max, baths_min, baths_max, size_min, size_max, dogs, cats, neighborhood, parking, laundry, utilities
     } = inputValues;
