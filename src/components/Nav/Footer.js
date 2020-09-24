@@ -69,6 +69,7 @@ const NavContainer = styled.div`
 `
 
 const NavSection = styled.nav`
+    flex: 1 1 calc((100% - 282px)/2);
     display: flex;
     flex-direction: column;
     margin: 0 2rem 2rem 2rem;
@@ -88,7 +89,6 @@ const NavItem = styled.span`
     display: inline-block;
     grid-column: span 1;
     justify-self: center;
-
     a {
         text-decoration: none;
         font-family: 'Open Sans', sans-serif;
