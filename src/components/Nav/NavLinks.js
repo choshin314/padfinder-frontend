@@ -1,9 +1,15 @@
 import React, {useContext} from 'react'
-import {Link, useHistory} from 'react-router-dom'
+import {NavLink, useHistory} from 'react-router-dom'
 import styled, {css} from 'styled-components'
 
 import {AuthContext} from '../../context/AuthContext'
 import {useLoginLogout} from '../../hooks/useLoginLogout'
+
+const activeStyle = {
+    fontWeight: "800",
+    color: "var(--accent)"
+
+}
 
 const NavLinks = ({border, inverse}) => {
     const authContext = useContext(AuthContext);
@@ -12,11 +18,11 @@ const NavLinks = ({border, inverse}) => {
 
     return (
         <>
-        <NavItem border={border} inverse={inverse}><Link to="/favorites">Favorites</Link></NavItem>
-        <NavItem border={border} inverse={inverse}><Link to="/listings">Manage Listings</Link></NavItem>
-        <NavItem border={border} inverse={inverse}><Link to="/listings/new">Add Listing</Link></NavItem>
+        <NavItem border={border} inverse={inverse}><NavLink to="/favorites" activeStyle={activeStyle}>Favorites</NavLink></NavItem>
+        <NavItem border={border} inverse={inverse}><NavLink exact to="/listings" activeStyle={activeStyle}>Manage Listings</NavLink></NavItem>
+        <NavItem border={border} inverse={inverse}><NavLink exact to="/listings/new" activeStyle={activeStyle}>Add Listing</NavLink></NavItem>
         {!authContext.user ?
-            <NavItem border={border} inverse={inverse}><Link to="/authenticate">Sign In / Register</Link></NavItem> :
+            <NavItem border={border} inverse={inverse}><NavLink to="/authenticate" activeStyle={activeStyle}>Sign In / Register</NavLink></NavItem> :
             <NavItem border={border} inverse={inverse}><button onClick={() => {
                 logout();
                 history.push('/');
