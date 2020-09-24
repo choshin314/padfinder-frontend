@@ -9,6 +9,7 @@ import FormDatePicker from '../formElements/FormDatePicker'
 import Card from '../shared/Card'
 import {PropertyContext} from '../../context/PropertyContext'
 import {convertDateToMMDDYYYY} from '../../helpers'
+import {devices} from '../shared/styledLib'
 
 const validateForm = values => {
     let errors = {}
@@ -148,8 +149,11 @@ const FormHeader = styled.div`
     justify-content: center;
     align-items: center;
     & h2 {
-        font-size: 1.5rem;
+        font-size: 1.1rem;
         line-height: 1.5;
+        @media(min-width: ${devices.tablet}) {
+            font-size: 1.5rem;
+        }
     }
 `
 
