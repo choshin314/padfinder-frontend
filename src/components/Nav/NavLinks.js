@@ -5,12 +5,6 @@ import styled, {css} from 'styled-components'
 import {AuthContext} from '../../context/AuthContext'
 import {useLoginLogout} from '../../hooks/useLoginLogout'
 
-const activeStyle = {
-    fontWeight: "800",
-    color: "var(--accent)"
-
-}
-
 const NavLinks = ({border, inverse}) => {
     const authContext = useContext(AuthContext);
     const {logout} = useLoginLogout();
@@ -18,11 +12,11 @@ const NavLinks = ({border, inverse}) => {
 
     return (
         <>
-        <NavItem border={border} inverse={inverse}><NavLink to="/favorites" activeStyle={activeStyle}>Favorites</NavLink></NavItem>
-        <NavItem border={border} inverse={inverse}><NavLink exact to="/listings" activeStyle={activeStyle}>Manage Listings</NavLink></NavItem>
-        <NavItem border={border} inverse={inverse}><NavLink exact to="/listings/new" activeStyle={activeStyle}>Add Listing</NavLink></NavItem>
+        <NavItem border={border} inverse={inverse}><NavLink to="/favorites" activeClassName="activeNavLink">Favorites</NavLink></NavItem>
+        <NavItem border={border} inverse={inverse}><NavLink exact to="/listings"activeClassName="activeNavLink">Manage Listings</NavLink></NavItem>
+        <NavItem border={border} inverse={inverse}><NavLink exact to="/listings/new"activeClassName="activeNavLink">Add Listing</NavLink></NavItem>
         {!authContext.user ?
-            <NavItem border={border} inverse={inverse}><NavLink to="/authenticate" activeStyle={activeStyle}>Sign In / Register</NavLink></NavItem> :
+            <NavItem border={border} inverse={inverse}><NavLink to="/authenticate"activeClassName="activeNavLink">Sign In / Register</NavLink></NavItem> :
             <NavItem border={border} inverse={inverse}><button onClick={() => {
                 logout();
                 history.push('/');
@@ -49,8 +43,27 @@ const NavItem = styled.li`
         color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
         text-decoration: none;
         text-transform: uppercase;
+        position: relative;
         &:hover {
             color: var(--accent);
+        }
+    }
+    a::after {
+        transition: transform .2s ease-in-out;
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+    }
+    a.activeNavLink {
+        color: var(--accent);
+        font-weight: 800;
+        &::after {
+            transform: scaleX(1);
         }
     }
     button {
