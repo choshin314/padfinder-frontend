@@ -18,7 +18,7 @@ function reducer(state, action) {
     }
 }
 
-const ImgSlider = ({images, startingSlide}) => {
+const ImgSlider = ({images, startingSlide, height}) => {
     let initSlide = startingSlide ? startingSlide : 0;
     let finalSlide = images.length - 1;
     const [{ isTracking, startingX, currentSlide }, dispatch] = useReducer(reducer, { 
@@ -46,6 +46,7 @@ const ImgSlider = ({images, startingSlide}) => {
 
     return (
         <SliderFrame
+            height={height}
             ontouchstart={(e) => e.preventDefault()}
             onPointerDown={handleSwipeStart}
             onPointerMove={handleSwiping}
@@ -81,11 +82,14 @@ const ImgSlider = ({images, startingSlide}) => {
 export default ImgSlider
 
 const SliderFrame = styled.div`
+    height: ${props => props.height};
+    max-height: 100%;
     width: 100%;
     overflow-x: hidden;
 `
 
 const SliderTrack = styled.div`
+    height: 100%;
     width: 100%;
     padding: 0;
     display: flex;
@@ -95,15 +99,15 @@ const SliderTrack = styled.div`
 
 const SliderItem = styled.div`
     width: 100%;
-    height: 290px;
+    height: 100%;
     flex: 1 0 100%;
     position: relative;
     overflow: hidden;
     touch-action: none;
-    & > img {
+    img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
         pointer-events: none;
         touch-action: none;
     }

@@ -5,7 +5,7 @@ import {devices} from './styledLib'
 
 const PhotoGrid = props => {
     return (
-        <Grid reverseStacking={props.reverseStacking}>
+        <Grid reverseStacking={props.reverseStacking} onClick={props.onClick}>
             {props.children}
         </Grid>
     )

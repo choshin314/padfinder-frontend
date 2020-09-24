@@ -17,7 +17,7 @@ const ImageUpload = ({selectedImages, handleSelect, errorMsg}) => {
         <InputWrapper>
             <PreviewDiv>
                 <h3>Add Photos and Review</h3>
-                {!selectedImages ? <PreviewDivFiller /> : <ImgSlider images={getImageArr(selectedImages)}/>}
+                {!selectedImages ? <PreviewDivFiller /> : <ImgSlider height="290px" images={getImageArr(selectedImages)}/>}
             </PreviewDiv>
             <ImageUploadLabel htmlFor="image-upload" bg="black">SELECT PHOTOS</ImageUploadLabel>
             <FileInput id="image-upload" type="file" multiple accept=".png, .jpg, .jpeg" onChange={handleSelect} /> 
