@@ -17,7 +17,7 @@ const MapView = props => {
     useEffect(() => {
         async function getProperties() {
             try {
-                const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/string/${searchQuery}`);
+                const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby?queryString=${searchQuery}`);
                 if (response.status === 404) return dispatch({ type: "UPDATE_NEARBY", value: [] });
                 const { coordinates, formatted_address, nearbyProperties } = await response.json();
                 dispatch({ type: "UPDATE_COORDS+ADDRESS", value: [coordinates, formatted_address] });

@@ -59,10 +59,10 @@ const Map = props => {
         newCoords = { lat: newCoords.lat(), lng: newCoords.lng()}
         dispatch({type: "UPDATE_COORDS", value: newCoords});
         try {
-            const response = await fetch(`http://localhost:5000/api/properties/nearby/coordinates/${newCoords.lat}-${newCoords.lng}`);
+            const response = await fetch(`http://localhost:5000/api/properties/nearby?lat=${newCoords.lat}&lng=${newCoords.lng}`);
             if (response.status === 404) return dispatch({ type: "UPDATE_NEARBY", value: [] });
-            const nearby = await response.json();
-            dispatch({ type: "UPDATE_NEARBY", value: nearby });
+            const data = await response.json();
+            dispatch({ type: "UPDATE_NEARBY", value: data.nearbyProperties });
         } catch(err) {
             console.log(err, 'Failed to fetch nearby properties');
         }

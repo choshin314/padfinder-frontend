@@ -36,9 +36,9 @@ const Home = () => {
     async function getPanelProperties() {
         const geoData = await getClientGeo();
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby/panel/${geoData.latitude}-${geoData.longitude}`)
-            const nearby = await response.json();
-            dispatch({ type: 'UPDATE_NEARBY', value: nearby });
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby?lat=${geoData.latitude}&lng=${geoData.longitude}&limit=4`)
+            const data = await response.json();
+            dispatch({ type: 'UPDATE_NEARBY', value: data.nearbyProperties });
             setLoading(false);
         } catch(err) {
             console.log(err.message);
@@ -64,7 +64,7 @@ const Home = () => {
                     <LoadingCard><LoadingSpinner /></LoadingCard>
                     <LoadingCard><LoadingSpinner /></LoadingCard>
                 </>)}
-                {!loading && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} />)}
+                {!loading && nearbyProperties && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} />)}
             </GridPanel>
             <SeeMoreBtn>
                 <Link to={`/search/${displayAddress.trim().replace(/ /g, '+').replace(/,/g, '')}`}>DISCOVER MORE</Link>
