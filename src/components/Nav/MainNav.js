@@ -30,7 +30,7 @@ const Nav = styled.nav`
     box-shadow: 0px 2px 10px 0px var(--dark-grey);
 
     & > a {
-        padding: 1rem;
+        padding: 1rem 1rem 1rem 0;
         height: 70px;
         color: var(--primary-color);
     }

@@ -34,19 +34,15 @@ const NavLinks = ({border, inverse}) => {
 
 const NavItem = styled.li`
     ${props => props.border && css`
-        &::before {
+        &::after {
             content: '';
             display: block;
             height: 2px;
             width: 100%;
             background-color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
-        }
-        &:last-child::after {
-            content: '';
-            display: block;
-            height: 2px;
-            width: 100%;
-            background-color: ${props => props.inverse ? 'white' : 'var(--primary-color)'};
+            &:hover {
+                color: var(--accent);
+            }
         }
     `}
     a {

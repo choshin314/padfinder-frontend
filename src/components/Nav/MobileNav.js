@@ -1,10 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 import NavLinks from './NavLinks'
-import Logo from './Logo'
 
 const MobileNav = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -15,10 +12,15 @@ const MobileNav = () => {
 
     return (
         <>
-        <BurgerBtn onClick={toggleOpen}><FontAwesomeIcon icon={faBars} size="3x"/></BurgerBtn>
+        <BurgerBtn2 onClick={toggleOpen} className={isOpen && 'isOpen'}>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </BurgerBtn2>
         <Container isOpen={isOpen} onClick={toggleOpen}>
             <MenuWrapper>
-                <LogoWrapper><Logo white/></LogoWrapper>
+                
                 <ul><NavLinks border inverse/></ul>
             </MenuWrapper>
         </Container>
@@ -42,31 +44,69 @@ const BurgerBtn = styled.button`
         display: none;
     }
 `
-const Container = styled.div`
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    right: 0;
-    background: var(--primary-color);
-    transition: transform .2s ease-in-out;
-    transform: ${props => props.isOpen ? 'scaleX(1)' : 'scaleX(0)'};
-    transform-origin: right;
-`
 
-const LogoWrapper = styled.div`
-    & > a {
-        height: 3rem;
+const BurgerBtn2 = styled.div`
+    width: 54px;
+    height: 41px;
+    position: relative;
+    cursor: pointer;
+    span {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 8px;
+        background: var(--primary-color);
+        border-radius: 20px;
+        transition: all 0.2s ease-in-out;
+    }
+    span:first-child {
+        top: 0px;
+    }
+    span:nth-child(2), span:nth-child(3) {
+        top: 16.5px;
+    }
+    span:nth-child(4) {
+        top: 33px;
+    }
+    &.isOpen {
+        span:first-child {
+            transform: translateY(22px) scale(0);
+        }
+        span:nth-child(2) {
+            transform: rotate(45deg);
+        }
+        span:nth-child(3) {
+            transform: rotate(-45deg);
+        }
+        span:nth-child(4) {
+            transform: translateY(-22px) scale(0);
+        }
+    }
+    @media (min-width: 800px) {
+        display: none;
     }
 `
 
-const MenuWrapper = styled.div`
+const Container = styled.div`
+    width: 100vw;
+    height: calc(100vh - 4rem);
+    position: fixed;
+    top: 4rem;
+    left: 0;
+    background: var(--primary-color);
+    transition: transform .2s ease-in-out;
+    transform: ${props => props.isOpen ? 'scaleY(1)' : 'scaleY(0)'};
+    transform-origin: top;
+    z-index: 10;
+`
+
+const MenuWrapper = styled.nav`
     width: 100%;
     height: 50vh;
     font-size: 2.5rem;
     display: flex;
     flex-direction: column;
-    padding: 2.5rem;
+    padding: 1rem 2.5rem;
 
     & ul {
         padding: 0;
