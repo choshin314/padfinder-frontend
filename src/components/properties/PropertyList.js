@@ -1,4 +1,5 @@
 import React, {useContext} from 'react'
+import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 
 import {AuthContext} from '../../context/AuthContext'
@@ -10,7 +11,7 @@ const PropertyList = ({ title, properties, setProperties, errorMsg }) => {
     return (
         <Container>
             <Heading>MANAGE YOUR {title.toUpperCase()}</Heading>
-            {!user && <ErrorDisplay>Login to see your {title}</ErrorDisplay>}
+            {!user && <ErrorDisplay><LoginLink><Link to="/authenticate">LOGIN to see your {title}!</Link></LoginLink></ErrorDisplay>}
             {user && !user.isLister && title === 'listings' && <ErrorDisplay>You must be logged in as a Property Manager/Agent to manage listings</ErrorDisplay>}
             {user && user.isLister && title === 'listings' && (!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
             {user && title === 'favorites' && (!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
@@ -61,4 +62,33 @@ const ErrorDisplay = styled.p`
     font-size: 1rem;
     font-weight: bold;
     color: red;
+`
+const LoginLink = styled.span`
+    & > a {
+        text-decoration: none;
+        color: red;
+        font-size: 1.3rem;
+        font-weight: 800;
+        position: relative;
+        cursor: pointer;
+        &:hover {
+            color: var(--accent);
+        }
+    }
+    & > a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: all 250ms ease-in;
+    }
+
+    & > a:hover::after {
+        transform: scaleX(1);
+    }
 `
