@@ -13,7 +13,7 @@ const ManageListings = () => {
     const {totalPages, currentPage, prevPage, nextPage} = pagination;
 
     useEffect(() => {
-        fetchPropertyList('listings', 1, 1, setListings);
+        fetchPropertyList('listings', 1, 10, setListings);
     }, [])
 
     return (
@@ -25,14 +25,14 @@ const ManageListings = () => {
                 setProperties={setListings} 
                 errorMsg={errorMsg} 
             />
-            <PageNav
+            {totalPages > 1 && (<PageNav
                 currentPage={currentPage}
                 nextPage={nextPage}
                 prevPage={prevPage}
                 totalPages={totalPages}
-                handleNavPrev={() => fetchPropertyList('listings', prevPage, 1, setListings)}
-                handleNavNext={() => fetchPropertyList('listings', nextPage, 1, setListings)}
-            />
+                handleNavPrev={() => fetchPropertyList('listings', prevPage, 10, setListings)}
+                handleNavNext={() => fetchPropertyList('listings', nextPage, 10, setListings)}
+            />)}
         </Wrapper>
         {modalOpen && <PropertyModal toggleModal={toggleModal}/>}
         </>
