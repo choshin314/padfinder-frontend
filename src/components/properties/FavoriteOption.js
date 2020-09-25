@@ -61,7 +61,9 @@ const FavoriteOption = ({property, color}) => {
     }
 
     useEffect(() => {
-        fetchPropertyList('favorites', 1, 100, setFavs);
+        if(favs.length < 1 && authContext.user) {
+            fetchPropertyList('favorites', 1, 100, setFavs);
+        }
     }, [isFavorite]);
 
     useEffect(() => {
