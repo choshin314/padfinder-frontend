@@ -2,6 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import styled from 'styled-components'
 
+import ScrollToTop from './components/shared/ScrollToTop'
 import {AuthContextProvider} from './context/AuthContext'
 import {MapContextProvider} from './context/MapContext'
 import {PropertyContextProvider} from './context/PropertyContext'
@@ -21,6 +22,7 @@ function App() {
     <MapContextProvider>
     <PropertyContextProvider>
       <Router>
+        <ScrollToTop />
         <PageWrapper>
           <MainNav />
           <Switch>
