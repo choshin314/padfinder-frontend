@@ -4,11 +4,13 @@ import {AuthContext} from '../context/AuthContext'
 export const usePropertyList = () => {
     const {user} = useContext(AuthContext);
     const [ pagination, setPagination ] = useState({});
-    const [ errorMsg, setErrorMsg ] = useState(null)
+    const [ errorMsg, setErrorMsg ] = useState(null);
+    const [ loading, setLoading ] = useState(false);
 
     async function fetchPropertyList(listName, pageNum = 1, limit = 100, setPropertyList) {
         if (user) {
             try {
+                setLoading(true);
                 const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/list/${listName}/${user.userId}?pg=${pageNum}&limit=${limit}`, {
                     method: 'GET',
                     headers: {
@@ -25,13 +27,14 @@ export const usePropertyList = () => {
                     prevPage: data.prevPage,
                     nextPage: data.nextPage
                 })
-                console.log(data.properties);
+                setLoading(false);
             } catch(err) {
-                return setErrorMsg(err.message);
+                setLoading(false);
+                setErrorMsg(err.message);
             }
         }
     }
 
-    return { fetchPropertyList, pagination, errorMsg }
+    return { fetchPropertyList, pagination, errorMsg, loading }
 }
 
