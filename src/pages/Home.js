@@ -36,7 +36,7 @@ const Home = () => {
     async function getPanelProperties() {
         const geoData = await getClientGeo();
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby?lat=${geoData.latitude}&lng=${geoData.longitude}&limit=4`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby?lat=${geoData.latitude}&lng=${geoData.longitude}`)
             const data = await response.json();
             dispatch({ type: 'UPDATE_NEARBY', value: data.nearbyProperties });
             setLoading(false);
@@ -50,6 +50,15 @@ const Home = () => {
         if (!nearbyProperties || nearbyProperties.length === 0) getPanelProperties();
     }, [nearbyProperties])
 
+    function renderUpToTwelveCards() {
+        let limitTwelveCards = [];
+        let limit = nearbyProperties.length > 12 ? 12 : nearbyProperties.length;
+        for (let i = 0; i < limit; i++) {
+            limitTwelveCards.push(<PropertyCard key={nearbyProperties[i]._id} property={nearbyProperties[i]} />)
+        }
+        return limitTwelveCards;
+    }
+    
     return (
         <>
         <HeroSection>
@@ -64,7 +73,8 @@ const Home = () => {
                     <LoadingCard><LoadingSpinner /></LoadingCard>
                     <LoadingCard><LoadingSpinner /></LoadingCard>
                 </>)}
-                {!loading && nearbyProperties && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} />)}
+                {!loading && nearbyProperties && nearbyProperties.length <= 12 && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} />)}
+                {!loading && nearbyProperties && nearbyProperties.length > 12 && renderUpToTwelveCards()}
             </GridPanel>
             <SeeMoreBtn>
                 <Link to={`/search/${displayAddress.trim().replace(/ /g, '+').replace(/,/g, '')}`}>DISCOVER MORE</Link>
