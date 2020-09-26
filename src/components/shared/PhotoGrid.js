@@ -36,6 +36,7 @@ const Grid = styled.div`
             object-fit: contain;
             max-width: 100%;
             max-height: 100%;
+            cursor: pointer;
         }
     }
     @media(min-width: ${devices.tablet}){
