@@ -13,3 +13,8 @@ export function convertDateToMMDDYYYY(date) {
     let displayDate = `${rawDate.getMonth() + 1}/${rawDate.getDay() + 1}/${rawDate.getFullYear()}`;
     return displayDate;
 }
+
+export function scrollToTop() {
+    document.body.scrollTop = 0; 
+    document.documentElement.scrollTop = 0;
+}

@@ -6,6 +6,7 @@ import PropertyModal from '../components/properties/PropertyModal'
 import { Wrapper } from '../components/shared/styledLib'
 import {PropertyContext} from '../context/PropertyContext'
 import PageNav from '../components/shared/PageNav'
+import {scrollToTop} from '../helpers'
 
 const ManageFavs = () => {
     const { modalOpen, toggleModal, favs, setFavs } = useContext(PropertyContext);
@@ -32,8 +33,14 @@ const ManageFavs = () => {
                 nextPage={nextPage}
                 prevPage={prevPage}
                 totalPages={totalPages}
-                handleNavPrev={() => fetchPropertyList('listings', prevPage, 1, setFavs)}
-                handleNavNext={() => fetchPropertyList('listings', nextPage, 1, setFavs)}
+                handleNavPrev={() => {
+                    fetchPropertyList('listings', prevPage, 1, setFavs)
+                    scrollToTop();
+                }}
+                handleNavNext={() => {
+                    fetchPropertyList('listings', nextPage, 1, setFavs)
+                    scrollToTop();
+                }}
             />)}
         </Wrapper>
         {modalOpen && <PropertyModal toggleModal={toggleModal}/>}
