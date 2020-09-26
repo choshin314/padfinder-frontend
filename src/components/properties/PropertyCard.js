@@ -9,8 +9,7 @@ import FavoriteOption from './FavoriteOption'
 import BtnDeleteProperty from './BtnDeleteProperty'
 import BtnEditProperty from './BtnEditProperty'
 
-const PropertyCard = props => {
-    const { property } = props;
+const PropertyCard = ({property}) => {
     const { photos, details, address, type } = property;
     const { rent, beds, baths, size } = details;
     const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
@@ -23,7 +22,7 @@ const PropertyCard = props => {
     return (
         <Container onClick={handleClickView}>
             <ImageDiv>
-                <img src={photos[0].href} alt={address.street} />
+                {photos.length > 0 && <img src={photos[0].href} alt={address.street} />}
             </ImageDiv>
             <InfoList onClick={handleClickView}>
                 <Address>{address.street}, {address.city}, {address.state} </Address>
