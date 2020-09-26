@@ -4,8 +4,9 @@ import styled from 'styled-components'
 
 import {AuthContext} from '../../context/AuthContext'
 import PropertyCard from './PropertyCard'
+import LoadingSpinner from '../shared/LoadingSpinner'
 
-const PropertyList = ({ title, properties, setProperties, errorMsg }) => {
+const PropertyList = ({ title, properties, setProperties, errorMsg, loading }) => {
     const {user} = useContext(AuthContext);
     //need to pass down 'setProperties' (which is rly setListings or setFavorites) to enable live removal of Cards on 'delete'
     return (
@@ -13,8 +14,7 @@ const PropertyList = ({ title, properties, setProperties, errorMsg }) => {
             <Heading>MANAGE YOUR {title.toUpperCase()}</Heading>
             {!user && <ErrorDisplay><LoginLink><Link to="/authenticate">LOGIN to see your {title}!</Link></LoginLink></ErrorDisplay>}
             {user && !user.isLister && title === 'listings' && <ErrorDisplay>You must be logged in as a Property Manager/Agent to manage listings</ErrorDisplay>}
-            {user && user.isLister && title === 'listings' && (!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
-            {user && title === 'favorites' && (!properties || properties.length < 1) && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
+            {errorMsg && <ErrorDisplay>{errorMsg}</ErrorDisplay>}
             {properties.length > 0 && properties.map(property => (
                 <CardWrapper key={property._id}>
                     <PropertyCard
@@ -23,6 +23,7 @@ const PropertyList = ({ title, properties, setProperties, errorMsg }) => {
                     />
                 </CardWrapper>
             ))}
+            {loading && <LoadingWrapper><LoadingSpinner /></LoadingWrapper>}
         </Container>
     )
 }
@@ -31,6 +32,7 @@ export default PropertyList
 
 const Container = styled.div`
     width: 100%;
+    min-height: 300px;
     display: flex;
     flex-direction: column;
     & h1 {
@@ -91,4 +93,11 @@ const LoginLink = styled.span`
     & > a:hover::after {
         transform: scaleX(1);
     }
+`
+
+const LoadingWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
 `

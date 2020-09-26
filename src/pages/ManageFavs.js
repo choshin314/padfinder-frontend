@@ -1,21 +1,20 @@
 import React, {useContext, useEffect} from 'react'
 
 import {usePropertyList} from '../hooks/usePropertyList'
+import {PropertyContext} from '../context/PropertyContext'
+import {scrollToTop} from '../helpers'
 import PropertyList from '../components/properties/PropertyList'
 import PropertyModal from '../components/properties/PropertyModal'
 import { Wrapper } from '../components/shared/styledLib'
-import {PropertyContext} from '../context/PropertyContext'
 import PageNav from '../components/shared/PageNav'
-import {scrollToTop} from '../helpers'
 
 const ManageFavs = () => {
     const { modalOpen, toggleModal, favs, setFavs } = useContext(PropertyContext);
-    const { fetchPropertyList, pagination, errorMsg } = usePropertyList();
+    const { fetchPropertyList, pagination, errorMsg, loading } = usePropertyList();
     const {totalPages, currentPage, prevPage, nextPage} = pagination;
 
     useEffect(() => {
         fetchPropertyList('favorites', 1, 10, setFavs);
-        console.log('fetched')
     }, [])
 
     return (
@@ -25,8 +24,8 @@ const ManageFavs = () => {
                 title="favorites"
                 properties={favs} 
                 setProperties={setFavs} 
-                error
-                Msg={errorMsg} 
+                errorMsg={errorMsg} 
+                loading={loading}
             />
             {totalPages > 1 && (<PageNav
                 currentPage={currentPage}
