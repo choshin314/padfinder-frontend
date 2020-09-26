@@ -134,4 +134,5 @@ const SliderBtn = styled.button`
     padding: 1rem .5rem;
     outline: none;
     border: none;
+    cursor: pointer;
 `
