@@ -79,7 +79,7 @@ const Map = props => {
         <GoogleMap
             mapContainerStyle={containerStyle}
             center={coordinates}
-            zoom={13}
+            zoom={15}
             options={options}
             onLoad={onMapLoad}
             onDragEnd={saveNewCoords}
