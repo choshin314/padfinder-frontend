@@ -5,8 +5,10 @@ import styled from 'styled-components'
 import {PropertyContext} from '../context/PropertyContext'
 import {MapContext} from '../context/MapContext'
 import cityscape from '../assets/cityscape.jpg'
+import featuredCities from '../assets/featuredCities.json'
 import Searchbox from '../components/map/Searchbox'
 import {devices} from '../components/shared/styledLib'
+import {convertToQueryString} from '../helpers'
 import PropertyCard from '../components/properties/PropertyCard'
 import PropertyModal from '../components/properties/PropertyModal'
 import LoadingSpinner from '../components/shared/LoadingSpinner'
@@ -47,8 +49,8 @@ const Home = () => {
     }
     //get nearby listings based on client ip geolocation - only if nearbyProperties isn't cached from a prev search
     useEffect(() => {
-        if (!nearbyProperties || nearbyProperties.length === 0) getPanelProperties();
-    }, [nearbyProperties])
+        if (nearbyProperties.length === 0) getPanelProperties();
+    }, [])
 
     function renderUpToTwelveCards() {
         let limitTwelveCards = [];
@@ -73,6 +75,21 @@ const Home = () => {
                     <LoadingCard><LoadingSpinner /></LoadingCard>
                     <LoadingCard><LoadingSpinner /></LoadingCard>
                 </>)}
+                {!loading && nearbyProperties.length === 0 && (
+                    <Filler>
+                        <FillerOptions>
+                            <h3>Bummer!</h3>
+                            <p>No listings within 100 miles.  Consider moving to one of our featured cities?</p>
+                            <FillerList>
+                                {featuredCities.map(city => (
+                                    <li key={"featuredCity_" + city}>
+                                        <Link to={`/search/${convertToQueryString(city)}`}>{city}</Link>
+                                    </li>
+                                ))}
+                            </FillerList>
+                        </FillerOptions>
+                    </Filler>
+                )}
                 {!loading && nearbyProperties && nearbyProperties.length <= 12 && nearbyProperties.map(p => <PropertyCard key={p._id} property={p} />)}
                 {!loading && nearbyProperties && nearbyProperties.length > 12 && renderUpToTwelveCards()}
             </GridPanel>
@@ -155,10 +172,10 @@ const LoadingCard = styled.div`
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 
     @media(min-width: ${devices.tablet}) {
-        grid-columns: span 2;
+        grid-column: span 1;
     }
     @media(min-width: ${devices.laptop}) {
-        grid-columns: span 4;
+        grid-column: span 1;
     }
 `
 
@@ -189,6 +206,64 @@ const SeeMoreBtn = styled.div`
         }
         @media(min-width: ${devices.tablet}) {
             font-size: 1.25rem;
+        }
+    }
+`
+const Filler = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    text-align: center;
+    margin-bottom: 1rem;
+    @media(min-width: ${devices.tablet}) {
+        grid-column: span 2;
+    }
+    @media(min-width: ${devices.laptop}) {
+        grid-column: span 4;
+    }
+`
+
+const FillerOptions = styled.div`
+    width: 100%;
+    max-width: 600px;
+    h3 {
+        font-size: 1.3rem;
+    }
+    p {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+`
+
+const FillerList = styled.ul`
+    list-style: none;
+    padding: 0;
+    a {
+        text-decoration: none;
+        color: var(--primary-color);
+        font-weight: 600;
+        text-transform: uppercase;
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            transition: transform .2s ease-in-out;
+            transform: scaleX(0);
+            transform-origin: right;
+        }
+    }
+
+    a:hover {
+        &::after {
+            transform: scaleX(1);
+            transform-origin: left;
         }
     }
 `
