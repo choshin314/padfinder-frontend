@@ -55,6 +55,7 @@ const Map = props => {
 
     //set up handler to update map center coordinates and update nearby properties array whenever user drags the map.
     const saveNewCoords = async () => {
+        props.setLoading(true);
         let newCoords = mapRef.current.getCenter();
         newCoords = { lat: newCoords.lat(), lng: newCoords.lng()}
         dispatch({type: "UPDATE_COORDS", value: newCoords});
@@ -63,8 +64,10 @@ const Map = props => {
             if (response.status === 404) return dispatch({ type: "UPDATE_NEARBY", value: [] });
             const data = await response.json();
             dispatch({ type: "UPDATE_NEARBY", value: data.nearbyProperties });
+            props.setLoading(false);
         } catch(err) {
             console.log(err, 'Failed to fetch nearby properties');
+            props.setLoading(false);
         }
     }
 

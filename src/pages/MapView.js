@@ -39,7 +39,7 @@ const MapView = props => {
         <>
         <GridContainer>
             <MapDiv>
-                <Map mainMap/>
+                <Map mainMap setLoading={setLoading}/>
             </MapDiv>
             <SidePanelContainer>
                 <SidePanelTitle>Rentals Nearby</SidePanelTitle>
