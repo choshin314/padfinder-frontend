@@ -21,9 +21,12 @@ const PropertyContextProvider = (props) => {
     }
 
     const propertyMethods = {
-        selectProperty: function(property) {
-            setExpandedProperty(property);
-            localStorage.setItem('expandedProperty', JSON.stringify(property))
+        selectProperty: async function(property) {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/single?propertyId=${property._id}`);
+            const refreshedProperty = await response.json();
+            const selectedProperty = response.status === 200 ? refreshedProperty : property;
+            setExpandedProperty(selectedProperty);
+            localStorage.setItem('expandedProperty', JSON.stringify(selectedProperty))
         },
         deselectProperty: function() {
             setExpandedProperty(null);
