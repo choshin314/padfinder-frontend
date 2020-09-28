@@ -22,11 +22,11 @@ const Home = () => {
         setLoading(true);
         let geoData;
         try {
-            const response = await fetch(`https://api.ipstack.com/check?access_key=${process.env.REACT_APP_IPSTACK_KEY}&fields=main`);
+            const response = await fetch(`https://geo.ipify.org/api/v1?apiKey=${process.env.REACT_APP_IPIFY_KEY}`);
             geoData = await response.json();
             dispatch({ type: 'UPDATE_COORDS+ADDRESS', value: [
-                { lat: geoData.latitude, lng: geoData.longitude },
-                `${geoData.city}, ${geoData.region_code} ${geoData.zip}`
+                { lat: geoData.location.lat, lng: geoData.location.lng },
+                `${geoData.location.city}, ${geoData.location.region} ${geoData.location.postalCode}`
             ]})
         } catch(err) {
             console.log(err.message);
@@ -38,7 +38,7 @@ const Home = () => {
     async function getPanelProperties() {
         const geoData = await getClientGeo();
         try {
-            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby?lat=${geoData.latitude}&lng=${geoData.longitude}`)
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/properties/nearby?lat=${geoData.location.lat}&lng=${geoData.location.lng}`)
             const data = await response.json();
             dispatch({ type: 'UPDATE_NEARBY', value: data.nearbyProperties });
             setLoading(false);
