@@ -12,12 +12,12 @@ const MobileNav = () => {
 
     return (
         <>
-        <BurgerBtn2 onClick={toggleOpen} className={isOpen && 'isOpen'}>
+        <BurgerBtn onClick={toggleOpen} className={isOpen && 'isOpen'}>
             <span></span>
             <span></span>
             <span></span>
             <span></span>
-        </BurgerBtn2>
+        </BurgerBtn>
         <Container isOpen={isOpen} onClick={toggleOpen}>
             <MenuWrapper>
                 
@@ -28,33 +28,16 @@ const MobileNav = () => {
     )
 }
 
-const BurgerBtn = styled.button`
-    position: relative;
-    height: 100%;
-    width: 4rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-
-    & svg {
-        color: var(--primary-color);
-    }
-
-    @media (min-width: 800px) {
-        display: none;
-    }
-`
-
-const BurgerBtn2 = styled.div`
-    width: 54px;
-    height: 41px;
+const BurgerBtn = styled.div`
+    width: 40px;
+    height: 30px; 
     position: relative;
     cursor: pointer;
     span {
         display: block;
         position: absolute;
         width: 100%;
-        height: 8px;
+        height: 6px;
         background: var(--primary-color);
         border-radius: 20px;
         transition: all 0.2s ease-in-out;
@@ -63,10 +46,10 @@ const BurgerBtn2 = styled.div`
         top: 0px;
     }
     span:nth-child(2), span:nth-child(3) {
-        top: 16.5px;
+        top: 12px;
     }
     span:nth-child(4) {
-        top: 33px;
+        top: 24px;
     }
     &.isOpen {
         span:first-child {
