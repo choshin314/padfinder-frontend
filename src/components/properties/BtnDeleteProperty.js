@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react'
-import {useLocation} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt as faTrashAltEmpty } from '@fortawesome/free-regular-svg-icons'
 
@@ -10,7 +9,6 @@ import AlertModal from '../shared/AlertModal'
 import { CardBtn } from './CardBtn'
 
 const BtnDeleteProperty = ({property}) => {
-    const location = useLocation();
     const { address, _id } = property;
     const [ showDeletionModal, toggleDeletionModal ] = useToggle();
     const [ deletionConfirmed, setDeletionConfirmed ] = useState(false);
@@ -46,7 +44,7 @@ const BtnDeleteProperty = ({property}) => {
         if (deletionConfirmed) deleteProperty();
     }, [deletionConfirmed])
 
-    return (location.pathname === '/listings' && authContext.user && (authContext.user.userId === property.creator)) ? (
+    return (authContext.user && (authContext.user.userId === property.creator)) ? (
         <>
             <CardBtn onClick={handleClickDelete}>
                 <FontAwesomeIcon fixedWidth icon={faTrashAltEmpty} />

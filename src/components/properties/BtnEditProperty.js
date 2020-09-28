@@ -1,5 +1,5 @@
 import React, {useContext} from 'react'
-import {useHistory, useRouteMatch, useLocation} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-regular-svg-icons'
 
@@ -11,16 +11,14 @@ const BtnEditProperty = ({property}) => {
     const { user } = useContext(AuthContext);
     const { propertyMethods } = useContext(PropertyContext); 
     const history = useHistory();
-    const match = useRouteMatch();
-    const location = useLocation();
 
     function handleClickEdit(e) {
         e.stopPropagation();
         propertyMethods.selectProperty(property);
-        history.push(`${match.url}/edit/${property._id}`)
+        history.push(`../listings/edit/${property._id}`)
     }
 
-    return (location.pathname === '/listings' && user && (user.userId === property.creator)) ? (
+    return (user && (user.userId === property.creator)) ? (
         <CardBtn onClick={handleClickEdit}>
             <FontAwesomeIcon fixedWidth icon={faEdit} />
             <span>EDIT</span>
