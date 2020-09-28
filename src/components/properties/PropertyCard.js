@@ -14,9 +14,9 @@ const PropertyCard = ({property}) => {
     const { rent, beds, baths, size } = details;
     const { toggleModal, propertyMethods } = useContext(PropertyContext); //on click, save the property in context. To be consumed by PropertyModal.
 
-    function handleClickView() {
+    async function handleClickView() {
+        await propertyMethods.selectProperty(property);
         toggleModal();
-        propertyMethods.selectProperty(property);
     }
 
     return (
