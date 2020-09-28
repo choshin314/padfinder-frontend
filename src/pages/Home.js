@@ -22,7 +22,7 @@ const Home = () => {
         setLoading(true);
         let geoData;
         try {
-            const response = await fetch(`http://api.ipstack.com/check?access_key=${process.env.REACT_APP_IPSTACK_KEY}&fields=main`);
+            const response = await fetch(`https://api.ipstack.com/check?access_key=${process.env.REACT_APP_IPSTACK_KEY}&fields=main`);
             geoData = await response.json();
             dispatch({ type: 'UPDATE_COORDS+ADDRESS', value: [
                 { lat: geoData.latitude, lng: geoData.longitude },
