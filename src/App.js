@@ -25,45 +25,17 @@ function App() {
         <ScrollToTop />
         <PageWrapper>
           <MainNav />
-          <Switch>
-              <Route exact path="/">
-                <Main>
-                  <Home />
-                </Main>
-                <Footer />
-              </Route>
-              <Route exact path="/authenticate">
-                <Main>
-                  <Authentication />
-                </Main>
-                <Footer />
-              </Route>
-              <Route exact path="/listings/edit/:propertyId">
-                <Main>
-                  <UpdateListing />
-                </Main>
-                <Footer />
-              </Route>
-              <Route exact path="/listings/new">
-                <Main>
-                  <NewListing />
-                </Main>
-                <Footer />
-              </Route>
-              <Route exact path="/listings">
-                <Main>
-                  <ManageListings />
-                </Main>
-                <Footer />
-              </Route>
-              <Route exact path="/favorites">
-                <Main>
-                  <ManageFavs />
-                </Main>
-                <Footer />
-              </Route>
-          </Switch>
-          <Route exact path="/search/:searchQuery"><MapView /></Route>  
+          <Main>
+            <Switch>
+                <Route exact path="/"><Home /><Footer /></Route>
+                <Route exact path="/authenticate"><Authentication /><Footer /></Route>
+                <Route exact path="/listings/edit/:propertyId"><UpdateListing /><Footer /></Route>
+                <Route exact path="/listings/new"><NewListing /><Footer /></Route>
+                <Route exact path="/listings"><ManageListings /><Footer /></Route>
+                <Route exact path="/favorites"><ManageFavs /><Footer /></Route>
+            </Switch>
+            <Route exact path="/search/:searchQuery"><MapView /></Route>  
+          </Main>
         </PageWrapper>
       </Router>  
     </PropertyContextProvider>
