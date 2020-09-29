@@ -22,7 +22,7 @@ const Home = () => {
         setLoading(true);
         let geoData;
         try {
-            const response = await fetch(`https://geo.ipify.org/api/v1?apiKey=${process.env.REACT_APP_IPIFY_KEY}`);
+            const response = await fetch(`https://ip-geolocation.whoisxmlapi.com/api/v1?apiKey=${process.env.REACT_APP_GEOIP_API_KEY}`);
             geoData = await response.json();
             dispatch({ type: 'UPDATE_COORDS+ADDRESS', value: [
                 { lat: geoData.location.lat, lng: geoData.location.lng },
