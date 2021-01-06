@@ -47,6 +47,7 @@ const Footer = () => {
 export default Footer
 
 const FooterWrapper = styled.footer`
+    justify-self: flex-end;
     min-height: 200px;
     padding: 2rem;
     background-color: var(--primary-color);

@@ -14,4 +14,5 @@ export const Wrapper = styled.div`
     margin-right: auto;
     padding: 1rem;
     position: relative;
+    flex: auto;
 `
