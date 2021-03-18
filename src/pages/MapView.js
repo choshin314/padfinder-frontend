@@ -83,6 +83,7 @@ const MapDiv = styled.div`
     position: relative;
     height: 100%;
     min-height: 50vh;
+    max-height: 100vh;
     @media (min-width: ${devices.tablet}) {
         grid-column: span 4;
     }
@@ -93,6 +94,8 @@ const MapDiv = styled.div`
 
 const SidePanelContainer = styled.div`
     max-height: 100%;
+    height: 100vh;
+    overflow: auto;
     grid-column: span 2;
     position: relative;
     @media(min-width: ${devices.laptop}) {
